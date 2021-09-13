@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Ramo Events</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Day of week</th>
+      <th>Start timestamp</th>
+      <th>End timestamp</th>
+      <th>Date</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ramo_events.each do |ramo_event| %>
+      <tr>
+        <td><%= ramo_event.type %></td>
+        <td><%= ramo_event.day_of_week %></td>
+        <td><%= ramo_event.start_timestamp %></td>
+        <td><%= ramo_event.end_timestamp %></td>
+        <td><%= ramo_event.date %></td>
+        <td><%= link_to 'Show', ramo_event %></td>
+        <td><%= link_to 'Edit', edit_ramo_event_path(ramo_event) %></td>
+        <td><%= link_to 'Destroy', ramo_event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ramo Event', new_ramo_event_path %>

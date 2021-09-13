@@ -1,0 +1,2 @@
+class Ramo < ApplicationRecord
+end

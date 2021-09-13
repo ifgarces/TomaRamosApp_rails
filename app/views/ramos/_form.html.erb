@@ -1,0 +1,62 @@
+<%= form_with(model: ramo) do |form| %>
+  <% if ramo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(ramo.errors.count, "error") %> prohibited this ramo from being saved:</h2>
+
+      <ul>
+        <% ramo.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :nombre %>
+    <%= form.text_field :nombre %>
+  </div>
+
+  <div class="field">
+    <%= form.label :profesor %>
+    <%= form.text_field :profesor %>
+  </div>
+
+  <div class="field">
+    <%= form.label :creditos %>
+    <%= form.number_field :creditos %>
+  </div>
+
+  <div class="field">
+    <%= form.label :materia %>
+    <%= form.text_field :materia %>
+  </div>
+
+  <div class="field">
+    <%= form.label :curso %>
+    <%= form.number_field :curso %>
+  </div>
+
+  <div class="field">
+    <%= form.label :seccion %>
+    <%= form.text_field :seccion %>
+  </div>
+
+  <div class="field">
+    <%= form.label :plan_estudios %>
+    <%= form.text_field :plan_estudios %>
+  </div>
+
+  <div class="field">
+    <%= form.label :connector_liga %>
+    <%= form.text_field :connector_liga %>
+  </div>
+
+  <div class="field">
+    <%= form.label :lista_cruzada %>
+    <%= form.text_field :lista_cruzada %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

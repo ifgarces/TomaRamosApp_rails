@@ -10,6 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_09_13_234939) do
+
+  create_table "ramo_events", force: :cascade do |t|
+    t.integer "type"
+    t.integer "day_of_week"
+    t.datetime "start_timestamp"
+    t.datetime "end_timestamp"
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "ramos", force: :cascade do |t|
+    t.string "nombre"
+    t.string "profesor"
+    t.integer "creditos"
+    t.string "materia"
+    t.integer "curso"
+    t.string "seccion"
+    t.string "plan_estudios"
+    t.string "connector_liga"
+    t.string "lista_cruzada"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
 end

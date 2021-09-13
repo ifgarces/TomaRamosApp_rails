@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @ramo.nombre %>
+</p>
+
+<p>
+  <strong>Profesor:</strong>
+  <%= @ramo.profesor %>
+</p>
+
+<p>
+  <strong>Creditos:</strong>
+  <%= @ramo.creditos %>
+</p>
+
+<p>
+  <strong>Materia:</strong>
+  <%= @ramo.materia %>
+</p>
+
+<p>
+  <strong>Curso:</strong>
+  <%= @ramo.curso %>
+</p>
+
+<p>
+  <strong>Seccion:</strong>
+  <%= @ramo.seccion %>
+</p>
+
+<p>
+  <strong>Plan estudios:</strong>
+  <%= @ramo.plan_estudios %>
+</p>
+
+<p>
+  <strong>Connector liga:</strong>
+  <%= @ramo.connector_liga %>
+</p>
+
+<p>
+  <strong>Lista cruzada:</strong>
+  <%= @ramo.lista_cruzada %>
+</p>
+
+<%= link_to 'Edit', edit_ramo_path(@ramo) %> |
+<%= link_to 'Back', ramos_path %>

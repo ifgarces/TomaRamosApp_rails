@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @ramo_event.type %>
+</p>
+
+<p>
+  <strong>Day of week:</strong>
+  <%= @ramo_event.day_of_week %>
+</p>
+
+<p>
+  <strong>Start timestamp:</strong>
+  <%= @ramo_event.start_timestamp %>
+</p>
+
+<p>
+  <strong>End timestamp:</strong>
+  <%= @ramo_event.end_timestamp %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @ramo_event.date %>
+</p>
+
+<%= link_to 'Edit', edit_ramo_event_path(@ramo_event) %> |
+<%= link_to 'Back', ramo_events_path %>
