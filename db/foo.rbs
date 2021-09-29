@@ -1,0 +1,5 @@
+#! Unused. Couldn't make it work.
+
+def getDataFromCSV(filename :String) -> String
+    return "Hello"
+end
