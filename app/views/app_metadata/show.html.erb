@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @app_metadatum %>
+
+<div>
+  <%= link_to "Edit this app metadatum", edit_app_metadatum_path(@app_metadatum) %> |
+  <%= link_to "Back to app metadata", app_metadata_path %>
+
+  <%= button_to "Destroy this app metadatum", @app_metadatum, method: :delete %>
+</div>

@@ -1,0 +1,2 @@
+class RamoEventType < ApplicationRecord
+end

@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  profesor: MyString
+  creditos: 1
+  materia: MyString
+  curso: 1
+  seccion: MyString
+  plan_estudios: MyString
+  conect_liga: MyString
+  lista_cruzada: MyString
+
+two:
+  name: MyString
+  profesor: MyString
+  creditos: 1
+  materia: MyString
+  curso: 1
+  seccion: MyString
+  plan_estudios: MyString
+  conect_liga: MyString
+  lista_cruzada: MyString
