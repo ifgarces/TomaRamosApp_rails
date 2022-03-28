@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+["CLAS", "AYUD", "LABT", "PRBA", "EXAM"].each { |event_type_name|
+    RamoEventType.create(name: event_type_name)
+}
+
