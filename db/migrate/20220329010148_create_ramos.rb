@@ -1,6 +1,7 @@
 class CreateRamos < ActiveRecord::Migration[7.0]
   def change
-    create_table :ramos do |t|
+    create_table :ramos, :id => false do |t|
+      t.string :nrc, limit: 30, primary_key: true
       t.string :name, limit: 100
       t.string :profesor, limit: 100
       t.integer :creditos

@@ -51,6 +51,7 @@
     <orderEntry type="library" scope="PROVIDED" name="debug (v1.4.0, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="digest (v3.1.0, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubi (v1.10.0, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="figaro (v1.2.0, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="globalid (v1.0.0, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.10.0, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="importmap-rails (v1.0.3, Remote-rvm: ruby-3.1.1-p18) [gem]" level="application" />

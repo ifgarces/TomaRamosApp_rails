@@ -17,8 +17,8 @@ namespace :data_importer do
         CsvColumns = OpenStruct.new(
             :plan_estudios => 0,
             :nrc           => 1,
-            :conector_liga => 2,
-            :lista_cruzada => 3,
+            :conectorLiga => 2,
+            :listaCruzada => 3,
             :materia       => 4,
             :cursonum      => 5,
             :seccion       => 6,
@@ -29,10 +29,10 @@ namespace :data_importer do
             :miercoles     => 11,
             :jueves        => 12,
             :viernes       => 13,
-            :fecha_inicio  => 15,
-            :fecha_fin     => 16,
+            :fechaInicio  => 15,
+            :fechaFin     => 16,
             :sala          => 17,
-            :tipo_evento   => 18,
+            :tipoEvento   => 18,
             :profesor      => 19
         )
 
@@ -48,13 +48,17 @@ namespace :data_importer do
 
         # Helper class for parsing rows from the CSV
         class CsvRow
+            attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :seccion, :nombre, :credito,
+                        :lunes, :martes, :miercoles, :jueves, :viernes, :fechaInicio, :fechaFin, :sala, :tipoEvento,
+                        :profesor
+
             def initialize(row_cells)
                 @pe = row_cells[CsvColumns.plan_estudios] # string | nil
                 @nrc = row_cells[CsvColumns.nrc].to_i() # integer
-                @conector_liga = row_cells[CsvColumns.conector_liga] # string | nil
-                @lista_cruzada = row_cells[CsvColumns.lista_cruzada] # string | nil
+                @conectorLiga = row_cells[CsvColumns.conectorLiga] # string | nil
+                @listaCruzada = row_cells[CsvColumns.listaCruzada] # string | nil
                 @materia = row_cells[CsvColumns.materia] # string | nil
-                @curso = row_cells[CsvColumns.cursonum].to_i()
+                @curso = row_cells[CsvColumns.cursonum].to_i() # integer
                 @seccion = row_cells[CsvColumns.seccion] # string | nil
                 @nombre = row_cells[CsvColumns.nombre] # string | nil
                 @credito = row_cells[CsvColumns.credito] # string | nil
@@ -63,14 +67,14 @@ namespace :data_importer do
                 @miercoles = CsvRow.parseTimeInterval(row_cells[CsvColumns.miercoles]) # List[Time] | nil
                 @jueves = CsvRow.parseTimeInterval(row_cells[CsvColumns.jueves]) # List[Time] | nil
                 @viernes = CsvRow.parseTimeInterval(row_cells[CsvColumns.viernes]) # List[Time] | nil
-                @fecha_inicio = CsvRow.parseDate(row_cells[CsvColumns.fecha_inicio]) # Date | nil
-                @fecha_fin = CsvRow.parseDate(row_cells[CsvColumns.fecha_fin]) # Date | nil
+                @fechaInicio = CsvRow.parseDate(row_cells[CsvColumns.fechaInicio]) # Date | nil
+                @fechaFin = CsvRow.parseDate(row_cells[CsvColumns.fechaFin]) # Date | nil
                 @sala = row_cells[CsvColumns.sala] # string | nil
-                @tipo_evento = row_cells[CsvColumns.tipo_evento].tr("0-9", "") # string, ignoring numbers (e.g. "PRBA 1" is treated as just "PRBA")
+                @tipoEvento = row_cells[CsvColumns.tipoEvento].tr("0-9", "") # string, ignoring numbers (e.g. "PRBA 1" is treated as just "PRBA")
                 @profesor = row_cells[CsvColumns.profesor] # string | nil
 
                 # Ensuring mandatory fields are not null
-                [@pe, @nrc, @materia, @seccion, @nombre, @tipo_evento, @profesor].each { |field|
+                [@pe, @nrc, @materia, @seccion, @nombre, @tipoEvento, @profesor].each { |field|
                     raise "One of the mandatory fields is nil for CsvRow %s" % [self] \
                         unless (field != nil)
                 }
@@ -105,19 +109,38 @@ namespace :data_importer do
         RamoEvent.delete_all()
 
         # Now parsing the CSV and populating database tables `ramo` and `ramo_event`
-        csv_rows = CSV.read(Figaro.env.CSV_FILE_PATH) # :List[List[string]]
-        csv_rows.delete_at(0) # ignoring headers
-        csv_rows = csv_rows.map { |row|
+        csvRows = CSV.read(Figaro.env.CSV_FILE_PATH) # :List[List[string]]
+        csvRows.delete_at(0) # ignoring headers
+        csvRows = csvRows.map { |row|
             row.map { |item|
                 item == nil ? nil : item.strip()
             }
         }
-        csv_rows.each { |row|
-            log.debug("Processing %s" % [row])
-            CsvRow.new(row)
+        ramosNrcs = [] # :List[str]
+        csvRows.each_with_index { |row, row_index|
+            #log.debug("Processing row %s" % [row]) # trace
+            parsedRow = CsvRow.new(row)
+            if (! ramosNrcs.include?(parsedRow.nrc))
+                ramosNrcs.append(parsedRow.nrc)
+                rowRamo = Ramo.new(
+                    nrc: parsedRow.nrc,
+                    name: parsedRow.nombre,
+                    profesor: parsedRow.profesor,
+                    creditos: parsedRow.credito,
+                    materia: parsedRow.materia,
+                    curso: parsedRow.curso,
+                    seccion: parsedRow.seccion,
+                    plan_estudios: parsedRow.pe,
+                    conect_liga: parsedRow.conectorLiga,
+                    lista_cruzada: parsedRow.listaCruzada
+                )
+                rowRamo.save!()
+            else
+                rowRamo = Ramo.last!()
+            end
         }
 
-        throw NotImplementedError
+        #throw NotImplementedError
     end
 
 end
