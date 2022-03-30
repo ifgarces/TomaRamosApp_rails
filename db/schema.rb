@@ -81,8 +81,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_30_043554) do
   create_table "users", force: :cascade do |t|
     t.string "tag", limit: 60
     t.string "password_digest"
-    t.string "first_name", limit: 100
-    t.string "last_name", limit: 100
+    t.string "name", limit: 150
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tag"], name: "index_users_on_tag", unique: true

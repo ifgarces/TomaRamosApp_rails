@@ -163,8 +163,8 @@ namespace :data_importer do
             end
         }
 
-        puts(Ramo.first().ramo_events)
-        puts(RamoEventType.first().ramo_events.map{ |ev| ev.as_json() })
+        # puts(Ramo.first().ramo_events)
+        # puts(RamoEventType.first().ramo_events.map{ |ev| ev.as_json() })
 
         puts("CSV parsing complete. Loaded %d Ramos and %d RamoEvents" % [Ramo.count(), RamoEvent.count()])
     end
