@@ -1,8 +1,8 @@
 class CreateRamos < ActiveRecord::Migration[7.0]
   def change
-    create_table :ramos, :id => false do |t|
-      t.string :nrc, limit: 30, primary_key: true
-      t.string :name, limit: 100
+    create_table :ramos do |t|
+      t.string :nrc, limit: 40
+      t.string :nombre, limit: 100
       t.string :profesor, limit: 100
       t.integer :creditos
       t.string :materia, limit: 60
@@ -14,5 +14,6 @@ class CreateRamos < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    add_index :ramos, :nrc, unique: true
   end
 end

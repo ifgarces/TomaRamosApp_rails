@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_03_29_010148) do
+ActiveRecord::Schema[7.0].define(version: 2022_03_30_043554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,29 +42,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_010148) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "app_metadata", force: :cascade do |t|
-    t.string "latest_version_name", limit: 100
-    t.string "catalog_current_period"
-    t.string "catalog_last_updated"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "career_advices", force: :cascade do |t|
-    t.string "title", limit: 60
-    t.text "description"
-    t.string "url", limit: 200
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "quick_hyperlinks", force: :cascade do |t|
-    t.string "name", limit: 60
-    t.string "url", limit: 200
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "ramo_event_types", force: :cascade do |t|
     t.string "name", limit: 60
     t.datetime "created_at", null: false
@@ -79,10 +56,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_010148) do
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "ramo_id", null: false
+    t.bigint "ramo_event_type_id", null: false
+    t.index ["ramo_event_type_id"], name: "index_ramo_events_on_ramo_event_type_id"
+    t.index ["ramo_id"], name: "index_ramo_events_on_ramo_id"
   end
 
-  create_table "ramos", primary_key: "nrc", id: { type: :string, limit: 30 }, force: :cascade do |t|
-    t.string "name", limit: 100
+  create_table "ramos", force: :cascade do |t|
+    t.string "nrc", limit: 40
+    t.string "nombre", limit: 100
     t.string "profesor", limit: 100
     t.integer "creditos"
     t.string "materia", limit: 60
@@ -93,6 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_010148) do
     t.string "lista_cruzada", limit: 60
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["nrc"], name: "index_ramos_on_nrc", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -107,4 +90,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_29_010148) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "ramo_events", "ramo_event_types"
+  add_foreign_key "ramo_events", "ramos"
 end

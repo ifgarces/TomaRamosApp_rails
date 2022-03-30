@@ -9,7 +9,7 @@ set -exu
 rails generate model app_metadatum \
     latest_version_name:string{100} catalog_current_period:string catalog_last_updated:string --force
 rails generate model ramo \
-    name:string{100} profesor:string{100} creditos:integer materia:string{60} curso:integer \
+    nrc:string{40}:uniq nombre:string{100} profesor:string{100} creditos:integer materia:string{60} curso:integer \
     seccion:string{60} plan_estudios:string{60} conect_liga:string{60} lista_cruzada:string{60} --force
 rails generate model ramo_event_type \
     name:string{60} --force
@@ -24,7 +24,7 @@ rails generate model quick_hyperlink \
     name:string{60} url:string{200}
     # image attached
 rails generate model user \
-    tag:string{60}:uniq password:digest first_name:string{100} last_name:string{100} --force
+    tag:string{60}:uniq password:digest name:string{150} --force
 
 # Creating controllers
 rails generate scaffold_controller app_metadatum \

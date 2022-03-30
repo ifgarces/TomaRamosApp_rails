@@ -1,2 +1,0 @@
-class AppMetadatum < ApplicationRecord
-end
