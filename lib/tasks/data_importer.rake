@@ -4,7 +4,6 @@ namespace :data_importer do
     on the catalog.
     "
 
-    #require "dotenv/tasks" # ensuring the `.env` file is loaded, ref: https://forum.upcase.com/t/accessing-env-variables-in-rake-task/1381/2
     require "time"
     require "date"
     require "logger"
@@ -13,13 +12,11 @@ namespace :data_importer do
 
     # Retraives data from the CSV (standard engineering faculty format) and fills the database
     task csv_all: :environment do
-        log = Rails.logger
-
         CsvColumns = OpenStruct.new(
             :plan_estudios => 0,
             :nrc           => 1,
-            :conectorLiga => 2,
-            :listaCruzada => 3,
+            :conectorLiga  => 2,
+            :listaCruzada  => 3,
             :materia       => 4,
             :cursonum      => 5,
             :seccion       => 6,
@@ -30,10 +27,10 @@ namespace :data_importer do
             :miercoles     => 11,
             :jueves        => 12,
             :viernes       => 13,
-            :fechaInicio  => 15,
-            :fechaFin     => 16,
+            :fechaInicio   => 15,
+            :fechaFin      => 16,
             :sala          => 17,
-            :tipoEvento   => 18,
+            :tipoEvento    => 18,
             :profesor      => 19
         )
 
@@ -49,9 +46,8 @@ namespace :data_importer do
 
         # Helper class for parsing rows from the CSV
         class CsvRow
-            attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :seccion, :nombre, :credito,
-                        :lunes, :martes, :miercoles, :jueves, :viernes, :fechaInicio, :fechaFin, :sala, :tipoEvento,
-                        :profesor
+            attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :seccion, :nombre, :credito, :lunes,
+                        :martes, :miercoles, :jueves, :viernes, :fechaInicio, :fechaFin, :sala, :tipoEvento, :profesor
 
             def initialize(row_cells)
                 @pe = row_cells[CsvColumns.plan_estudios] # string | nil
@@ -75,10 +71,10 @@ namespace :data_importer do
                 @profesor = row_cells[CsvColumns.profesor] # string | nil
 
                 # Ensuring mandatory fields are not null
-                [@pe, @nrc, @materia, @seccion, @nombre, @tipoEvento, @profesor].each { |field|
+                [@pe, @nrc, @materia, @seccion, @nombre, @tipoEvento, @profesor].each do |field|
                     raise "One of the mandatory fields is nil for CsvRow %s" % [self] \
                         unless (field != nil)
-                }
+                end
             end
 
             # Returns a pair of `Time` object 
@@ -105,7 +101,7 @@ namespace :data_importer do
             end
         end
 
-        log.info("Clearing Ramo and RamoEvent tables prior to CSV parsing")
+        puts("Clearing Ramo and RamoEvent tables prior to CSV parsing")
         RamoEvent.delete_all()
         Ramo.delete_all()
 
@@ -118,7 +114,7 @@ namespace :data_importer do
             }
         }
         ramosNrcs = [] # :List[str]
-        csvRows.each_with_index { |row, row_index|
+        csvRows.each_with_index do |row, row_index|
             #log.debug("Processing row %s" % [row]) # trace
             parsedRow = CsvRow.new(row)
             if (! ramosNrcs.include?(parsedRow.nrc))
@@ -135,36 +131,32 @@ namespace :data_importer do
                     conect_liga: parsedRow.conectorLiga,
                     lista_cruzada: parsedRow.listaCruzada
                 ).save!()
-            else
-                { # :Hash[DayOfWeek, Pair[Time, Time]]
-                    DayOfWeek::MONDAY => parsedRow.lunes,
-                    DayOfWeek::TUESDAY => parsedRow.martes,
-                    DayOfWeek::WEDNESDAY => parsedRow.miercoles,
-                    DayOfWeek::THURSDAY => parsedRow.jueves,
-                    DayOfWeek::FRIDAY => parsedRow.viernes,
-                }.each do |dayOfWeek, eventTimes|
-                    if (eventTimes != nil)
-                        eventType = CsvEventTypesMapping[parsedRow.tipoEvento]
-                        raise "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
-                            row_index + 2, parsedRow.tipoEvento, CsvEventTypesMapping.values()
-                        ] unless (eventType != nil)
-                        RamoEvent.new(
-                            location: parsedRow.sala,
-                            day_of_week: DayOfWeek.parseStringDay(dayOfWeek),
-                            start_time: eventTimes.first(),
-                            end_time: eventTimes.second(),
-                            date: parsedRow.fechaInicio,
+            end
+            { # :Hash[DayOfWeek, Pair[Time, Time]]
+                DayOfWeek::MONDAY => parsedRow.lunes,
+                DayOfWeek::TUESDAY => parsedRow.martes,
+                DayOfWeek::WEDNESDAY => parsedRow.miercoles,
+                DayOfWeek::THURSDAY => parsedRow.jueves,
+                DayOfWeek::FRIDAY => parsedRow.viernes,
+            }.each do |dayOfWeek, eventTimes|
+                if (eventTimes != nil)
+                    eventType = CsvEventTypesMapping[parsedRow.tipoEvento]
+                    raise "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
+                        row_index + 2, parsedRow.tipoEvento, CsvEventTypesMapping.values()
+                    ] unless (eventType != nil)
+                    RamoEvent.new(
+                        location: parsedRow.sala,
+                        day_of_week: DayOfWeek.parseStringDay(dayOfWeek),
+                        start_time: eventTimes.first(),
+                        end_time: eventTimes.second(),
+                        date: parsedRow.fechaInicio,
 
-                            ramo: Ramo.last(), #? or should bind by ID/NRC?
-                            ramo_event_type: eventType
-                        ).save!()
-                    end
+                        ramo: Ramo.last(), #? or should bind by ID/NRC?
+                        ramo_event_type: eventType
+                    ).save!()
                 end
             end
-        }
-
-        # puts(Ramo.first().ramo_events)
-        # puts(RamoEventType.first().ramo_events.map{ |ev| ev.as_json() })
+        end
 
         puts("CSV parsing complete. Loaded %d Ramos and %d RamoEvents" % [Ramo.count(), RamoEvent.count()])
     end
