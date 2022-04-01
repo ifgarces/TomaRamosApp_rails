@@ -1,12 +1,11 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+RAMO_EVENT_TYPES = ["CLAS", "AYUD", "LABT", "PRBA", "EXAM"]
 
-["CLAS", "AYUD", "LABT", "PRBA", "EXAM"].each { |event_type_name|
-    RamoEventType.create(name: event_type_name)
-}
+if (RamoEventType.count() != RAMO_EVENT_TYPES.count())
+    RAMO_EVENT_TYPES.each { |event_type_name|
+        RamoEventType.new(name: event_type_name).save()
+    }
+end
 
+if (AcademicPeriod.order(name: :asc).first() != "2022-10")
+    AcademicPeriod.new(name: "2022-10").save()
+end

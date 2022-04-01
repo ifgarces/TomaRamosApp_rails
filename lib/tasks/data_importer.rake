@@ -105,6 +105,8 @@ namespace :data_importer do
         RamoEvent.delete_all()
         Ramo.delete_all()
 
+        currentAcademicPeriod = AcademicPeriod.find_by(name: "2022-10") #TODO: avoid hardcoding name
+
         # Now parsing the CSV and populating database tables `ramo` and `ramo_event`
         csvRows = CSV.read(Figaro.env.CSV_FILE_PATH) # :List[List[string]]
         csvRows.delete_at(0) # ignoring headers
@@ -129,7 +131,8 @@ namespace :data_importer do
                     seccion: parsedRow.seccion,
                     plan_estudios: parsedRow.pe,
                     conect_liga: parsedRow.conectorLiga,
-                    lista_cruzada: parsedRow.listaCruzada
+                    lista_cruzada: parsedRow.listaCruzada,
+                    academic_period: currentAcademicPeriod #TODO: add migration!
                 ).save!()
             end
             { # :Hash[DayOfWeek, Pair[Time, Time]]

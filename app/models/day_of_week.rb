@@ -8,23 +8,46 @@ module DayOfWeek
     SATURDAY = "saturday"
     SUNDAY = "sunday"
 
-    public
-        def self.parseStringDay(dayString)
-            case dayString
+public
+    # @param dayString [String]
+    # @return [DayOfWeek]
+    def self.parseStringDay(dayString)
+        return case dayString
             when "monday"
-                return DayOfWeek::MONDAY
+                DayOfWeek::MONDAY
             when "tuesday"
-                return DayOfWeek::TUESDAY
+                DayOfWeek::TUESDAY
             when "wednesday"
-                return DayOfWeek::WEDNESDAY
+                DayOfWeek::WEDNESDAY
             when "thursday"
-                return DayOfWeek::THURSDAY
+                DayOfWeek::THURSDAY
             when "friday"
-                return DayOfWeek::FRIDAY
+                DayOfWeek::FRIDAY
             when "saturday"
-                return DayOfWeek::SATURDAY
+                DayOfWeek::SATURDAY
             when "sunday"
-                return DayOfWeek::SUNDAY
+                DayOfWeek::SUNDAY
             end
-        end
+    end
+
+    # @param sayOfWeek [DayOfWeek]
+    # @return [String]
+    def self.toStringSpanish(dayOfWeek)
+        return case dayOfWeek
+            when DayOfWeek::MONDAY
+                "Lunes"
+            when DayOfWeek::TUESDAY
+                "Martes"
+            when DayOfWeek::WEDNESDAY
+                "Miércoles"
+            when DayOfWeek::THURSDAY
+                "Jueves"
+            when DayOfWeek::FRIDAY
+                "Viernes"
+            when DayOfWeek::SATURDAY
+                "Sábado"
+            when DayOfWeek::SUNDAY
+                "Domingo"
+            end
+    end
 end

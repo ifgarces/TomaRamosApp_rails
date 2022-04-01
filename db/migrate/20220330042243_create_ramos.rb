@@ -1,6 +1,8 @@
 class CreateRamos < ActiveRecord::Migration[7.0]
   def change
     create_table :ramos do |t|
+      # t.references :academic_periods, null: false, foreign_key: true
+
       t.string :nrc, limit: 40
       t.string :nombre, limit: 100
       t.string :profesor, limit: 100
