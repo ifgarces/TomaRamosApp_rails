@@ -37,7 +37,7 @@ set_rails:
 	rails db:environment:set RAILS_ENV=development
 	rvm use 3.1.1 && rvm current
 	bundle install
-	yarn install
+	yarn install --check-files
 
 # Executes migrations, resets database, cleans assets and compiles webpacker
 rails_tasks: set_rails
