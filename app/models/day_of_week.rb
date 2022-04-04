@@ -1,5 +1,6 @@
 # Unlike Java/Kotlin, Ruby doesn't have a built-in library for days of week
 module DayOfWeek
+public
     MONDAY = "monday"
     TUESDAY = "tuesday"
     WEDNESDAY = "wednesday"
@@ -8,7 +9,6 @@ module DayOfWeek
     SATURDAY = "saturday"
     SUNDAY = "sunday"
 
-public
     # @param dayString [String]
     # @return [DayOfWeek]
     def self.parseStringDay(dayString)

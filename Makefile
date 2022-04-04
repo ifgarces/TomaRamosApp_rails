@@ -11,11 +11,11 @@ PORT = 9090
 HOST = 0.0.0.0
 
 # Runs the server, but not in background
-foreground_server: stop_server rails_tasks
+foreground_server: stop_server
 	rails server --port=${PORT} --binding=${HOST}
 
 # Runs the server in background
-background_server: stop_server rails_tasks
+background_server: stop_server
 	rails server --port=${PORT} --binding=${HOST} --daemon
 
 # Views server output, when running in background

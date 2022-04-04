@@ -18,5 +18,9 @@ module TomaRamosUandes
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Default HTML webpage for errors
+    config.debug_exception_response_format = :default
+
   end
 end

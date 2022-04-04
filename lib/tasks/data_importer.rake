@@ -9,6 +9,7 @@ namespace :data_importer do
     require "logger"
     require "csv"
     require_relative "../../app/models/day_of_week"
+    require_relative "../../app/models/catalog_status"
 
     # Retraives data from the CSV (standard engineering faculty format) and fills the database
     task csv_all: :environment do
@@ -105,7 +106,8 @@ namespace :data_importer do
         RamoEvent.delete_all()
         Ramo.delete_all()
 
-        currentAcademicPeriod = AcademicPeriod.find_by(name: "2022-10") #TODO: avoid hardcoding name
+        currentAcademicPeriod = CatalogStatus.getAcademicPeriod()
+        puts("Reading CSV for academic period %s..." % [currentAcademicPeriod.name])
 
         # Now parsing the CSV and populating database tables `ramo` and `ramo_event`
         csvRows = CSV.read(Figaro.env.CSV_FILE_PATH) # :List[List[string]]
@@ -132,10 +134,10 @@ namespace :data_importer do
                     plan_estudios: parsedRow.pe,
                     conect_liga: parsedRow.conectorLiga,
                     lista_cruzada: parsedRow.listaCruzada,
-                    academic_period: currentAcademicPeriod #TODO: add migration!
+                    academic_period: currentAcademicPeriod
                 ).save!()
             end
-            { # :Hash[DayOfWeek, Pair[Time, Time]]
+            { # :Hash[DayOfWeek, Pair[Time, Time] | nil|]
                 DayOfWeek::MONDAY => parsedRow.lunes,
                 DayOfWeek::TUESDAY => parsedRow.martes,
                 DayOfWeek::WEDNESDAY => parsedRow.miercoles,

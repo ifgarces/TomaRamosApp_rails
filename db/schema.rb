@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_01_012006) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_01_012006) do
 
   create_table "ramo_events", force: :cascade do |t|
     t.string "location", limit: 60
-    t.string "day_of_week", limit: 60
+    t.string "day_of_week", limit: 16
     t.time "start_time"
     t.time "end_time"
     t.date "date"
@@ -81,6 +81,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_01_012006) do
     t.string "lista_cruzada", limit: 60
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "academic_period_id", null: false
+    t.index ["academic_period_id"], name: "index_ramos_on_academic_period_id"
     t.index ["nrc"], name: "index_ramos_on_nrc", unique: true
   end
 
@@ -106,6 +108,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_01_012006) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ramo_events", "ramo_event_types"
   add_foreign_key "ramo_events", "ramos"
+  add_foreign_key "ramos", "academic_periods"
   add_foreign_key "user_ramos_inscriptions", "ramos", column: "ramos_id"
   add_foreign_key "user_ramos_inscriptions", "users"
 end
