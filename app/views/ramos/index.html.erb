@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Ramos</h1>
+
+<div id="ramos">
+  <% @ramos.each do |ramo| %>
+    <%= render ramo %>
+    <p>
+      <%= link_to "Show this ramo", ramo %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New ramo", new_ramo_path %>

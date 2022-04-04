@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Ramo events</h1>
+
+<div id="ramo_events">
+  <% @ramo_events.each do |ramo_event| %>
+    <%= render ramo_event %>
+    <p>
+      <%= link_to "Show this ramo event", ramo_event %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New ramo event", new_ramo_event_path %>
