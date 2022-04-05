@@ -5,5 +5,6 @@ class CreateRamoEventTypes < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    add_index :ramo_event_types, :name, unique: true
   end
 end

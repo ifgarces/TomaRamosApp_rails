@@ -5,5 +5,6 @@ class CreateAcademicPeriods < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    add_index :academic_periods, :name, unique: true
   end
 end

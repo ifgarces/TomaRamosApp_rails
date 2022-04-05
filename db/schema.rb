@@ -18,6 +18,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
     t.string "name", limit: 20
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_academic_periods_on_name", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -52,6 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
     t.string "name", limit: 60
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_ramo_event_types_on_name", unique: true
   end
 
   create_table "ramo_events", force: :cascade do |t|

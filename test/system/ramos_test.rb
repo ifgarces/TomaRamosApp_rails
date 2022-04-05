@@ -19,7 +19,7 @@ class RamosTest < ApplicationSystemTestCase
     fill_in "Curso", with: @ramo.curso
     fill_in "Lista cruzada", with: @ramo.lista_cruzada
     fill_in "Materia", with: @ramo.materia
-    fill_in "Name", with: @ramo.name
+    fill_in "Name", with: @ramo.nombre
     fill_in "Nrc", with: @ramo.nrc
     fill_in "Plan estudios", with: @ramo.plan_estudios
     fill_in "Profesor", with: @ramo.profesor
@@ -39,7 +39,7 @@ class RamosTest < ApplicationSystemTestCase
     fill_in "Curso", with: @ramo.curso
     fill_in "Lista cruzada", with: @ramo.lista_cruzada
     fill_in "Materia", with: @ramo.materia
-    fill_in "Name", with: @ramo.name
+    fill_in "Name", with: @ramo.nombre
     fill_in "Nrc", with: @ramo.nrc
     fill_in "Plan estudios", with: @ramo.plan_estudios
     fill_in "Profesor", with: @ramo.profesor

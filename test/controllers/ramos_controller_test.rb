@@ -17,7 +17,7 @@ class RamosControllerTest < ActionDispatch::IntegrationTest
 
   test "should create ramo" do
     assert_difference("Ramo.count") do
-      post ramos_url, params: { ramo: { conect_liga: @ramo.conect_liga, creditos: @ramo.creditos, curso: @ramo.curso, lista_cruzada: @ramo.lista_cruzada, materia: @ramo.materia, name: @ramo.name, nrc: @ramo.nrc, plan_estudios: @ramo.plan_estudios, profesor: @ramo.profesor, seccion: @ramo.seccion } }
+      post ramos_url, params: { ramo: { conect_liga: @ramo.conect_liga, creditos: @ramo.creditos, curso: @ramo.curso, lista_cruzada: @ramo.lista_cruzada, materia: @ramo.materia, name: @ramo.nombre, nrc: @ramo.nrc, plan_estudios: @ramo.plan_estudios, profesor: @ramo.profesor, seccion: @ramo.seccion } }
     end
 
     assert_redirected_to ramo_url(Ramo.last)
@@ -34,7 +34,7 @@ class RamosControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update ramo" do
-    patch ramo_url(@ramo), params: { ramo: { conect_liga: @ramo.conect_liga, creditos: @ramo.creditos, curso: @ramo.curso, lista_cruzada: @ramo.lista_cruzada, materia: @ramo.materia, name: @ramo.name, nrc: @ramo.nrc, plan_estudios: @ramo.plan_estudios, profesor: @ramo.profesor, seccion: @ramo.seccion } }
+    patch ramo_url(@ramo), params: { ramo: { conect_liga: @ramo.conect_liga, creditos: @ramo.creditos, curso: @ramo.curso, lista_cruzada: @ramo.lista_cruzada, materia: @ramo.materia, name: @ramo.nombre, nrc: @ramo.nrc, plan_estudios: @ramo.plan_estudios, profesor: @ramo.profesor, seccion: @ramo.seccion } }
     assert_redirected_to ramo_url(@ramo)
   end
 
