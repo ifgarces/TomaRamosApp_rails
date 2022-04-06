@@ -9,7 +9,7 @@ public
         return (self.ramo_event_type.name == "PRBA") || (self.ramo_event_type.name == "EXAM")
     end
 
-    # @return [String]
+    # @return [String] multiline description of the event.
     def get_description_long()
         dateOrDayString = self.is_evaluation() ? self.date.to_s() : DayOfWeek.toStringSpanish(self.day_of_week)
         locationString = (self.location == "") ? "(no informada)" : self.location

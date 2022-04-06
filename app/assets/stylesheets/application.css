@@ -13,3 +13,16 @@
  *= require_tree .
  *= require_self
  */
+
+body {
+    font-family: "Source Code Pro", Monaco, monospace;
+    font-size: 12px;
+}
+
+div.app_header_left {
+    float: left;
+}
+
+div.app_header_right {
+    float: right;
+}

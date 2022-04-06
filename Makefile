@@ -34,10 +34,9 @@ stop_server:
 
 # Installs dependencies, sets right Ruby version
 set_rails:
-	rails db:environment:set RAILS_ENV=development
-	rvm use 3.1.1 && rvm current
 	bundle install
 	yarn install --check-files
+	rails db:environment:set RAILS_ENV=development
 
 # Executes migrations, resets database, cleans assets and compiles webpacker
 rails_tasks: set_rails

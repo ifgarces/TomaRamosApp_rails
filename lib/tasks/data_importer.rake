@@ -8,7 +8,7 @@ namespace :data_importer do
     require "date"
     require "logger"
     require "csv"
-    require_relative "../../app/models/day_of_week"
+    require_relative "../utils/day_of_week"
     require_relative "../../app/models/catalog_status"
 
     # Retraives data from the CSV (standard engineering faculty format) and fills the database
@@ -103,6 +103,7 @@ namespace :data_importer do
         end
 
         puts("Clearing Ramo and RamoEvent tables prior to CSV parsing")
+        #TODO: only delete data for the current target academic period, not all!
         RamoEvent.delete_all()
         Ramo.delete_all()
 
