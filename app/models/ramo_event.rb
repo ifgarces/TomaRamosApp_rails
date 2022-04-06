@@ -14,7 +14,7 @@ public
         dateOrDayString = self.is_evaluation() ? self.date.to_s() : DayOfWeek.toStringSpanish(self.day_of_week)
         locationString = (self.location == "") ? "(no informada)" : self.location
         return %{
-Tipo: #{self.ramo_event_type.toStringLarge()}
+Tipo: #{self.ramo_event_type.to_string_large()}
 Ramo: #{self.ramo.nombre} (NRC #{self.ramo.nrc})
 Fecha: #{dateOrDayString} (#{self.start_time} - #{self.end_time})
 Sala: #{locationString}

@@ -4,7 +4,7 @@ class RamoEventType < ApplicationRecord
 public
     # Returns the larger description of the event (by its `name`).
     # @return [String]
-    def toStringLarge()
+    def to_string_large()
         return
             case self.name
             when "CLAS"

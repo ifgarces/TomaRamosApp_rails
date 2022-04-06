@@ -9,7 +9,7 @@ namespace :data_importer do
     require "logger"
     require "csv"
     require_relative "../utils/day_of_week"
-    require_relative "../../app/models/catalog_status"
+    require_relative "../utils/catalog_status"
 
     # Retraives data from the CSV (standard engineering faculty format) and fills the database
     task csv_all: :environment do
@@ -107,7 +107,7 @@ namespace :data_importer do
         RamoEvent.delete_all()
         Ramo.delete_all()
 
-        currentAcademicPeriod = CatalogStatus.getAcademicPeriod()
+        currentAcademicPeriod = CatalogStatus.get_academic_period()
         puts("Reading CSV for academic period %s..." % [currentAcademicPeriod.name])
 
         # Now parsing the CSV and populating database tables `ramo` and `ramo_event`

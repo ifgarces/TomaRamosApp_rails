@@ -39,5 +39,9 @@ set_rails:
 	rails db:environment:set RAILS_ENV=development
 
 # Executes migrations, resets database, cleans assets and compiles webpacker
-rails_tasks: set_rails
-	rails db:migrate:reset db:drop db:reset #assets:clobber assets:precompile
+rails_tasks: set_rails assets
+	rails db:migrate:reset db:drop db:reset
+
+# Updates assets such as CSS files
+assets:
+	rails assets:clobber assets:precompile
