@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_07_035041) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "academic_periods", force: :cascade do |t|
-    t.string "name", limit: 20
+    t.string "name", limit: 20, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_academic_periods_on_name", unique: true
@@ -50,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
   end
 
   create_table "ramo_event_types", force: :cascade do |t|
-    t.string "name", limit: 60
+    t.string "name", limit: 60, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_ramo_event_types_on_name", unique: true
@@ -59,8 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
   create_table "ramo_events", force: :cascade do |t|
     t.string "location", limit: 60
     t.string "day_of_week", limit: 16
-    t.time "start_time"
-    t.time "end_time"
+    t.time "start_time", null: false
+    t.time "end_time", null: false
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,13 +71,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
   end
 
   create_table "ramos", force: :cascade do |t|
-    t.string "nrc", limit: 40
-    t.string "nombre", limit: 100
-    t.string "profesor", limit: 100
-    t.integer "creditos"
-    t.string "materia", limit: 60
+    t.string "nrc", limit: 40, null: false
+    t.string "nombre", limit: 100, null: false
+    t.string "profesor", limit: 100, null: false
+    t.integer "creditos", null: false
+    t.string "materia", limit: 60, null: false
     t.integer "curso"
-    t.string "seccion", limit: 60
+    t.string "seccion", limit: 60, null: false
     t.string "plan_estudios", limit: 60
     t.string "conect_liga", limit: 60
     t.string "lista_cruzada", limit: 60
@@ -98,11 +98,25 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_04_003906) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "tag", limit: 60
-    t.string "password_digest"
-    t.string "name", limit: 150
+    t.string "email", limit: 60, null: false
+    t.string "tag", limit: 60, null: false
+    t.string "display_name", limit: 150, null: false
+    t.string "profile_bio", limit: 256
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "last_sign_in_at"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["tag"], name: "index_users_on_tag", unique: true
   end
 

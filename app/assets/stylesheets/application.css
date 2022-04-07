@@ -15,15 +15,19 @@
  */
 
 body {
-    font-family: Tahoma, Verdana, sans-serif;
-    font-size: 14px;
+    font-family: "Ubuntu", Tahoma, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+h1 {
+    font-family: "Gill Sans Extrabold", Helvetica, sans-serif;
 }
 
 nav.main-nav {
     background-image: -webkit-linear-gradient(top, #232f3db9 0%, white 100%);
-    grid-row: 2;
+    /* grid-row: 2;
     grid-column: 1 / 3;
-    border-color: darkmagenta;
+    border-color: darkmagenta; */
 }
 
 nav.main-nav ul {
@@ -33,19 +37,17 @@ nav.main-nav ul {
     list-style: none;
     justify-content: flex-start;
     padding-left: 12px;
-    margin: 0;
+    /* margin: 0; */
 }
 
-nav.main-nav li {
-    background: #9ce8ff;
-    /* background-image: -webkit-linear-gradient(top, rgba(221, 211, 119, 0.185) 0%, rgb(127, 136, 0) 100%); changed */
-    border: solid 2px #108aaf;
-    border-width: 2px;
-    padding-top: 2px;
-    padding-left: 4px; 
-    padding-right: 4px;
+div.main-nav li {
+    background: transparent;
+    /* background-image: -webkit-linear-gradient(top, rgba(221, 211, 119, 0.185) 0%, rgb(127, 136, 0) 100%); */
+    border: solid 1px darkmagenta;
+    /* padding: 4px 4px 4px 4px; */
+    margin: 4px 4px 4px 4px;
     text-align: center;
-    margin: 4px;
-    border-radius: 5pt; /* changed */
+    border-radius: 5pt;
     height: 1.5em;
+    width: auto;
 }

@@ -1,9 +1,10 @@
 class CreateUsers < ActiveRecord::Migration[7.0]
   def change
     create_table :users do |t|
-      t.string :tag, limit: 60
-      t.string :password_digest
-      t.string :name, limit: 150
+      t.string :email,        limit: 60, null: false, unique: true # for authentication
+      t.string :tag,          limit: 60, null: false # custom unique user tag string
+      t.string :display_name, limit: 150, null: false
+      t.string :profile_bio,  limit: 256
 
       t.timestamps
     end
