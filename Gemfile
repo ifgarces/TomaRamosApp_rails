@@ -85,3 +85,5 @@ gem "cancancan"
 
 # jQuery
 gem 'jquery-rails'
+
+gem "tailwindcss-rails", "~> 2.0"
