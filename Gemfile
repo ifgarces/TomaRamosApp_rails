@@ -48,37 +48,42 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-# Figaro for environment variables
-gem "figaro"
-
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+    # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+    gem "debug", platforms: %i[ mri mingw x64_mingw ]
 end
 
 group :development do
-  # Use console on exceptions index [https://github.com/rails/web-console]
-  gem "web-console"
+    # Use console on exceptions index [https://github.com/rails/web-console]
+    gem "web-console"
 
-  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  # gem "rack-mini-profiler"
+    # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
+    # gem "rack-mini-profiler"
 
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+    # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+    # gem "spring"
 
-  # Adding a tool for printing ActiveRecords as tables
-  gem 'hirb'
+    # Adding a tool for printing ActiveRecords as tables
+    gem "hirb"
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+    # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+    gem "capybara"
+    gem "selenium-webdriver"
+    gem "webdrivers"
 end
 
+# Figaro for environment variables
+gem "figaro"
+
 # Devise, for authentication
-gem 'devise'
+gem "devise"
 
 # CanCan, for access control based on authentication levels
-gem 'cancancan'
+gem "cancancan"
+
+# Bootstrap + jQuery
+gem 'popper_js', '~> 2.9.3'
+gem 'bootstrap', '~> 5.1.3'
+gem 'jquery-rails'
