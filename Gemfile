@@ -83,7 +83,5 @@ gem "devise"
 # CanCan, for access control based on authentication levels
 gem "cancancan"
 
-# Bootstrap + jQuery
-gem 'popper_js', '~> 2.9.3'
-gem 'bootstrap', '~> 5.1.3'
+# jQuery
 gem 'jquery-rails'
