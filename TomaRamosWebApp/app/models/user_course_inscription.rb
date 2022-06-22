@@ -1,3 +1,6 @@
+# Simply maps an user with their collection of `Course`s inscribed for a given `AcademicPeriod`, so
+# it makes possible to store historical data for previous periods for that user.
+
 class UserCourseInscription < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :course_instances

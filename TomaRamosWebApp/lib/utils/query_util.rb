@@ -2,7 +2,7 @@
 #! DEPRECATED
 #! ---
 
-require "day_of_week"
+require "utils/day_of_week"
 
 module QueryUtil
   public
@@ -12,7 +12,7 @@ module QueryUtil
   # @return [Boolean] whether the events collide with each other.
   # @raise Exception when the events are not of the same broad type (evaluation or non-evaluation). The way for
   # comparing conflicts between those two broat types is different, can't compare evaluation and non-evaluation.
-  def self.are_events_conflicted(event1, event2)
+  def self.areEventsInConflict(event1, event2)
     isEvalEvent1 = event1.is_evaluation()
     isEvalEvent2 = event2.is_evaluation()
     if (isEvalEvent1 && isEvalEvent2) # comparing evaluations: considering date and times
@@ -37,12 +37,12 @@ module QueryUtil
   # @param event [RamoEvent]
   # @return [Array<RamoEvent>] the collection of conflictive `RamoEvent`s with `event`. If there is no conflict, this
   # array will be empty.
-  def self.get_conflicts_for_new_event(ramos, event)
+  def self.getConflictsForNewEvent(ramos, event)
     conflicts = []
     ramos.each do |ramo|
       ramo.ramo_events.each do |ev|
         if (ev.id != event.id)
-          if (QueryUtil.are_events_conflicted(ev, event))
+          if (QueryUtil.areEventsInConflict(ev, event))
             conflicts.append(ev)
           end
         end
@@ -60,7 +60,7 @@ module QueryUtil
 
   # @param ramos [Array<Ramo>]
   # @return [Hash<DayOfWeek, Array<RamoEvent>>]
-  def self.get_events_by_week_day(ramos)
+  def self.getEventsByDayOfWeek(ramos)
     results = {
       DayOfWeek::MONDAY => [],
       DayOfWeek::TUESDAY => [],

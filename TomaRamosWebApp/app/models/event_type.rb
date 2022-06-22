@@ -1,3 +1,8 @@
+# Static enum-like db table, for defining the type of each `CourseEvent`.
+# 
+# @!attribute name
+#   @return [String] E.g. "clase", "ayudantía".
+
 class EventType < ApplicationRecord
   has_many :course_events
 

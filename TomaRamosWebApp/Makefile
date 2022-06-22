@@ -9,7 +9,7 @@ RAILS_POSTGRES_CONNECTION = "postgresql://tomaramosuandes:tomaramosuandes@localh
 
 .PHONY: build web_server set_rails assets test _create_db
 
-# Executes migrations, resets database, cleans assets and compiles webpacker
+# Executes migrations, resets database, cleans assets and compiles javascript
 build: set_rails assets
 	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
 		rails db:migrate:reset db:seed --trace
