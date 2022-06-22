@@ -1,3 +1,7 @@
+#! ---
+#! DEPRECATED
+#! ---
+
 require "date"
 
 # Public module that contains references to the current valid academic period and its courses.

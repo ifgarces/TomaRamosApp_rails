@@ -1,32 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TomaRamosUandes</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <title>Tomaramosuandes</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
 
-    <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body>
-    <nav class="main-nav">
-      <div>
-        <ul>
-          <li><div><%= link_to("Home", root_path) %></div></li>
-          <li><div><%= link_to("Ramos", ramos_path) %></div></li>
-          <li><div><%= link_to("RamoEvents", ramo_events_path) %></div></li>
-        </ul>
-      </div>
-    </nav>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
     <%= yield %>
   </body>
 </html>

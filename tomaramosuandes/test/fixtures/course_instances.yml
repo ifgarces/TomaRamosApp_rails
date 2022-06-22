@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nrc: MyString
+  title: MyString
+  teacher: MyString
+  credits: 1
+  career: MyString
+  course_number: 1
+  section: 1
+  curriculum: MyString
+  liga: MyString
+  lcruz: MyString
+
+two:
+  nrc: MyString
+  title: MyString
+  teacher: MyString
+  credits: 1
+  career: MyString
+  course_number: 1
+  section: 1
+  curriculum: MyString
+  liga: MyString
+  lcruz: MyString

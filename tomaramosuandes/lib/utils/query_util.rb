@@ -1,3 +1,7 @@
+#! ---
+#! DEPRECATED
+#! ---
+
 require 'day_of_week'
 
 module QueryUtil

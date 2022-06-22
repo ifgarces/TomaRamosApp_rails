@@ -1,3 +1,7 @@
+#! ---
+#! DEPRECATED
+#! ---
+
 namespace :data_importer do
     desc "
     Rake task(s) for importing data from sheet files (e.g. CSV) for when the faculty performs changes

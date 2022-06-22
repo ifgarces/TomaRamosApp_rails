@@ -1,11 +1,15 @@
+#! ---
+#! DEPRECATED
+#! ---
+
 require_relative "../lib/utils/catalog_status"
 
-RAMO_EVENT_TYPES = ["CLAS", "AYUD", "LABT", "PRBA", "EXAM"]
+COURSE_EVENT_TYPES = ["CLAS", "AYUD", "LABT", "PRBA", "EXAM"]
 
-if (RamoEventType.count() != RAMO_EVENT_TYPES.count())
-    puts("Inserting RamoEvents into database")
-    RAMO_EVENT_TYPES.each do |event_type_name|
-        RamoEventType.new(name: event_type_name).save()
+if (CourseEventType.count() != COURSE_EVENT_TYPES.count())
+    puts("Inserting CourseEvents into database")
+    COURSE_EVENT_TYPES.each do |event_type_name|
+        CourseEventType.new(name: event_type_name).save()
     end
 end
 
