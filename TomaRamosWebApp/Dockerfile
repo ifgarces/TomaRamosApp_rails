@@ -2,6 +2,7 @@ ARG RUBY_VERSION
 FROM ruby:${RUBY_VERSION}
 
 WORKDIR /home/cypherdev/webapp
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Installing NodJS, Yarn and some debugging utilities
 RUN apt-get update --quiet && apt-get install -y \
@@ -20,7 +21,7 @@ COPY Gemfile .
 COPY package.json .
 COPY Rakefile .
 COPY app/ app/
-# COPY bin/ bin/ #? really needed?
+COPY bin/ bin/
 COPY config/ config/
 COPY db/ db/
 COPY lib/ lib/
@@ -36,7 +37,7 @@ ARG WEB_SERVER_PORT
 EXPOSE ${WEB_SERVER_PORT}
 
 # As Rails is not smart enough to properly load its own `database.yaml` for database connection
-ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramos_development"
+ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
 COPY docker-entrypoint.sh .
 
 CMD [ "/bin/bash", "docker-entrypoint.sh" ]

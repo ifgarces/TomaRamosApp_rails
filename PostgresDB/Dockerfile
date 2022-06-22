@@ -29,10 +29,6 @@ host    all     	all     0.0.0.0/0    md5 \n\
 host    all         all     ::/0         md5 \n\
 " >> /etc/postgresql/14/main/pg_hba.conf
 
-# Exposing the port, for debugging
-ARG POSTGRES_PORT
-EXPOSE ${POSTGRES_PORT}
-
 USER postgres
 
 CMD [ "/bin/sh", "-exu", "-c", "/usr/lib/postgresql/14/bin/postgres \
