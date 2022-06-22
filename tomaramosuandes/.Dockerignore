@@ -1,0 +1,16 @@
+db/schema.rb
+.idea/
+node_modules/
+Gemfile.lock
+.browserslistrc
+.ruby-version
+Procfile.dev
+
+.bundle
+log/
+tmp/
+storage/
+public/assets
+config/master.key
+config/application.yml
+app/assets/builds
