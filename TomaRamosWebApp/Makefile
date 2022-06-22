@@ -4,34 +4,41 @@
 
 include ../.env
 
-# Using this should not be needed, but well, rails is rails.
-RAILS_POSTGRES_CONNECTION = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramos_development"
+# Using explicit ENV variables for database config, which should not be needed, but Rails refuses to
+# correctly use the `datatabse.yml` for some reason
+DB_URL_DEVELOPMENT = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramos_development"
+DB_URL_TEST = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramos_test"
 
-.PHONY: build web_server set_rails assets test _create_db
+.PHONY: build web_server import_csv set_rails assets test
 
 # Executes migrations, resets database, cleans assets and compiles javascript
 build: set_rails assets
-	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails db:migrate:reset db:seed --trace
 
 # Runs the server, but not in background
 web_server:
-	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST}
+
+# Runs the task for importing course data
+import_csv:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+		rake data_importer --trace
 
 # Installs dependencies
 set_rails:
 	bundle install
 	yarn install --check-files
-	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails db:environment:set RAILS_ENV=development
 
 # Updates assets such as CSS styles
 assets:
-	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails assets:clobber assets:precompile
 
 # Run all tests
 test:
-	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+	DATABASE_URL=${DB_URL_TEST} RAILS_ENV=test \
 		rails test

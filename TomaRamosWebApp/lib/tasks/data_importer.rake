@@ -2,19 +2,20 @@
 #! DEPRECATED
 #! ---
 
+require "time"
+require "date"
+require "csv"
+require "utils/day_of_week"
+
+log = Rails.logger
+
 namespace :data_importer do
   desc "
     Rake task(s) for importing data from sheet files (e.g. CSV) for when the faculty performs
     changes on the catalog.
     "
 
-  require "time"
-  require "date"
-  require "logger"
-  require "csv"
-  require "utils/day_of_week"
-
-  # Retraives data from the CSV (standard engineering faculty format) and fills the database
+  # Retrieves data from the CSV (standard engineering faculty format) and fills the database
   task csv_all: :environment do
     CsvColumns = OpenStruct.new(
       :plan_estudios => 0,
@@ -35,7 +36,7 @@ namespace :data_importer do
       :fechaFin => 16,
       :sala => 17,
       :tipoEvento => 18,
-      :profesor => 19,
+      :profesor => 19
     )
 
     # Mapping CSV cell values for actual indexed event type in database
@@ -45,13 +46,14 @@ namespace :data_importer do
       "LABT" => RamoEventType.find_by(name: "LABT"),
       "TUTR" => RamoEventType.find_by(name: "LABT"),
       "PRBA" => RamoEventType.find_by(name: "PRBA"),
-      "EXAM" => RamoEventType.find_by(name: "EXAM"),
+      "EXAM" => RamoEventType.find_by(name: "EXAM")
     }
 
     # Helper class for parsing rows from the CSV
     class CsvRow
-      attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :seccion, :nombre, :credito, :lunes,
-                  :martes, :miercoles, :jueves, :viernes, :fechaInicio, :fechaFin, :sala, :tipoEvento, :profesor
+      attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :seccion, :nombre,
+                  :credito, :lunes, :martes, :miercoles, :jueves, :viernes, :fechaInicio,
+                  :fechaFin, :sala, :tipoEvento, :profesor
 
       def initialize(row_cells)
         @pe = row_cells[CsvColumns.plan_estudios] # string | nil
@@ -88,7 +90,7 @@ namespace :data_importer do
         buff = cellValue.split(Figaro.env.CSV_TIME_SEPARATOR)
         return [
                  Time.parse(buff[0].strip()),
-                 Time.parse(buff[1].strip()),
+                 Time.parse(buff[1].strip())
                ]
       end
 
@@ -104,25 +106,25 @@ namespace :data_importer do
       end
     end
 
-    puts("Clearing Ramo and RamoEvent tables prior to CSV parsing")
+    log.info("Clearing Ramo and RamoEvent tables prior to CSV parsing")
     #TODO: only delete data for the current target academic period, not all!
     RamoEvent.delete_all()
     Ramo.delete_all()
 
     currentAcademicPeriod = CatalogStatus.get_academic_period()
-    puts("Reading CSV for academic period %s..." % [currentAcademicPeriod.name])
+    log.info("Reading CSV for academic period %s..." % [currentAcademicPeriod.name])
 
     # Now parsing the CSV and populating database tables `ramo` and `ramo_event`
     csvRows = CSV.read(Figaro.env.CSV_FILE_PATH) # :List[List[string]]
     csvRows.delete_at(0) # ignoring headers
     csvRows = csvRows.map { |row|
       row.map { |item|
-        item == nil ? nil : item.strip()
+        (item == nil) ? nil : item.strip()
       }
     }
     ramosNrcs = [] # :List[str]
     csvRows.each_with_index do |row, row_index|
-      #log.debug("Processing row %s" % [row]) # trace
+      log.trace("Processing row %s" % [row])
       parsedRow = CsvRow.new(row)
       if (!ramosNrcs.include?(parsedRow.nrc))
         ramosNrcs.append(parsedRow.nrc)
@@ -137,7 +139,7 @@ namespace :data_importer do
           plan_estudios: parsedRow.pe,
           conect_liga: parsedRow.conectorLiga,
           lista_cruzada: parsedRow.listaCruzada,
-          academic_period: currentAcademicPeriod,
+          academic_period: currentAcademicPeriod
         ).save!()
       end
       { # :Hash[DayOfWeek, Pair[Time, Time] | nil|]
@@ -145,12 +147,12 @@ namespace :data_importer do
         DayOfWeek::TUESDAY => parsedRow.martes,
         DayOfWeek::WEDNESDAY => parsedRow.miercoles,
         DayOfWeek::THURSDAY => parsedRow.jueves,
-        DayOfWeek::FRIDAY => parsedRow.viernes,
+        DayOfWeek::FRIDAY => parsedRow.viernes
       }.each do |dayOfWeek, eventTimes|
         if (eventTimes != nil)
           eventType = CsvEventTypesMapping[parsedRow.tipoEvento]
           raise "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
-                  row_index + 2, parsedRow.tipoEvento, CsvEventTypesMapping.values(),
+                  row_index + 2, parsedRow.tipoEvento, CsvEventTypesMapping.values()
                 ] unless (eventType != nil)
           RamoEvent.new(
             location: parsedRow.sala,
@@ -159,12 +161,16 @@ namespace :data_importer do
             end_time: eventTimes.second(),
             date: parsedRow.fechaInicio,
             ramo: Ramo.last(), #? or should bind by ID/NRC?
-            ramo_event_type: eventType,
+            ramo_event_type: eventType
           ).save!()
         end
       end
     end
 
-    puts("CSV parsing complete. Loaded %d Ramos and %d RamoEvents" % [Ramo.count(), RamoEvent.count()])
+    log.info(
+      "CSV parsing complete. Loaded %d Ramos and %d RamoEvents" % [
+        Ramo.count(), RamoEvent.count()
+      ]
+    )
   end
 end

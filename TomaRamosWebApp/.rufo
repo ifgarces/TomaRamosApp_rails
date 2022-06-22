@@ -1,0 +1,4 @@
+# Config for Rufo: https://github.com/ruby-formatter/rufo/blob/master/docs/settings.md
+quote_style :double
+trailing_commas false
+parens_in_def :yes

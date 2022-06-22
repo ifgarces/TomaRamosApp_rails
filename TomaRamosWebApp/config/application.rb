@@ -18,6 +18,14 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Configuring Rails logging, globally
+Rails.logger = Logger.new(STDOUT)
+Rails.logger.level = Logger::DEBUG
+Rails.logger.formatter = proc do |severity, datetime, progname, msg|
+  date_format = datetime.strftime("%Y-%m-%d %H:%M:%S")
+  "[#{date_format}][##{Process.pid}][#{severity}] #{msg}\n"
+end
+
 module Tomaramosuandes
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

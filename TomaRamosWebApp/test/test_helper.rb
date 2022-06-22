@@ -9,5 +9,10 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
-  # Add more helper methods to be used by all tests here...
+  # @param expectedError [Exception]
+  # @param gotError [Exception]
+  def assertExceptionsEqual(expectedError:, gotError:)
+    assert_equal(expectedError.class, gotError.class)
+    assert_equal(expectedError.message, gotError.message)
+  end
 end

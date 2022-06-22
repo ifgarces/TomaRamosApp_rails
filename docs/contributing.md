@@ -22,9 +22,10 @@ Of course, everything should be in english, as is the standard in the industry. 
 
 ### 1.3. Formatting
 
-Parenthesis have to be used wherever possible, in order to distinguish actual methods with attributes (attribute getters). This includes methods with no parameters.
+- Parenthesis have to be used wherever possible, in order to distinguish actual methods with attributes (attribute getters). This includes methods with no parameters.
+- Automatic formatting with [`rufo`](https://github.com/ruby-formatter/rufo) linter.
+- Line breaks should be configured at 100 characters. Make sure to set a vertical ruler at that threshold in your IDE, as the `rufo` formatter does not yet includes automatic line breaks.
 
-[`rufo`](https://github.com/ruby-formatter/rufo) should be used..... for now.... (WIP)
 <!-- TODO: decide if to use `rufo` or `rubocop`, and automate it in `Makefile` and `settings.json` somehow -->
 
 ## 2. Committing

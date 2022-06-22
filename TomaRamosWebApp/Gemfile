@@ -73,3 +73,15 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+# Rufo ruby formatter
+gem "rufo"
+
+# Hirb, for printing ActiveRecords as nice tables when running queries in rails console
+gem "hirb"
+
+# Devise, for authentication
+# gem "devise"
+
+# CanCan, for access control based on authentication levels
+# gem "cancancan"
