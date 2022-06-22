@@ -1,47 +1,42 @@
 # --------------------------------------------------------------------------------------------------
-# Makefile for quickly executing build commands.
+# Makefile for quickly executing rails commands.
 # --------------------------------------------------------------------------------------------------
 
-# Setting quiet mode by default (not printing rules when executing them)
-ifndef VERBOSE
-.SILENT:
-endif
+include .env
 
-PORT = 9090
-HOST = 0.0.0.0
+# Using this should not be needed, but well, rails is rails.
+RAILS_POSTGRES_CONNECTION = "postgresql://cypherdevapp:cypherdevapp@localhost:${POSTGRES_SERVER_PORT}/cypherdevapp_development"
+
+.PHONY: build web_server set_rails assets test _create_db
+
+# Executes migrations, resets database, cleans assets and compiles webpacker
+build: set_rails assets
+	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+		rails db:migrate:reset db:seed --trace
 
 # Runs the server, but not in background
-foreground_server: stop_server
-	rails server --port=${PORT} --binding=${HOST}
+web_server:
+	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+		rails server --port=${RAILS_SERVER_PORT} --binding=${RAILS_SERVER_HOST}
 
-# Runs the server in background
-background_server: stop_server
-	rails server --port=${PORT} --binding=${HOST} --daemon
-
-# Views server output, when running in background
-output:
-	tail -f ./log/development.log -n 60
-
-#* Stops the server, if running at background
-stop_server:
-	if [ -f "./tmp/pids/server.pid" ]; then \
-		kill $$(cat "./tmp/pids/server.pid"); \
-		echo "Server stopped."; \
-		rm -f ./log/development.log; \
-	else \
-		echo "Server was not running in background."; \
-	fi
-
-# Installs dependencies, sets right Ruby version
+# Installs dependencies
 set_rails:
 	bundle install
 	yarn install --check-files
-	rails db:environment:set RAILS_ENV=development
+	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+		rails db:environment:set RAILS_ENV=development
 
-# Executes migrations, resets database, cleans assets and compiles webpacker
-rails_tasks: set_rails assets
-	rails db:migrate:reset db:drop db:reset
-
-# Updates assets such as CSS files
+# Updates assets such as CSS styles
 assets:
-	rails assets:clobber assets:precompile
+	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+		rails assets:clobber assets:precompile
+
+# Run all tests
+test:
+	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+		rails test
+
+# Should be executed only once, when database is blank, when initializing rails on a new machine
+_create_db:
+	DATABASE_URL=${RAILS_POSTGRES_CONNECTION} \
+		rails db:create
