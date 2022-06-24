@@ -7,6 +7,7 @@ require "date"
 require "csv"
 require "json"
 require "utils/day_of_week"
+require "utils/event_type_enum"
 
 log = Rails.logger
 
@@ -45,12 +46,12 @@ namespace :data_importer do
 
     # Mapping CSV cell values for actual indexed event type in database
     csvEventTypesHash = {
-      "CLAS" => EventType.find_by(name: "CLAS"),
-      "AYUD" => EventType.find_by(name: "AYUD"),
-      "LABT" => EventType.find_by(name: "LABT"),
-      "TUTR" => EventType.find_by(name: "LABT"),
-      "PRBA" => EventType.find_by(name: "PRBA"),
-      "EXAM" => EventType.find_by(name: "EXAM")
+      "CLAS" => EventType.find_by(name: EventTypeEnum::CLASS),
+      "AYUD" => EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP),
+      "LABT" => EventType.find_by(name: EventTypeEnum::LABORATORY),
+      "TUTR" => EventType.find_by(name: EventTypeEnum::LABORATORY),
+      "PRBA" => EventType.find_by(name: EventTypeEnum::TEST),
+      "EXAM" => EventType.find_by(name: EventTypeEnum::EXAM)
     }
 
     # Helper class for parsing rows from the CSV
@@ -61,20 +62,20 @@ namespace :data_importer do
 
       # @param row_cells [Array<String>]
       def initialize(row_cells)
-        @pe = row_cells[CsvColumns.plan_estudios] # string | nil
-        @nrc = row_cells[CsvColumns.nrc].to_i() # integer
-        @conectorLiga = row_cells[CsvColumns.conectorLiga] # string | nil
-        @listaCruzada = row_cells[CsvColumns.listaCruzada] # string | nil
-        @materia = row_cells[CsvColumns.materia] # string | nil
-        @curso = row_cells[CsvColumns.número_curso].to_i() # integer
-        @sección = row_cells[CsvColumns.sección] # string | nil
-        @nombre = row_cells[CsvColumns.nombre] # string | nil
-        @créditos = row_cells[CsvColumns.créditos] # string | nil
-        @lunes = CsvRow.parseTimeInterval(row_cells[CsvColumns.lunes]) # List[Time] | nil
-        @martes = CsvRow.parseTimeInterval(row_cells[CsvColumns.martes]) # List[Time] | nil
-        @miércoles = CsvRow.parseTimeInterval(row_cells[CsvColumns.miércoles]) # List[Time] | nil
-        @jueves = CsvRow.parseTimeInterval(row_cells[CsvColumns.jueves]) # List[Time] | nil
-        @viernes = CsvRow.parseTimeInterval(row_cells[CsvColumns.viernes]) # List[Time] | nil
+        @pe = row_cells[CsvColumns.plan_estudios] # String | nil
+        @nrc = row_cells[CsvColumns.nrc].to_i() # Integer
+        @conectorLiga = row_cells[CsvColumns.conectorLiga] # String | nil
+        @listaCruzada = row_cells[CsvColumns.listaCruzada] # String | nil
+        @materia = row_cells[CsvColumns.materia] # String | nil
+        @curso = row_cells[CsvColumns.número_curso].to_i() # Integer
+        @sección = row_cells[CsvColumns.sección] # String | nil
+        @nombre = row_cells[CsvColumns.nombre] # String | nil
+        @créditos = row_cells[CsvColumns.créditos] # String | nil
+        @lunes = CsvRow.parseTimeInterval(row_cells[CsvColumns.lunes]) # Array<Time, Time> | nil
+        @martes = CsvRow.parseTimeInterval(row_cells[CsvColumns.martes])
+        @miércoles = CsvRow.parseTimeInterval(row_cells[CsvColumns.miércoles])
+        @jueves = CsvRow.parseTimeInterval(row_cells[CsvColumns.jueves])
+        @viernes = CsvRow.parseTimeInterval(row_cells[CsvColumns.viernes])
         @fechaInicio = CsvRow.parseDate(row_cells[CsvColumns.fechaInicio]) # Date | nil
         @fechaFin = CsvRow.parseDate(row_cells[CsvColumns.fechaFin]) # Date | nil
         @sala = row_cells[CsvColumns.sala] # string | nil
@@ -87,8 +88,7 @@ namespace :data_importer do
         end
       end
 
-      
-      # @param cellValue [String | nil] format "HH:mm - HH:mm"
+      # @param cellValue [String | nil] In format "HH:mm - HH:mm"
       # @raise [ArgumentError]
       # @return [Array<Time, Time>] of size 2 for initial and end times
       def self.parseTimeInterval(cellValue)
@@ -104,6 +104,8 @@ namespace :data_importer do
         return [Time.parse(cleanSplit.first()), Time.parse(cleanSplit.last())]
       end
 
+      # @param cellValue [String | nil] In format "DD/mm/yyyy", could be `nil` for recurrent events
+      # such as classes (non-evaluation)
       def self.parseDate(cellValue)
         if (cellValue == nil)
           return nil
@@ -181,8 +183,7 @@ namespace :data_importer do
             start_time: eventTimes.first(),
             end_time: eventTimes.second(),
             date: parsedRow.fechaInicio,
-            course_instance: CourseInstance.find_by(nrc: parsedRow.nrc),
-            # course_instance: CourseInstance.last(), #? or should bind by ID/NRC?
+            course_instance: CourseInstance.find_by(nrc: parsedRow.nrc), #// course_instance: CourseInstance.last(),
             event_type: eventType
           ).save!()
         end

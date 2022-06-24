@@ -9,7 +9,7 @@ class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)
 
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order
   fixtures :all
 
   # Asserts the errors are exactly the same.
@@ -37,6 +37,15 @@ class ActiveSupport::TestCase
              section: 1,
              curriculum: "PE2033",
              academic_period: self.getFooAcademicPeriod()
+           )
+  end
+
+  def getFooUser()
+    return User.new(
+             email: "deshka@foo.com",
+             username: "deshka347",
+             password: "qwerty",
+             is_admin: false
            )
   end
 end
