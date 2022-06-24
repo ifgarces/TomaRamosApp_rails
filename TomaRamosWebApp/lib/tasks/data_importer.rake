@@ -5,9 +5,13 @@
 require "time"
 require "date"
 require "csv"
+require "json"
 require "utils/day_of_week"
 
 log = Rails.logger
+
+CSV_FILE_PATH = "db/catalog-ing.csv"
+CSV_TIME_SEPARATOR = "-"
 
 namespace :data_importer do
   desc "
@@ -23,13 +27,13 @@ namespace :data_importer do
       :conectorLiga => 2,
       :listaCruzada => 3,
       :materia => 4,
-      :cursonum => 5,
-      :seccion => 6,
+      :número_curso => 5,
+      :sección => 6,
       :nombre => 7,
-      :credito => 8,
+      :créditos => 8,
       :lunes => 9,
       :martes => 10,
-      :miercoles => 11,
+      :miércoles => 11,
       :jueves => 12,
       :viernes => 13,
       :fechaInicio => 15,
@@ -40,34 +44,35 @@ namespace :data_importer do
     )
 
     # Mapping CSV cell values for actual indexed event type in database
-    CsvEventTypesMapping = {
-      "CLAS" => RamoEventType.find_by(name: "CLAS"),
-      "AYUD" => RamoEventType.find_by(name: "AYUD"),
-      "LABT" => RamoEventType.find_by(name: "LABT"),
-      "TUTR" => RamoEventType.find_by(name: "LABT"),
-      "PRBA" => RamoEventType.find_by(name: "PRBA"),
-      "EXAM" => RamoEventType.find_by(name: "EXAM")
+    csvEventTypesHash = {
+      "CLAS" => EventType.find_by(name: "CLAS"),
+      "AYUD" => EventType.find_by(name: "AYUD"),
+      "LABT" => EventType.find_by(name: "LABT"),
+      "TUTR" => EventType.find_by(name: "LABT"),
+      "PRBA" => EventType.find_by(name: "PRBA"),
+      "EXAM" => EventType.find_by(name: "EXAM")
     }
 
     # Helper class for parsing rows from the CSV
     class CsvRow
-      attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :seccion, :nombre,
-                  :credito, :lunes, :martes, :miercoles, :jueves, :viernes, :fechaInicio,
+      attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :sección, :nombre,
+                  :créditos, :lunes, :martes, :miércoles, :jueves, :viernes, :fechaInicio,
                   :fechaFin, :sala, :tipoEvento, :profesor
 
+      # @param row_cells [Array<String>]
       def initialize(row_cells)
         @pe = row_cells[CsvColumns.plan_estudios] # string | nil
         @nrc = row_cells[CsvColumns.nrc].to_i() # integer
         @conectorLiga = row_cells[CsvColumns.conectorLiga] # string | nil
         @listaCruzada = row_cells[CsvColumns.listaCruzada] # string | nil
         @materia = row_cells[CsvColumns.materia] # string | nil
-        @curso = row_cells[CsvColumns.cursonum].to_i() # integer
-        @seccion = row_cells[CsvColumns.seccion] # string | nil
+        @curso = row_cells[CsvColumns.número_curso].to_i() # integer
+        @sección = row_cells[CsvColumns.sección] # string | nil
         @nombre = row_cells[CsvColumns.nombre] # string | nil
-        @credito = row_cells[CsvColumns.credito] # string | nil
+        @créditos = row_cells[CsvColumns.créditos] # string | nil
         @lunes = CsvRow.parseTimeInterval(row_cells[CsvColumns.lunes]) # List[Time] | nil
         @martes = CsvRow.parseTimeInterval(row_cells[CsvColumns.martes]) # List[Time] | nil
-        @miercoles = CsvRow.parseTimeInterval(row_cells[CsvColumns.miercoles]) # List[Time] | nil
+        @miércoles = CsvRow.parseTimeInterval(row_cells[CsvColumns.miércoles]) # List[Time] | nil
         @jueves = CsvRow.parseTimeInterval(row_cells[CsvColumns.jueves]) # List[Time] | nil
         @viernes = CsvRow.parseTimeInterval(row_cells[CsvColumns.viernes]) # List[Time] | nil
         @fechaInicio = CsvRow.parseDate(row_cells[CsvColumns.fechaInicio]) # Date | nil
@@ -77,100 +82,115 @@ namespace :data_importer do
         @profesor = row_cells[CsvColumns.profesor] # string | nil
 
         # Ensuring mandatory fields are not null
-        [@pe, @nrc, @materia, @seccion, @nombre, @tipoEvento, @profesor].each do |field|
+        [@pe, @nrc, @materia, @sección, @nombre, @tipoEvento, @profesor].each do |field|
           raise "One of the mandatory fields is nil for CsvRow %s" % [self] unless (field != nil)
         end
       end
 
-      # Returns a pair of `Time` object
+      
+      # @param cellValue [String | nil] format "HH:mm - HH:mm"
+      # @raise [ArgumentError]
+      # @return [Array<Time, Time>] of size 2 for initial and end times
       def self.parseTimeInterval(cellValue)
         if (cellValue == nil)
           return nil
         end
-        buff = cellValue.split(Figaro.env.CSV_TIME_SEPARATOR)
-        return [
-                 Time.parse(buff[0].strip()),
-                 Time.parse(buff[1].strip())
-               ]
+        cleanSplit = cellValue.split(CSV_TIME_SEPARATOR).map { |str|
+          str.strip()
+        }
+        raise ArgumentError.new(
+          "Invalid cell value '#{cellValue}': does not have the expected format 'HH:mm - HH:mm'"
+        ) unless (cleanSplit.count() == 2)
+        return [Time.parse(cleanSplit.first()), Time.parse(cleanSplit.last())]
       end
 
       def self.parseDate(cellValue)
         if (cellValue == nil)
           return nil
         end
-        return DateTime.parse(cellValue).to_date() #TODO ensure this works
+        return DateTime.parse(cellValue).to_date()
       end
 
       def to_s()
-        return self.as_json.to_s
+        return self.to_json()
       end
     end
 
-    log.info("Clearing Ramo and RamoEvent tables prior to CSV parsing")
+    log.info("Clearing CourseInstance and CourseEvent tables prior to CSV parsing...")
+
     #TODO: only delete data for the current target academic period, not all!
-    RamoEvent.delete_all()
-    Ramo.delete_all()
+    CourseEvent.delete_all()
+    CourseInstance.delete_all()
 
-    currentAcademicPeriod = CatalogStatus.get_academic_period()
-    log.info("Reading CSV for academic period %s..." % [currentAcademicPeriod.name])
+    currentAcademicPeriod = AcademicPeriod.getLatest()
 
-    # Now parsing the CSV and populating database tables `ramo` and `ramo_event`
-    csvRows = CSV.read(Figaro.env.CSV_FILE_PATH) # :List[List[string]]
-    csvRows.delete_at(0) # ignoring headers
+    # Now parsing the CSV and populating database tables `CourseInstance` and `CourseEvent`
+    log.info("Reading courses from CSV '%s' for current academic period %s..." % [
+      CSV_FILE_PATH, currentAcademicPeriod.name
+    ])
+
+    if (!File.exist?(CSV_FILE_PATH))
+      log.error("CSV file '%s' does not exist" % [CSV_FILE_PATH])
+      exit(1)
+    end
+
+    csvRows = CSV.read(CSV_FILE_PATH)
+    csvRows.delete_at(0) # ignoring CSV headers
     csvRows = csvRows.map { |row|
       row.map { |item|
         (item == nil) ? nil : item.strip()
       }
     }
-    ramosNrcs = [] # :List[str]
-    csvRows.each_with_index do |row, row_index|
-      log.trace("Processing row %s" % [row])
+    allCoursesNRCs = [] # :Array<String>
+    csvRows.each_with_index do |row, rowIndex|
+      log.debug("Processing row %s" % [row])
       parsedRow = CsvRow.new(row)
-      if (!ramosNrcs.include?(parsedRow.nrc))
-        ramosNrcs.append(parsedRow.nrc)
-        Ramo.new(
+      if (!allCoursesNRCs.include?(parsedRow.nrc))
+        allCoursesNRCs.append(parsedRow.nrc)
+        CourseInstance.new(
           nrc: parsedRow.nrc,
-          nombre: parsedRow.nombre,
-          profesor: parsedRow.profesor,
-          creditos: parsedRow.credito,
-          materia: parsedRow.materia,
-          curso: parsedRow.curso,
-          seccion: parsedRow.seccion,
-          plan_estudios: parsedRow.pe,
-          conect_liga: parsedRow.conectorLiga,
-          lista_cruzada: parsedRow.listaCruzada,
+          title: parsedRow.nombre,
+          teacher: parsedRow.profesor,
+          credits: parsedRow.créditos,
+          career: parsedRow.materia,
+          course_number: parsedRow.curso,
+          section: parsedRow.sección,
+          curriculum: parsedRow.pe,
+          liga: parsedRow.conectorLiga,
+          lcruz: parsedRow.listaCruzada,
           academic_period: currentAcademicPeriod
         ).save!()
       end
-      { # :Hash[DayOfWeek, Pair[Time, Time] | nil|]
+      { # :Hash<DayOfWeek, Array<Time, Time> | nil>
         DayOfWeek::MONDAY => parsedRow.lunes,
         DayOfWeek::TUESDAY => parsedRow.martes,
-        DayOfWeek::WEDNESDAY => parsedRow.miercoles,
+        DayOfWeek::WEDNESDAY => parsedRow.miércoles,
         DayOfWeek::THURSDAY => parsedRow.jueves,
         DayOfWeek::FRIDAY => parsedRow.viernes
       }.each do |dayOfWeek, eventTimes|
         if (eventTimes != nil)
-          eventType = CsvEventTypesMapping[parsedRow.tipoEvento]
-          raise "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
-                  row_index + 2, parsedRow.tipoEvento, CsvEventTypesMapping.values()
-                ] unless (eventType != nil)
-          RamoEvent.new(
+          eventType = csvEventTypesHash[parsedRow.tipoEvento]
+          raise RuntimeError.new(
+            "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
+              rowIndex + 2, parsedRow.tipoEvento, csvEventTypesHash.values()
+            ]
+          ) unless (eventType != nil)
+          CourseEvent.new(
             location: parsedRow.sala,
             day_of_week: DayOfWeek.parseStringDay(dayOfWeek),
             start_time: eventTimes.first(),
             end_time: eventTimes.second(),
             date: parsedRow.fechaInicio,
-            ramo: Ramo.last(), #? or should bind by ID/NRC?
-            ramo_event_type: eventType
+            course_instance: CourseInstance.find_by(nrc: parsedRow.nrc),
+            # course_instance: CourseInstance.last(), #? or should bind by ID/NRC?
+            event_type: eventType
           ).save!()
         end
       end
     end
 
-    log.info(
-      "CSV parsing complete. Loaded %d Ramos and %d RamoEvents" % [
-        Ramo.count(), RamoEvent.count()
-      ]
-    )
+    log.info("CSV parsing complete, loaded %d CourseInstances and %d CourseEvents" % [
+      CourseInstance.count(), CourseEvent.count()
+    ])
   end
 end

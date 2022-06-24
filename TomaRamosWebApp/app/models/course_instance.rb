@@ -2,7 +2,9 @@
 #
 # @!attribute nrc
 #   @return [String] Unique number for a course instance for a given `AcademicPeriod`. Not the
-#   primary key at a database level, as we will have multiple periods.
+#   primary key at a database level, as we will have multiple periods. It is stored as a String
+#   instead of an Integer directly because CSV format is sometimes messy or incomplete (so we could
+#   have a "PENDING" value for an NRC when and if needed at a given point).
 #
 # @!attribute title
 #   @return [String] Course name or title.

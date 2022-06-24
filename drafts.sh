@@ -53,3 +53,8 @@ set -exu
 #     lista_cruzada:string{60}
 # rails generate scaffold_controller ramo_event \
 #     location:string{32} day_of_week:string{16} start_time:time end_time:time date:date
+
+#* Relations remainder
+# When we get `MissingAttributeError` for setting association instance `B` into `A`, we shall run:
+rails generate migration AddBForeignKeyToA b:references
+# e.g. rails generate migration AddLodgingForeignKeyToGuestRating lodging:references

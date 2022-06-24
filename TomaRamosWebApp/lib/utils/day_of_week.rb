@@ -1,54 +1,38 @@
-# Unlike Java/Kotlin, Ruby doesn't have a built-in library for days of week
+# Enum-like module for modeling a day of the week (as Ruby does not have a build-in one, unlike
+# Java/Kotlin)
+
 module DayOfWeek
   public
 
-  MONDAY = "monday"
-  TUESDAY = "tuesday"
-  WEDNESDAY = "wednesday"
-  THURSDAY = "thursday"
-  FRIDAY = "friday"
-  SATURDAY = "saturday"
-  SUNDAY = "sunday"
+  MONDAY = "LUNES"
+  TUESDAY = "MARTES"
+  WEDNESDAY = "MIÉRCOLES"
+  THURSDAY = "JUEVES"
+  FRIDAY = "VIERNES"
+  SATURDAY = "SÁBADO"
+  SUNDAY = "DOMINGO"
+
+  # @param cleanDay [String]
+  # @return [Boolean]
+  def self.isDayStringValid(cleanDay)
+    return ([
+      DayOfWeek::MONDAY,
+      DayOfWeek::TUESDAY,
+      DayOfWeek::WEDNESDAY,
+      DayOfWeek::THURSDAY,
+      DayOfWeek::FRIDAY,
+      DayOfWeek::SATURDAY,
+      DayOfWeek::SUNDAY
+    ].include?(cleanDay))
+  end
 
   # @param dayString [String]
   # @return [DayOfWeek]
   def self.parseStringDay(dayString)
-    return case (dayString)
-      when "monday"
-        DayOfWeek::MONDAY
-      when "tuesday"
-        DayOfWeek::TUESDAY
-      when "wednesday"
-        DayOfWeek::WEDNESDAY
-      when "thursday"
-        DayOfWeek::THURSDAY
-      when "friday"
-        DayOfWeek::FRIDAY
-      when "saturday"
-        DayOfWeek::SATURDAY
-      when "sunday"
-        DayOfWeek::SUNDAY
-      end
-  end
-
-  # @param sayOfWeek [DayOfWeek]
-  # @return [String]
-  def self.toStringSpanish(dayOfWeek)
-    return case (dayOfWeek)
-      when DayOfWeek::MONDAY
-        "Lunes"
-      when DayOfWeek::TUESDAY
-        "Martes"
-      when DayOfWeek::WEDNESDAY
-        "Miércoles"
-      when DayOfWeek::THURSDAY
-        "Jueves"
-      when DayOfWeek::FRIDAY
-        "Viernes"
-      when DayOfWeek::SATURDAY
-        "Sábado"
-      when DayOfWeek::SUNDAY
-        "Domingo"
-      end
+    day = dayString.upcase!().strip!()
+    raise ArgumentError.new(
+      "Provided value '%s' is not a valid DayOfWeek, must be one of %s" % [dayString, validValues]
+    ) unless (self.isDayStringValid(day))
+    return day
   end
 end

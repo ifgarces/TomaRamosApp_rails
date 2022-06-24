@@ -1,11 +1,14 @@
 # Web application user.
 #
 # @!attribute email
-#   @return [String] Registration email. Supposed to be `@miuandes`.
+#   @return [String] Registration email. Supposed to be `@miuandes`, unless `is_admin`.
 #
 # @!attribute username
 #   @return [String] So as this servers as a customizable displayable name for the user profile, in
 #   case profiles are ever implemented in the future.
+#
+# @!attribute is_admin
+#   @return [Boolean] Wether the user has admin privileges.
 
 class User < ApplicationRecord
   has_secure_password

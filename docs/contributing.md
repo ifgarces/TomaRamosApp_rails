@@ -12,7 +12,7 @@
 
 ### 1.1. Documentation
 
-The Ruby *entities* such as classes, modules and functions should have their respective [YARD](https://www.rubydoc.info/gems/yard/file/README.md) documentation (please check [section 3](#3-recommended-vscode-extensions)). The name of those entities should be ideally self-descriptive, so as not to place a description on every entity, but the types must be documented properly (e.g. function parameters, return type, class attributes).
+The Ruby *entities* such as classes, modules and functions should have their respective [YARD](https://www.rubydoc.info/gems/yard/file/README.md) documentation (please check [section 3](#3-recommended-vscode-extensions)). The name of those entities should be ideally self-descriptive, so as not to place a description on every entity, but the types must be documented properly (e.g. function parameters, return type, class attributes). Note that, as YARD is the standard for Ruby, when documenting types with it, your IDE will recognize them and thus will be able to help with autocompletion, etc.
 
 For documenting models, please do it in the model class and not in the migration. [This good man](https://stackoverflow.com/questions/64678789/documenting-ruby-on-rails-models-with-yard) provides a good example of the format.
 

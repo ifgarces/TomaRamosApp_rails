@@ -74,14 +74,27 @@ group :test do
   gem "webdrivers"
 end
 
+# For generating great Fake data
+gem "faker"
+
 # Rufo ruby formatter
 gem "rufo"
 
 # Hirb, for printing ActiveRecords as nice tables when running queries in rails console
 gem "hirb"
 
+# Bootstrap... #? needed here at the Gamefile?
+# gem "bootstrap"
+
+# jQuery
+gem "jquery-rails"
+
 # Devise, for authentication
 # gem "devise"
+gem "bcrypt" #! remove this later for when adding devise
 
 # CanCan, for access control based on authentication levels
 # gem "cancancan"
+
+# Figaro for environment variables
+gem "figaro"
