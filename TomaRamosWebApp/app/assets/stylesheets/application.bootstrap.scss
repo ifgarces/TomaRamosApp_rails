@@ -1,2 +1,8 @@
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-icons/font/bootstrap-icons';
+// Overriding boostrap colors here
+// Ref: https://stackoverflow.com/a/50253707/12684271
+$primary: #9240d1;
+$secondary: #7e6d8c; // default is #6c757d
+$danger: #eb0b64;
+
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons";
