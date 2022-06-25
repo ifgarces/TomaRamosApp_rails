@@ -26,7 +26,7 @@ import_csv:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rake data_importer:csv_all --trace
 
-# Installs dependencies
+# Installs Ruby and JavaScript dependencies
 packages:
 	bundle install
 	yarn install --check-files

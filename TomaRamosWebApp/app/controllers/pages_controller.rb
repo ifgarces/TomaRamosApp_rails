@@ -9,4 +9,7 @@ class PagesController < ApplicationController
 
   def wip()
   end
+
+  def not_found()
+  end
 end

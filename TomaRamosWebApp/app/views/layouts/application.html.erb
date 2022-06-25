@@ -12,16 +12,14 @@
 
   <body>
 
-    <nav id="TopNavBar" class="navbar navbar-expand-sm bg-light navbar-light">
+    <nav id="TopNavBar" class="navbar navbar-light">
       <div id="TopNavBarContentDiv" class="container-fluid">
 
-        <%=
-          link_to(
-            image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-            root_path,
-            class: "navbar-brand"
-          )
-        %>
+        <%= link_to(
+              image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+              root_path,
+              class: "navbar-brand"
+            ) %>
         <ul id="TopNavBarLinks" class="navbar-nav">
           <% if (false) %>
             <%
@@ -56,17 +54,17 @@
     %>
     <% if (true) %>
       <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar"
-           style="
-           background-color: #eeeeee;
-             position: fixed;
-             bottom: 0;
-             left:0;
-             width: 100%;
-             padding-top: 20px;
-             padding-left: 10px;
-             padding-right: 10px;
-             padding-bottom: 20px;
-           ">
+        style="
+          background-color: #EEEEEE;
+          position: fixed;
+          bottom: 0;
+          left:0;
+          width: 100%;
+          padding-top: 20px;
+          padding-left: 10px;
+          padding-right: 10px;
+          padding-bottom: 20px;
+       ">
         <button type="button" class="btn btn-lg btn-secondary">
           <i class="bi bi-house-door-fill"></i>
           Inicio
