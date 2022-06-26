@@ -29,9 +29,18 @@
   </head>
 
   <body>
-    <div id="MainDivWhiteLayer" style="background-color: rgba(255,255,255,0.9);">
+    <div id="MainDivWhiteLayer" style="
+      background-color: rgba(255,255,255,0.9);
+    ">
 
-      <nav id="TopNavBar" class="navbar navbar-light">
+      <nav id="TopNavBar" class="navbar navbar-light border-bottom" style="
+        height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
+        background-color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+      ">
         <div id="TopNavBarContentDiv" class="container-fluid">
 
           <%= link_to(
@@ -39,20 +48,25 @@
                 root_path,
                 class: "navbar-brand"
               ) %>
+
           <ul id="TopNavBarLinks" class="navbar-nav">
             <% if (false) %>
               <%
                 # If logged in, display link to user profile, showing their username
               %>
               <li class="nav-item">
-                <a class="nav-link active" href="#">Show username here</a>
+                <a class="nav-link active" href="#">[username here]</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Cerrar sesión</a>
               </li>
             <% else %>
               <li class="nav-item">
-                <%= link_to("Entrar con Google", "/auth/google_oauth2", class: "nav-link") %>
+                <%= link_to(
+                      raw("<i class='bi bi-box-arrow-in-right'></i> Entrar con Google"),
+                      "/auth/google_oauth2",
+                      class: "btn btn-sm btn-secondary"
+                    ) %>
               </li>
             <% end %>
           </ul>
@@ -60,9 +74,16 @@
         </div>
       </nav>
 
+      <%
+        # temporal, should be true only if the user is authenticated
+        navBarVisible = false
+      %>
+
       <div class="overflow-auto" style="
-      height: 500px;
+        height: inherit;
         padding: 8px 10px 8px 10px;
+        margin-top: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
+        margin-bottom: <%= (navBarVisible) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
         background: transparent;
       ">
         <%= yield %>
@@ -70,18 +91,17 @@
 
       <%
         #TODO: move hardcoded styles to a proper CSS file.
-        #TODO: also, do not display the bottom bar unless the user is authenticated, or make the buttons `disabled`
       %>
-      <% if (true) %>
-        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar"
-             style="
-             background-color: rgba(238,238,238,0.9);
-               position: fixed;
-               bottom: 0;
-               left:0;
-               width: 100%;
-               padding: 20px 10px 20px 10px;
-             ">
+      <% if (navBarVisible) %>
+        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
+          background-color: rgba(238,238,238,1);
+          height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          padding: 10px 8px 10px 8px;
+        ">
           <button type="button" class="btn btn-lg btn-secondary">
             <i class="bi bi-house-door-fill"></i>
             Inicio
@@ -100,6 +120,7 @@
           </button>
         </div>
       <% end %>
+
     </div>
   </body>
 </html>

@@ -1,8 +1,10 @@
 require "redcarpet"
 
 module ApplicationHelper
+  TOP_NAV_BAR_HEIGHT = "80px"
+  BOTTOM_NAV_BAR_HEIGHT = "76px"
 
-  # Renders a Markdown from a file name
+  # Renders a Markdown from a file name.
   #
   # References (many thanks, boys):
   #  - https://stackoverflow.com/questions/36957097/rails-4-how-i-use-the-contents-of-a-markdown-file-in-a-view
@@ -19,7 +21,7 @@ module ApplicationHelper
 
     renderer = Redcarpet::Render::HTML.new({
       filter_html: true,
-      no_images: true, #!
+      no_images: true, #! can't due Rails' security behavior for assets
       no_links: false,
       no_styles: false,
       safe_links_only: false,
@@ -42,7 +44,7 @@ module ApplicationHelper
       quote: true #?
     })
 
-    mdContent = File.open(filename, File::RDONLY).read()
-    @markdown.render(mdContent).html_safe()
+    mdRawContent = File.open(filename, File::RDONLY).read()
+    @markdown.render(mdRawContent).html_safe()
   end
 end
