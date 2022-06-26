@@ -2,7 +2,7 @@
 
 Esta es una herramienta no oficial para **planificar o simular la toma de ramos** para la Universidad de los Andes.
 
-Nota: inscribir ramos a través de esta plataforma no tiene ninguna validez, siempre debe tomar sus ramos por [Banner miUandes](https://mi.uandes.cl). Esta es una solución externa a la Facultad para planificar la toma de ramos.
+Nota: *inscribir ramos a través de esta plataforma no tiene ninguna validez*, siempre debe tomar sus ramos por [Banner miUandes](https://mi.uandes.cl). Esta es una solución externa a la Facultad para planificar la toma de ramos.
 
 ## Funcionalidades
 

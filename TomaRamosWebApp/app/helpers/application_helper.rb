@@ -19,15 +19,27 @@ module ApplicationHelper
 
     renderer = Redcarpet::Render::HTML.new({
       filter_html: true,
+      no_images: true, #!
+      no_links: false,
+      no_styles: false,
+      safe_links_only: false,
+      with_toc_data: false, #* would be interesting, but not in this case
       hard_wrap: true,
+      prettify: true,
       link_attributes: { rel: "nofollow", target: "_blank" },
       space_after_headers: true,
       fenced_code_blocks: true
     })
     @markdown ||= Redcarpet::Markdown.new(renderer, {
-      autolink: true,
+      autolink: false,
+      disable_indented_code_blocks: true,
+      strikethrough: true,
+      lax_spacing: false,
+      space_after_headers: true,
       superscript: true,
-      disable_indented_code_blocks: true
+      underline: false,
+      highlight: true,
+      quote: true #?
     })
 
     mdContent = File.open(filename, File::RDONLY).read()
