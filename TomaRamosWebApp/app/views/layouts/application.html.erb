@@ -30,60 +30,49 @@
 
   <body>
     <div id="MainDivWhiteLayer" style="
-      background-color: rgba(255,255,255,0.9);
+      background-color: rgba(255, 255, 255, 0.92);
     ">
 
-      <nav id="TopNavBar" class="navbar navbar-light border-bottom" style="
+      <% if (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) %>
+        <nav id="TopNavBar" class="navbar navbar-light border-bottom" style="
         height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
-        background-color: white;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-      ">
-        <div id="TopNavBarContentDiv" class="container-fluid">
+          background-color: white;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+        ">
+          <div id="TopNavBarContentDiv" class="container-fluid">
 
-          <%= link_to(
-                image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-                root_path,
-                class: "navbar-brand"
-              ) %>
+            <%= link_to(
+                  image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+                  root_path,
+                  class: "navbar-brand"
+                ) %>
 
-          <ul id="TopNavBarLinks" class="navbar-nav">
-            <% if (false) %>
-              <%
-                # If logged in, display link to user profile, showing their username
-              %>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">[username here]</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Cerrar sesión</a>
-              </li>
-            <% else %>
-              <li class="nav-item">
-                <%= link_to(
-                      raw("<i class='bi bi-box-arrow-in-right'></i> Entrar con Google"),
-                      "/auth/google_oauth2",
-                      class: "btn btn-sm btn-secondary"
-                    ) %>
-              </li>
-            <% end %>
-          </ul>
+            <ul id="TopNavBarLinks" class="navbar-nav">
+              <% if (false) %>
+                <%
+                  # If logged in, display link to user profile, showing their username
+                %>
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">(username here)</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Cerrar sesión</a>
+                </li>
+              <% end %>
+            </ul>
 
-        </div>
-      </nav>
-
-      <%
-        # temporal, should be true only if the user is authenticated
-        navBarVisible = false
-      %>
+          </div>
+        </nav>
+      <% end %>
 
       <div class="overflow-auto" style="
-        height: inherit;
+        height: 100vh;
         padding: 8px 10px 8px 10px;
-        margin-top: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
-        margin-bottom: <%= (navBarVisible) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
+        margin-top: <%= (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
+        margin-bottom: <%= (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
         background: transparent;
       ">
         <%= yield %>
@@ -92,7 +81,7 @@
       <%
         #TODO: move hardcoded styles to a proper CSS file.
       %>
-      <% if (navBarVisible) %>
+      <% if (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) %>
         <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
           background-color: rgba(238,238,238,1);
           height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;

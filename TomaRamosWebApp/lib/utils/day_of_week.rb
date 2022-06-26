@@ -29,7 +29,7 @@ module DayOfWeek
   # @param dayString [String]
   # @return [DayOfWeek]
   def self.parseStringDay(dayString)
-    day = dayString.upcase!().strip!()
+    day = dayString.upcase().strip()
     raise ArgumentError.new(
       "Provided value '%s' is not a valid DayOfWeek, must be one of %s" % [dayString, validValues]
     ) unless (self.isDayStringValid(day))

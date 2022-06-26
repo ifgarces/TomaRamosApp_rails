@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
-  get 'sessions/new'
-  get 'sessions/create'
-  root "pages#about"
-  #root "pages#home"
+  get "sessions/new"
+  get "sessions/create"
 
   # PagesController
   get "/home" => "pages#home"
@@ -19,4 +17,6 @@ Rails.application.routes.draw do
   get "/login" => "sessions#new"
 
   get "/google-auth/redirect" => "pages#awesome"
+
+  root "pages#home"
 end
