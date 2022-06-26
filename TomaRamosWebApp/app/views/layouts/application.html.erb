@@ -52,10 +52,7 @@
               </li>
             <% else %>
               <li class="nav-item">
-                <a class="nav-link" href="#">Entrar</a>
-                <%
-                  # link_to("Entrar", ..., class: "nav-link") # navigate to subpage where both login/signup options are located at
-                %>
+                <%= link_to("Entrar con Google", "/auth/google_oauth2", class: "nav-link") %>
               </li>
             <% end %>
           </ul>

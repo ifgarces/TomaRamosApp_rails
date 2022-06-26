@@ -3,15 +3,25 @@ require "figaro"
 
 log = Rails.logger
 
+# @param name [String]
+# @return [Boolean]
+def envExists(name)
+  return (ENV[name] != nil) && (!ENV[name].blank?)
+end
+
+raise RuntimeError.new(
+  "Google Cloud secrets missing! Please fill your `.secrets.env` properly"
+) unless (envExists("GCLOUD_CLIENT_ID") && envExists("GCLOUD_PRIVATE_KEY"))
+
 COURSE_EVENT_TYPES = ["CLAS", "AYUD", "LABT", "PRBA", "EXAM"]
 
 # @param log [Logger]
 def createUserPassword(log)
-  adminPassword = Figaro.env.ADMIN_USER_PASSWORD
-
   raise RuntimeError.new(
     "ADMIN_USER_PASSWORD environment variable was not provided or is blank"
-  ) unless ((adminPassword != nil) || (adminPassword.blank?))
+  ) unless envExists("ADMIN_USER_PASSWORD")
+
+  adminPassword = ENV["ADMIN_USER_PASSWORD"]
 
   User.new(
     email: "admin@tomaramos.app",
@@ -44,6 +54,7 @@ def setCurrentAcademicPeriod(log)
   end
 end
 
+createUserPassword(log)
 setEventTypes(log)
 setCurrentAcademicPeriod(log)
 

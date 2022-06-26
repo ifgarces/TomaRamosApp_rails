@@ -12,4 +12,7 @@ class PagesController < ApplicationController
 
   def not_found()
   end
+
+  def awesome()
+  end
 end
