@@ -1,7 +1,7 @@
 ARG RUBY_VERSION
 FROM ruby:${RUBY_VERSION}
 
-WORKDIR /home/cypherdev/webapp
+WORKDIR /home/tomaramos/webapp
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Installing NodJS, Yarn and some debugging utilities

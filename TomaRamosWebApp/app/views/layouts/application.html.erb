@@ -8,81 +8,101 @@
 
     <%= stylesheet_link_tag("application", "data-turbo-track": "reload") %>
     <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
+    <%= stylesheet_link_tag(params[:controller]) %>
+
+    <%
+      # Setting image as background. Ref: https://www.syedaslam.com/dynamic-full-page-background-images-in-rails/
+    %>
+    <style>
+        html {
+            background: url(<%= image_url("background-white-geometric.jpg") %>) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        body {
+            /* Warning: the following overrides Bootstrap stuff such as the navigation bar background color */
+            background: transparent;
+        }
+    </style>
   </head>
 
   <body>
+    <div id="MainDivWhiteLayer" style="background-color: rgba(255,255,255,0.9);">
 
-    <nav id="TopNavBar" class="navbar navbar-light">
-      <div id="TopNavBarContentDiv" class="container-fluid">
+      <nav id="TopNavBar" class="navbar navbar-light">
+        <div id="TopNavBarContentDiv" class="container-fluid">
 
-        <%= link_to(
-              image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-              root_path,
-              class: "navbar-brand"
-            ) %>
-        <ul id="TopNavBarLinks" class="navbar-nav">
-          <% if (false) %>
-            <%
-              # If logged in, display link to user profile, showing their username
-            %>
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Show username here</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Cerrar sesión</a>
-            </li>
-          <% else %>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Entrar</a>
+          <%= link_to(
+                image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+                root_path,
+                class: "navbar-brand"
+              ) %>
+          <ul id="TopNavBarLinks" class="navbar-nav">
+            <% if (false) %>
               <%
-                # link_to("Entrar", ..., class: "nav-link") # navigate to subpage where both login/signup options are located at
+                # If logged in, display link to user profile, showing their username
               %>
-            </li>
-          <% end %>
-        </ul>
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Show username here</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Cerrar sesión</a>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Entrar</a>
+                <%
+                  # link_to("Entrar", ..., class: "nav-link") # navigate to subpage where both login/signup options are located at
+                %>
+              </li>
+            <% end %>
+          </ul>
 
+        </div>
+      </nav>
+
+      <div class="overflow-auto" style="
+      height: 500px;
+        padding: 8px 10px 8px 10px;
+        background: transparent;
+      ">
+        <%= yield %>
       </div>
-    </nav>
 
-    <div class="overflow-auto" style="height: 500px; padding: 8px 10px 8px 10px;">
-      <%= yield %>
+      <%
+        #TODO: move hardcoded styles to a proper CSS file.
+        #TODO: also, do not display the bottom bar unless the user is authenticated, or make the buttons `disabled`
+      %>
+      <% if (true) %>
+        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar"
+             style="
+             background-color: rgba(238,238,238,0.9);
+               position: fixed;
+               bottom: 0;
+               left:0;
+               width: 100%;
+               padding: 20px 10px 20px 10px;
+             ">
+          <button type="button" class="btn btn-lg btn-secondary">
+            <i class="bi bi-house-door-fill"></i>
+            Inicio
+          </button>
+          <button type="button" class="btn btn-lg btn-outline-secondary">
+            <i class="bi bi-list-stars"></i>
+            Ramos
+          </button>
+          <button type="button" class="btn btn-lg btn-outline-secondary">
+            <i class="bi bi-calendar-week-fill"></i>
+            Horario
+          </button>
+          <button type="button" class="btn btn-lg btn-outline-secondary">
+            <i class="bi bi-clipboard-check"></i>
+            Pruebas
+          </button>
+        </div>
+      <% end %>
     </div>
-
-    <%
-      #TODO: move hardcoded styles to a proper CSS file.
-      #TODO: also, do not display the bottom bar unless the user is authenticated, or make the buttons `disabled`
-    %>
-    <% if (true) %>
-      <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar"
-        style="
-          background-color: #EEEEEE;
-          position: fixed;
-          bottom: 0;
-          left:0;
-          width: 100%;
-          padding-top: 20px;
-          padding-left: 10px;
-          padding-right: 10px;
-          padding-bottom: 20px;
-       ">
-        <button type="button" class="btn btn-lg btn-secondary">
-          <i class="bi bi-house-door-fill"></i>
-          Inicio
-        </button>
-        <button type="button" class="btn btn-lg btn-outline-secondary">
-          <i class="bi bi-list-stars"></i>
-          Ramos
-        </button>
-        <button type="button" class="btn btn-lg btn-outline-secondary">
-          <i class="bi bi-calendar-week-fill"></i>
-          Horario
-        </button>
-        <button type="button" class="btn btn-lg btn-outline-secondary">
-          <i class="bi bi-clipboard-check"></i>
-          Pruebas
-        </button>
-      </div>
-    <% end %>
-
   </body>
 </html>
