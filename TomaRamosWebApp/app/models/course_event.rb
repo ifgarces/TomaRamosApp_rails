@@ -1,4 +1,4 @@
-require "utils/event_type_enum"
+require "enums/event_type_enum"
 
 # An event from a `CourseInstance` event, such as a class or evaluation, belonging to a
 # `CourseInstance`. Evaluations are not "recurrent", as non-evaluation events are "recurrent",
@@ -34,7 +34,7 @@ class CourseEvent < ApplicationRecord
   # @return [String] multiline description of the event.
   def getDescriptionLong()
     raise NotImplementedError.new("DEPRECATED METHOD NEEDING UPDATE!") #!
-    dateOrDayString = self.is_evaluation() ? self.date.to_s() : DayOfWeek.toStringSpanish(
+    dateOrDayString = self.is_evaluation() ? self.date.to_s() : DayOfWeekEnum.toStringSpanish(
       self.day_of_week
     )
     locationString = (self.location == "") ? "(no informada)" : self.location

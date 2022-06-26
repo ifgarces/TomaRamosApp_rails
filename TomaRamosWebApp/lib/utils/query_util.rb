@@ -2,7 +2,7 @@
 #! DEPRECATED
 #! ---
 
-require "utils/day_of_week"
+require "enums/day_of_week_enum"
 
 module QueryUtil
   public
@@ -59,19 +59,19 @@ module QueryUtil
   end
 
   # @param ramos [Array<Ramo>]
-  # @return [Hash<DayOfWeek, Array<RamoEvent>>]
+  # @return [Hash<DayOfWeekEnum, Array<RamoEvent>>]
   def self.getEventsByDayOfWeek(ramos)
     results = {
-      DayOfWeek::MONDAY => [],
-      DayOfWeek::TUESDAY => [],
-      DayOfWeek::WEDNESDAY => [],
-      DayOfWeek::THURSDAY => [],
-      DayOfWeek::FRIDAY => [],
+      DayOfWeekEnum::MONDAY => [],
+      DayOfWeekEnum::TUESDAY => [],
+      DayOfWeekEnum::WEDNESDAY => [],
+      DayOfWeekEnum::THURSDAY => [],
+      DayOfWeekEnum::FRIDAY => [],
     }
     ramos.each do |ramo|
       ramo.ramo_events.each do |event|
         if (!event.is_evaluation())
-          dayOfWeek = DayOfWeek.parseStringDay(event.day_of_week)
+          dayOfWeek = DayOfWeekEnum.parseStringDay(event.day_of_week)
           begin
             results[dayOfWeek].append(event)
           rescue

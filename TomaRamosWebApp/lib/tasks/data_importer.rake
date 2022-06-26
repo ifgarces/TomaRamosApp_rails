@@ -6,8 +6,8 @@ require "time"
 require "date"
 require "csv"
 require "json"
-require "utils/day_of_week"
-require "utils/event_type_enum"
+require "enums/day_of_week_enum"
+require "enums/event_type_enum"
 
 log = Rails.logger
 
@@ -163,12 +163,12 @@ namespace :data_importer do
           academic_period: currentAcademicPeriod
         ).save!()
       end
-      { # :Hash<DayOfWeek, Array<Time, Time> | nil>
-        DayOfWeek::MONDAY => parsedRow.lunes,
-        DayOfWeek::TUESDAY => parsedRow.martes,
-        DayOfWeek::WEDNESDAY => parsedRow.miércoles,
-        DayOfWeek::THURSDAY => parsedRow.jueves,
-        DayOfWeek::FRIDAY => parsedRow.viernes
+      { # :Hash<DayOfWeekEnum, Array<Time, Time> | nil>
+        DayOfWeekEnum::MONDAY => parsedRow.lunes,
+        DayOfWeekEnum::TUESDAY => parsedRow.martes,
+        DayOfWeekEnum::WEDNESDAY => parsedRow.miércoles,
+        DayOfWeekEnum::THURSDAY => parsedRow.jueves,
+        DayOfWeekEnum::FRIDAY => parsedRow.viernes
       }.each do |dayOfWeek, eventTimes|
         if (eventTimes != nil)
           eventType = csvEventTypesHash[parsedRow.tipoEvento]
@@ -179,7 +179,7 @@ namespace :data_importer do
           ) unless (eventType != nil)
           CourseEvent.new(
             location: parsedRow.sala,
-            day_of_week: DayOfWeek.parseStringDay(dayOfWeek),
+            day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
             start_time: eventTimes.first(),
             end_time: eventTimes.second(),
             date: parsedRow.fechaInicio,
