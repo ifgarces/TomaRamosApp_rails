@@ -1,4 +1,4 @@
-require "utils/event_type_enum"
+require "enums/event_type_enum"
 
 # Static enum-like db table, for defining the type of each `CourseEvent`.
 #

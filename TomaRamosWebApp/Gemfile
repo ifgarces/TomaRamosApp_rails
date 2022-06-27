@@ -74,6 +74,9 @@ group :test do
   gem "webdrivers"
 end
 
+# jQuery
+gem "jquery-rails"
+
 # For generating great Fake data
 gem "faker"
 
@@ -83,8 +86,11 @@ gem "rufo"
 # Hirb, for printing ActiveRecords as nice tables when running queries in rails console
 gem "hirb"
 
-# jQuery
-gem "jquery-rails"
+# Figaro for environment variables
+gem "figaro"
+
+# RedCarpet for rendering markdown as views :D
+gem "redcarpet"
 
 # Devise, for authentication
 #* gem "devise"
@@ -93,8 +99,8 @@ gem "bcrypt" #! remove this later for when adding devise
 # CanCan, for access control based on authentication levels
 #* gem "cancancan"
 
-# Figaro for environment variables
-gem "figaro"
-
-# RedCarpet for rendering markdown as views :D
-gem "redcarpet"
+# Gem for authenticating the user with Google (OAuth2), for this case at an organization level
+# (@miuandes)
+gem "omniauth"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection" #? needed?

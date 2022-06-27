@@ -1,16 +1,31 @@
-<p>I am pages#home</p>
+<div class="text-center" style="margin-top: 40px; margin-bottom: 40px;">
 
-<div class="d-grid gap-2">
-<% (0..4).each do |_| %>
-  <button class="btn btn-primary">
-    Primary
-  </button>
-  <button class="btn btn-secondary">
-    Secondary
-  </button>
-  <button class="btn btn-danger">
-    Danger
-  </button>
+  <%= image_tag(
+        "app_icon.png",
+        alt: "Logo",
+        class: "mx-auto d-block img-fluid",
+        style: "max-height: 300px; padding: 10px 10px 10px 10px;"
+      ) %>
+
+  <h1>TomaRamosApp</h1>
+
   <br/>
-<% end %>
+
+  <p style="font-size: 18px; font-style: italic">
+    Planificador no oficial para la toma de ramos Uandes
+  </p>
+
+  <%= link_to(
+        raw("<i class='bi bi-box-arrow-in-right'></i> ") + "Entrar con Google",
+        "/auth/google_oauth2",
+        class: "btn btn-large btn-secondary",
+        style: "margin: 60px 10px 40px 10px;"
+      ) %>
+
+  <%= link_to(
+        raw("<i class='bi bi-question-circle-fill'></i> ") + "¿Qué es esto?",
+        "/about",
+        class: "btn btn-large btn-outline-secondary",
+        style: "margin: 60px 10px 40px 10px;"
+      ) %>
 </div>

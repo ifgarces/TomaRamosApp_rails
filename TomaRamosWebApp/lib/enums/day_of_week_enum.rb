@@ -1,7 +1,7 @@
 # Enum-like module for modeling a day of the week (as Ruby does not have a build-in one, unlike
 # Java/Kotlin)
 
-module DayOfWeek
+module DayOfWeekEnum
   public
 
   MONDAY = "LUNES"
@@ -16,22 +16,22 @@ module DayOfWeek
   # @return [Boolean]
   def self.isDayStringValid(cleanDay)
     return ([
-      DayOfWeek::MONDAY,
-      DayOfWeek::TUESDAY,
-      DayOfWeek::WEDNESDAY,
-      DayOfWeek::THURSDAY,
-      DayOfWeek::FRIDAY,
-      DayOfWeek::SATURDAY,
-      DayOfWeek::SUNDAY
+      DayOfWeekEnum::MONDAY,
+      DayOfWeekEnum::TUESDAY,
+      DayOfWeekEnum::WEDNESDAY,
+      DayOfWeekEnum::THURSDAY,
+      DayOfWeekEnum::FRIDAY,
+      DayOfWeekEnum::SATURDAY,
+      DayOfWeekEnum::SUNDAY
     ].include?(cleanDay))
   end
 
   # @param dayString [String]
-  # @return [DayOfWeek]
+  # @return [DayOfWeekEnum]
   def self.parseStringDay(dayString)
-    day = dayString.upcase!().strip!()
+    day = dayString.upcase().strip()
     raise ArgumentError.new(
-      "Provided value '%s' is not a valid DayOfWeek, must be one of %s" % [dayString, validValues]
+      "Provided value '%s' is not a valid DayOfWeekEnum, must be one of %s" % [dayString, validValues]
     ) unless (self.isDayStringValid(day))
     return day
   end

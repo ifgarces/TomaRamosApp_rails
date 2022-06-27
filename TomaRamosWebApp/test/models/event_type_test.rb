@@ -1,5 +1,5 @@
 require "test_helper"
-require "utils/event_type_enum"
+require "enums/event_type_enum"
 
 class EventTypeTest < ActiveSupport::TestCase
   test "insert success" do

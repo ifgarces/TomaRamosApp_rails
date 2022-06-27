@@ -1,0 +1,7 @@
+<p>Oh my, has the Oauth with Google work?</p>
+
+<p>Here's session: <%= session.inspect %></p>
+
+<% if (Rails.env.development?) %>
+  <%= debug session %>
+<% end %>

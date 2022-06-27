@@ -1,6 +1,6 @@
 require "test_helper"
 require "date"
-require "utils/day_of_week"
+require "enums/day_of_week_enum"
 
 class CourseEventTest < ActiveSupport::TestCase
   setup do
@@ -15,7 +15,7 @@ class CourseEventTest < ActiveSupport::TestCase
 
   #   testClassEvent = CourseEvent.new(
   #     location: "B-35",
-  #     day_of_week: DayOfWeek::FRIDAY,
+  #     day_of_week: DayOfWeekEnum::FRIDAY,
   #     start_time: "10:30",
   #     end_time: "12:20"
   #     #// date: Date.new(2077, 2, 22)

@@ -6,12 +6,15 @@
 
 set -exu
 
-rails db:environment:set RAILS_ENV=development
+echo "[debug] DATABASE_URL=${DATABASE_URL}"
 
 # Compiling assets and initializing database
 rails db:create
 rails db:migrate:reset db:seed
 rails assets:clobber assets:precompile
+
+# Filling database with data parsed from CSV
+rake data_importer:csv --trace
 
 # Starting web server
 rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST}

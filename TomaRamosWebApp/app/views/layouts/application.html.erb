@@ -3,6 +3,8 @@
   <head>
     <title>TomaRamosApp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="google-signin-client_id" content="<%= ENV["OAUTH_CLIENT_ID"] %>">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -29,43 +31,50 @@
   </head>
 
   <body>
-    <div id="MainDivWhiteLayer" style="background-color: rgba(255,255,255,0.9);">
+    <div id="MainDivWhiteLayer" style="
+      background-color: rgba(255, 255, 255, 0.92);
+    ">
 
-      <nav id="TopNavBar" class="navbar navbar-light">
-        <div id="TopNavBarContentDiv" class="container-fluid">
+      <% if (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) %>
+        <nav id="TopNavBar" class="navbar navbar-light border-bottom" style="
+        height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
+          background-color: white;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+        ">
+          <div id="TopNavBarContentDiv" class="container-fluid">
 
-          <%= link_to(
-                image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-                root_path,
-                class: "navbar-brand"
-              ) %>
-          <ul id="TopNavBarLinks" class="navbar-nav">
-            <% if (false) %>
-              <%
-                # If logged in, display link to user profile, showing their username
-              %>
-              <li class="nav-item">
-                <a class="nav-link active" href="#">Show username here</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Cerrar sesión</a>
-              </li>
-            <% else %>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Entrar</a>
+            <%= link_to(
+                  image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+                  root_path,
+                  class: "navbar-brand"
+                ) %>
+
+            <ul id="TopNavBarLinks" class="navbar-nav">
+              <% if (false) %>
                 <%
-                  # link_to("Entrar", ..., class: "nav-link") # navigate to subpage where both login/signup options are located at
+                  # If logged in, display link to user profile, showing their username
                 %>
-              </li>
-            <% end %>
-          </ul>
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">(username here)</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Cerrar sesión</a>
+                </li>
+              <% end %>
+            </ul>
 
-        </div>
-      </nav>
+          </div>
+        </nav>
+      <% end %>
 
       <div class="overflow-auto" style="
-      height: 500px;
+        height: 100vh;
         padding: 8px 10px 8px 10px;
+        margin-top: <%= (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
+        margin-bottom: <%= (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
         background: transparent;
       ">
         <%= yield %>
@@ -73,18 +82,17 @@
 
       <%
         #TODO: move hardcoded styles to a proper CSS file.
-        #TODO: also, do not display the bottom bar unless the user is authenticated, or make the buttons `disabled`
       %>
-      <% if (true) %>
-        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar"
-             style="
-             background-color: rgba(238,238,238,0.9);
-               position: fixed;
-               bottom: 0;
-               left:0;
-               width: 100%;
-               padding: 20px 10px 20px 10px;
-             ">
+      <% if (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) %>
+        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
+          background-color: rgba(238,238,238,1);
+          height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          padding: 10px 8px 10px 8px;
+        ">
           <button type="button" class="btn btn-lg btn-secondary">
             <i class="bi bi-house-door-fill"></i>
             Inicio
@@ -103,6 +111,7 @@
           </button>
         </div>
       <% end %>
+
     </div>
   </body>
 </html>
