@@ -13,6 +13,8 @@ module QueryUtil
   # @raise Exception when the events are not of the same broad type (evaluation or non-evaluation). The way for
   # comparing conflicts between those two broat types is different, can't compare evaluation and non-evaluation.
   def self.areEventsInConflict(event1, event2)
+    raise NotImplementedError.new("DEPRECATED, NEED UPDATE DUE CHANGE IN MODELS")
+
     isEvalEvent1 = event1.is_evaluation()
     isEvalEvent2 = event2.is_evaluation()
     if (isEvalEvent1 && isEvalEvent2) # comparing evaluations: considering date and times
@@ -38,6 +40,8 @@ module QueryUtil
   # @return [Array<RamoEvent>] the collection of conflictive `RamoEvent`s with `event`. If there is no conflict, this
   # array will be empty.
   def self.getConflictsForNewEvent(ramos, event)
+    raise NotImplementedError.new("DEPRECATED, NEED UPDATE DUE CHANGE IN MODELS")
+
     conflicts = []
     ramos.each do |ramo|
       ramo.ramo_events.each do |ev|
@@ -61,12 +65,14 @@ module QueryUtil
   # @param ramos [Array<Ramo>]
   # @return [Hash<DayOfWeekEnum, Array<RamoEvent>>]
   def self.getEventsByDayOfWeek(ramos)
+    raise NotImplementedError.new("DEPRECATED, NEED UPDATE DUE CHANGE IN MODELS")
+
     results = {
       DayOfWeekEnum::MONDAY => [],
       DayOfWeekEnum::TUESDAY => [],
       DayOfWeekEnum::WEDNESDAY => [],
       DayOfWeekEnum::THURSDAY => [],
-      DayOfWeekEnum::FRIDAY => [],
+      DayOfWeekEnum::FRIDAY => []
     }
     ramos.each do |ramo|
       ramo.ramo_events.each do |event|

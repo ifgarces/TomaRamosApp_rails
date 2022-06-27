@@ -58,4 +58,4 @@ createUserPassword(log)
 setEventTypes(log)
 setCurrentAcademicPeriod(log)
 
-log.info("Seeds complete ✔️")
+log.info("✔️ Seeds complete")

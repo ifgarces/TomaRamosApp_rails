@@ -5,7 +5,7 @@ require "enums/event_type_enum"
 # weekly. The `date` for these weekly events is not relevant and therefore is `nil`.
 #
 # @!attribute location
-#   @return [String] 'Sala'
+#   @return [String | nil] 'Sala'. Can be non-set (`nil`) for online courses.
 #
 # @!attribute day_of_week
 #   @return [String] 'Día de la semana'
