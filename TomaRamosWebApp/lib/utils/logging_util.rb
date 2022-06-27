@@ -1,6 +1,7 @@
 # Simple interface for initializing loggers with a custom format for this application.
 
 module LoggingUtil
+  # @return [Logger]
   def self.getStdoutLogger(logLevel = Logger::DEBUG)
     logger = Logger.new(STDOUT)
     logger.level = logLevel

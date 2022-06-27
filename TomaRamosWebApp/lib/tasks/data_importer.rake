@@ -14,11 +14,6 @@ CSV_FILE_PATH = "db/catalog-ing.csv"
 CSV_TIME_SEPARATOR = "-"
 
 namespace :data_importer do
-  desc "
-    Rake task(s) for importing data from sheet files (e.g. CSV) for when the faculty performs
-    changes on the catalog.
-    "
-
   # Helper class for parsing rows from the CSV
   class CsvRow
     attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :sección, :nombre,
@@ -106,8 +101,13 @@ namespace :data_importer do
     :profesor => 19
   )
 
+  desc "
+    Rake task(s) for importing data from sheet files (e.g. CSV) for when the faculty performs
+    changes on the catalog.
+    "
+
   # Retrieves data from the CSV (standard engineering faculty format) and fills the database
-  task csv_all: :environment do
+  task csv: :environment do
 
     # Mapping CSV cell values for actual indexed event type in database
     csvEventTypesHash = {
@@ -167,6 +167,8 @@ namespace :data_importer do
           academic_period: currentAcademicPeriod
         ).save!()
       end
+
+      eventTimeExists = false
       { # :Hash<DayOfWeekEnum, Array<Time, Time> | nil>
         DayOfWeekEnum::MONDAY => parsedRow.lunes,
         DayOfWeekEnum::TUESDAY => parsedRow.martes,
@@ -175,12 +177,14 @@ namespace :data_importer do
         DayOfWeekEnum::FRIDAY => parsedRow.viernes
       }.each do |dayOfWeek, eventTimes|
         if (eventTimes != nil)
+          eventTimeExists = true
           eventType = csvEventTypesHash[parsedRow.tipoEvento]
           raise RuntimeError.new(
             "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
               rowIndex + 2, parsedRow.tipoEvento, csvEventTypesHash.values()
             ]
           ) unless (eventType != nil)
+
           CourseEvent.new(
             location: parsedRow.sala,
             day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
@@ -191,6 +195,13 @@ namespace :data_importer do
             event_type: eventType
           ).save!()
         end
+      end
+
+      if (!eventTimeExists)
+        # Just warning, as some cases are valid, like practices
+        log.warn(
+          "CSV row #%d: no time interval given for this event >> %s" % [rowIndex + 2, row]
+        )
       end
     end
 

@@ -30,7 +30,7 @@ web_server:
 # Runs the task for importing course data
 import_csv:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		rake data_importer:csv_all --trace
+		rake data_importer:csv --trace
 
 # Installs Ruby and JavaScript dependencies
 packages:
