@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get "/auth/google_oauth2/callback" => "sessions#create"
   get "/login" => "sessions#new"
 
-  get "/google-auth/redirect" => "pages#awesome"
+  get "/google-auth/custom-redirect" => "pages#awesome"
 
   root "pages#home"
 end

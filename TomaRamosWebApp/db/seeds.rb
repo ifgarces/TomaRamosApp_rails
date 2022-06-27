@@ -11,7 +11,7 @@ end
 
 raise RuntimeError.new(
   "Google Cloud secrets missing! Please fill your `.secrets.env` properly"
-) unless (envExists("GCLOUD_CLIENT_ID") && envExists("GCLOUD_PRIVATE_KEY"))
+) unless (envExists("OAUTH_CLIENT_ID") && envExists("OAUTH_CLIENT_SECRET"))
 
 COURSE_EVENT_TYPES = ["CLAS", "AYUD", "LABT", "PRBA", "EXAM"]
 

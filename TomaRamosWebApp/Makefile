@@ -16,15 +16,15 @@ DB_URL_TEST = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES
 build: packages assets
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		ADMIN_USER_PASSWORD="qwerty" \
-		GCLOUD_CLIENT_ID="${GCLOUD_CLIENT_ID}" \
-		GCLOUD_PRIVATE_KEY="${GCLOUD_PRIVATE_KEY}" \
+		OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
+		OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
 		rails db:migrate:reset db:seed --trace
 
 # Runs the server, but not in background
 web_server:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		GCLOUD_CLIENT_ID="${GCLOUD_CLIENT_ID}" \
-		GCLOUD_PRIVATE_KEY="${GCLOUD_PRIVATE_KEY}" \
+		OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
+		OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
 		rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST}
 
 # Runs the task for importing course data
