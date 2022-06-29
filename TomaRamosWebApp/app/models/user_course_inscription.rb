@@ -5,8 +5,6 @@ class UserCourseInscription < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :course_instances
 
-  public
-
   # @return [Array<RamoEvent>] the events for all inscribed `Ramo`s that are evaluation (tests and exams).
   def get_user_evaluations()
     raise NotImplementedError.new("DEPRECATED METHOD NEEDING UPDATE!") #!

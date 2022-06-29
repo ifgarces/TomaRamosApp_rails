@@ -15,7 +15,7 @@ module DayOfWeekEnum
   # @param cleanDay [String]
   # @return [Boolean]
   def self.isDayStringValid(cleanDay)
-    return ([
+    return [
       DayOfWeekEnum::MONDAY,
       DayOfWeekEnum::TUESDAY,
       DayOfWeekEnum::WEDNESDAY,
@@ -23,7 +23,7 @@ module DayOfWeekEnum
       DayOfWeekEnum::FRIDAY,
       DayOfWeekEnum::SATURDAY,
       DayOfWeekEnum::SUNDAY
-    ].include?(cleanDay))
+    ].include?(cleanDay)
   end
 
   # @param dayString [String]

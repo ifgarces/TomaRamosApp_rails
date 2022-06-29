@@ -10,8 +10,9 @@ module QueryUtil
   # @param event1 [RamoEvent]
   # @param event2 [RamoEvent]
   # @return [Boolean] whether the events collide with each other.
-  # @raise Exception when the events are not of the same broad type (evaluation or non-evaluation). The way for
-  # comparing conflicts between those two broat types is different, can't compare evaluation and non-evaluation.
+  # @raise Exception when the events are not of the same broad type (evaluation or non-evaluation).
+  # The way for comparing conflicts between those two broat types is different, can't compare evaluation
+  # and non-evaluation.
   def self.areEventsInConflict(event1, event2)
     raise NotImplementedError.new("DEPRECATED, NEED UPDATE DUE CHANGE IN MODELS")
 
@@ -33,11 +34,12 @@ module QueryUtil
     return (event1.start_time <= event2.end_time) && (event1.end_time >= event2.start_time)
   end
 
-  # Iterates over a given collection of `Ramo`s and checks if a given event that **belongs to one of the `Ramo`s**
-  # already, has conflicts.
+  # Iterates over a given collection of `Ramo`s and checks if a given event that **belongs to one of
+  # the `Ramo`s** already, has conflicts.
   # @param ramos [Array<Ramo>]
   # @param event [RamoEvent]
-  # @return [Array<RamoEvent>] the collection of conflictive `RamoEvent`s with `event`. If there is no conflict, this
+  # @return [Array<RamoEvent>] the collection of conflictive `RamoEvent`s with `event`. If there is
+  # no conflict, this
   # array will be empty.
   def self.getConflictsForNewEvent(ramos, event)
     raise NotImplementedError.new("DEPRECATED, NEED UPDATE DUE CHANGE IN MODELS")

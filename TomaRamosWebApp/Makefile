@@ -10,27 +10,33 @@ include ../.secrets.env
 DB_URL_DEVELOPMENT = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_development"
 DB_URL_TEST = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_test"
 
-.PHONY: build web_server import_csv packages assets test
+.PHONY: build web_server import_csv migrate seed packages assets test
 
 # Executes migrations, resets database, cleans assets and compiles javascript
-build: packages assets
-	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		ADMIN_USER_PASSWORD="qwerty" \
-		OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
-		OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-		rails db:migrate:reset db:seed --trace
+build: packages assets migrate seed
 
 # Runs the server, but not in background
 web_server:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
-		OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
+	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
+	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
 		rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST}
 
 # Runs the task for importing course data
 import_csv:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rake data_importer:csv --trace
+
+migrate:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+		rails db:migrate:reset --trace
+
+seed:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
+	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
+	ADMIN_USER_PASSWORD=${ADMIN_USER_PASSWORD} \
+		rails db:seed --trace
 
 # Installs Ruby and JavaScript dependencies
 packages:

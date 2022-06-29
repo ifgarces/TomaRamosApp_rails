@@ -3,12 +3,11 @@ require "date"
 require "csv"
 require "json"
 require "logger"
-
 require "enums/day_of_week_enum"
 require "enums/event_type_enum"
 require "utils/logging_util"
 
-log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO)
+@log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO)
 
 CSV_FILE_PATH = "db/catalog-ing.csv"
 CSV_TIME_SEPARATOR = "-"
@@ -62,7 +61,7 @@ namespace :data_importer do
       @fechaInicio = CsvRow.parseDate(rowCells[CsvColumns.fechaInicio]) # Date | nil
       @fechaFin = CsvRow.parseDate(rowCells[CsvColumns.fechaFin]) # Date | nil
       @sala = rowCells[CsvColumns.sala] # String | nil
-      @tipoEvento = rowCells[CsvColumns.tipoEvento].tr("0-9", "").strip() # String, ignoring numbers (e.g. "PRBA 1" is treated as just "PRBA")
+      @tipoEvento = rowCells[CsvColumns.tipoEvento].tr("0-9", "").strip() # String, ignoring digits (e.g. "PRBA 1" => "PRBA")
       @profesor = rowCells[CsvColumns.profesor] # String | nil
 
       # Ensuring mandatory fields are not null
@@ -118,22 +117,21 @@ namespace :data_importer do
     }
 
     #TODO: instead of deleting everything, update existing records in a smart way
-
-    log.info("Clearing CourseInstance and CourseEvent tables prior to CSV parsing...")
+    @log.info("Clearing CourseInstance and CourseEvent tables prior to CSV parsing...")
     CourseEvent.delete_all()
-    # CourseInstance.delete_all()
+    CourseInstance.delete_all()
 
-    log.info("%d AcademicPeriods existing in database" % [AcademicPeriod.count()])
+    @log.info("%d AcademicPeriods existing in database" % [AcademicPeriod.count()])
 
     currentAcademicPeriod = AcademicPeriod.getLatest()
 
     # Now parsing the CSV and populating database tables `CourseInstance` and `CourseEvent`
-    log.info("Reading courses from CSV '%s' for current AcademicPeriod '%s'..." % [
+    @log.info("Reading courses from CSV '%s' for current AcademicPeriod '%s'..." % [
       CSV_FILE_PATH, currentAcademicPeriod.name
     ])
 
     if (!File.exist?(CSV_FILE_PATH))
-      log.error("CSV file '%s' does not exist" % [CSV_FILE_PATH])
+      @log.error("CSV file '%s' does not exist" % [CSV_FILE_PATH])
       exit(1)
     end
 
@@ -146,14 +144,14 @@ namespace :data_importer do
     }
     allCoursesNRCs = [] # :Array<String>
     csvRows.each_with_index do |row, rowIndex|
-      log.debug("Processing row %s" % [row])
+      @log.debug("Processing row %s" % [row])
       parsedRow = CsvRow.new(row)
       if (!allCoursesNRCs.include?(parsedRow.nrc))
         allCoursesNRCs.append(parsedRow.nrc)
 
-        course = CourseInstance.find_by(nrc: parsedRow.nrc)
-        if (course != nil) #! will only work for a given AcademicPeriod!
-          log.debug("Course NRC %s exists, updating..." % parsedRow.nrc) #! temp
+        course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: currentAcademicPeriod)
+        if (course != nil)
+          @log.debug("Course NRC %s exists, updating..." % parsedRow.nrc)
           course.title = parsedRow.nombre
           course.teacher = parsedRow.profesor
           course.credits = parsedRow.créditos
@@ -213,13 +211,13 @@ namespace :data_importer do
 
       if (!eventTimeExists)
         # Just warning, as some cases are valid, like practices
-        log.warn(
+        @log.warn(
           "CSV row #%d: no time interval given for this event >> %s" % [rowIndex + 2, row]
         )
       end
     end
 
-    log.info("✔️ CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
+    @log.info("✔️ CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
       CourseInstance.count(), CourseEvent.count()
     ])
   end
