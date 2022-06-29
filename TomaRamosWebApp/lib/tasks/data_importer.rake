@@ -7,7 +7,7 @@ require "enums/day_of_week_enum"
 require "enums/event_type_enum"
 require "utils/logging_util"
 
-@log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO)
+@log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO) #!
 
 CSV_FILE_PATH = "db/catalog-ing.csv"
 CSV_TIME_SEPARATOR = "-"
@@ -116,14 +116,19 @@ namespace :data_importer do
       "EXAM" => EventType.find_by(name: EventTypeEnum::EXAM)
     }
 
-    #TODO: instead of deleting everything, update existing records in a smart way
-    @log.info("Clearing CourseInstance and CourseEvent tables prior to CSV parsing...")
-    CourseEvent.delete_all()
-    CourseInstance.delete_all()
-
+    currentAcademicPeriod = AcademicPeriod.getLatest()
     @log.info("%d AcademicPeriods existing in database" % [AcademicPeriod.count()])
 
-    currentAcademicPeriod = AcademicPeriod.getLatest()
+    # Not deleting `CourseInstance`s so as to update them only, avoiding losing references with
+    # users
+    @log.info("Clearing CourseEvent table prior to CSV parsing...")
+    currentAcademicPeriod.getCourseEvents().each do |event|
+      event.destroy!()
+    end
+
+    raise RuntimeError.new(
+      "Huh? CourseEvent table should be cleared before processing CSV for events..."
+    ) unless (currentAcademicPeriod.getCourseEvents().count() == 0)
 
     # Now parsing the CSV and populating database tables `CourseInstance` and `CourseEvent`
     @log.info("Reading courses from CSV '%s' for current AcademicPeriod '%s'..." % [
@@ -144,43 +149,39 @@ namespace :data_importer do
     }
     allCoursesNRCs = [] # :Array<String>
     csvRows.each_with_index do |row, rowIndex|
-      @log.debug("Processing row %s" % [row])
+      #// @log.debug("Processing row %s" % [row])
       parsedRow = CsvRow.new(row)
       if (!allCoursesNRCs.include?(parsedRow.nrc))
         allCoursesNRCs.append(parsedRow.nrc)
 
         course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: currentAcademicPeriod)
-        if (course != nil)
-          @log.debug("Course NRC %s exists, updating..." % parsedRow.nrc)
-          course.title = parsedRow.nombre
-          course.teacher = parsedRow.profesor
-          course.credits = parsedRow.créditos
-          course.career = parsedRow.materia
-          course.course_number = parsedRow.curso
-          course.section = parsedRow.sección
-          course.curriculum = parsedRow.pe
-          course.liga = parsedRow.conectorLiga
-          course.lcruz = parsedRow.listaCruzada
-          course.academic_period = currentAcademicPeriod
+        if (course == nil)
+          course = CourseInstance.new(nrc: parsedRow.nrc)
         else
-          course = CourseInstance.new(
-            nrc: parsedRow.nrc,
-            title: parsedRow.nombre,
-            teacher: parsedRow.profesor,
-            credits: parsedRow.créditos,
-            career: parsedRow.materia,
-            course_number: parsedRow.curso,
-            section: parsedRow.sección,
-            curriculum: parsedRow.pe,
-            liga: parsedRow.conectorLiga,
-            lcruz: parsedRow.listaCruzada,
-            academic_period: currentAcademicPeriod
-          )
+          @log.debug("Course NRC %s exists, updating..." % parsedRow.nrc)
         end
+
+        course.title = parsedRow.nombre
+        course.teacher = parsedRow.profesor
+        course.credits = parsedRow.créditos
+        course.career = parsedRow.materia
+        course.course_number = parsedRow.curso
+        course.section = parsedRow.sección
+        course.curriculum = parsedRow.pe
+        course.liga = parsedRow.conectorLiga
+        course.lcruz = parsedRow.listaCruzada
+        course.academic_period = currentAcademicPeriod
+
         course.save!()
       end
 
+      # ...
+      #// raise RuntimeError.new(
+      #//   "Huh? CourseEvent table should be cleared before processing CSV for events..."
+      #// ) unless (currentAcademicPeriod.getCourseEvents().count() == 0)
+
       eventTimeExists = false
+
       { # :Hash<DayOfWeekEnum, Array<Time, Time> | nil>
         DayOfWeekEnum::MONDAY => parsedRow.lunes,
         DayOfWeekEnum::TUESDAY => parsedRow.martes,

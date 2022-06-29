@@ -10,9 +10,16 @@ class AcademicPeriod < ApplicationRecord
 
   @@LATEST_PERIOD_NAME = "2022-10"
 
-  # @return [Array<CourseInstance>] the collection of `CourseInstance`s belonging to the period.
+  # @return [Array<CourseInstance>]
   def getCourses()
-    return CourseInstance.where(academic_period: self.id)
+    return CourseInstance.where(academic_period: self)
+  end
+
+  # @return [Array<CourseEvent>]
+  def getCourseEvents()
+    return CourseEvent.all().filter { |event|
+      (event.course_instance.academic_period == self)
+    }
   end
 
   def self.getLatestPeriodName()

@@ -12,7 +12,8 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order
   fixtures :all
 
-  # Asserts the errors are exactly the same.
+  # Ensuring two errors are equal by type and message.
+  # References (thanks): https://stackoverflow.com/a/3454953/12684271
   # @param expectedError [Exception]
   # @param gotError [Exception]
   def assertExceptionsEqual(expectedError:, gotError:)
@@ -25,6 +26,7 @@ class ActiveSupport::TestCase
     return AcademicPeriod.new(name: "2040-10")
   end
 
+  # @param title [String]
   # @return [CourseInstance]
   def getFooCourseInstance(title:)
     return CourseInstance.new(
@@ -40,6 +42,7 @@ class ActiveSupport::TestCase
            )
   end
 
+  # @return [User]
   def getFooUser()
     return User.new(
              email: "deshka@foo.com",
