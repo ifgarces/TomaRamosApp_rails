@@ -3,7 +3,8 @@ class CourseInstancesController < ApplicationController
 
   # GET /course_instances or /course_instances.json
   def index
-    @course_instances = CourseInstance.all
+    @targetAcademicPeriod = AcademicPeriod.getLatest()
+    @course_instances = @targetAcademicPeriod.getCourses()
   end
 
   # GET /course_instances/1 or /course_instances/1.json

@@ -1,8 +1,22 @@
 require "redcarpet"
 
 module ApplicationHelper
+
+  #? Is there a better way to encapsulate this? could this be automated maybe based on releases on
+  #? the private GitHub repo of the project
+  APP_VERSION_NAME = "2022-20.0"
+  APP_VERSION_CODE = 1
+
+  # Navigation bars dimensions
   TOP_NAV_BAR_HEIGHT = "80px"
-  BOTTOM_NAV_BAR_HEIGHT = "72px"
+  BOTTOM_NAV_BAR_HEIGHT = "10vh" #"72px"
+
+  # @param requestParams [Hash]
+  # @return [Boolean] Whether both navigation bars should be displayed depending on the request
+  # (e.g. on the current controller or webpage)
+  def shouldNavBarsBeHidden(requestParams)
+    return (requestParams[:controller] != "pages")
+  end
 
   # Renders a Markdown from a file name.
   #

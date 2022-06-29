@@ -30,7 +30,7 @@
     </style>
   </head>
 
-  <% displayNvBars = (params[:controller] == "main") %>
+  <% displayNvBars = shouldNavBarsBeHidden(params) %>
 
   <body>
     <div id="MainDivWhiteLayer" style="
@@ -47,26 +47,20 @@
         ">
           <div id="TopNavBarContentDiv" class="container-fluid">
 
-            <%
-              # link_to(
-              #   image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-              #   root_path,
-              #   class: "navbar-brand"
-              # )
-            %>
-
             <%= link_to(
                   raw("<i class='bi bi-chevron-left'></i>"),
                   :back,
-                  class: "btn btn-light",
+                  class: "btn btn-lg btn-light",
                   style: "margin-right: 10px; background-color: transparent;"
                 ) %>
 
-            <%= link_to(
-                  "TomaRamosApp",
-                  "/main/home",
-                  class: "navbar-brand"
-                ) %>
+            <%=
+              link_to(
+                image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+                "/main/home",
+                class: "navbar-brand"
+              )
+            %>
 
             <ul id="TopNavBarLinks" class="navbar-nav">
 
@@ -87,7 +81,7 @@
           background-color: rgba(238, 238, 238, 1);
           height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
           position: fixed;
-          bottom: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          bottom: 0;
           width: 100%;
           padding: 10px 8px 10px 8px;
         ">
@@ -119,7 +113,7 @@
       <% end %>
 
       <div class="overflow-auto" style="
-        height: 100vh;
+        height: 80vh;
         padding: 8px 10px 8px 10px;
         margin-top: <%= (displayNvBars) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
         margin-bottom: <%= (displayNvBars) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;

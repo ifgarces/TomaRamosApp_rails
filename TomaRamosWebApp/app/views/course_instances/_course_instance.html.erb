@@ -1,52 +1,44 @@
-<div id="<%= dom_id course_instance %>">
-  <p>
-    <strong>Nrc:</strong>
-    <%= course_instance.nrc %>
-  </p>
-
-  <p>
-    <strong>Title:</strong>
+<div id="<%= dom_id course_instance %>" class="card" style="
+  margin: 8px 8px 8px 8px;
+">
+  <div class="card-header">
+    <span class="badge rounded-pill bg-secondary" style="margin-right: 8px;">NRC <%= course_instance.nrc %></span>
     <%= course_instance.title %>
-  </p>
+  </div>
 
-  <p>
-    <strong>Teacher:</strong>
-    <%= course_instance.teacher %>
-  </p>
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Sección:</dt>
+      <dd class="col-sm-9"><%= course_instance.section %></dd>
 
-  <p>
-    <strong>Credits:</strong>
-    <%= course_instance.credits %>
-  </p>
+      <dt class="col-sm-3">Profesor</dt>
+      <dd class="col-sm-9"><%= course_instance.teacher %></dd>
 
-  <p>
-    <strong>Career:</strong>
-    <%= course_instance.career %>
-  </p>
+      <dt class="col-sm-3">Materia</dt>
+      <dd class="col-sm-9"><%= course_instance.career %></dd>
 
-  <p>
-    <strong>Course number:</strong>
-    <%= course_instance.course_number %>
-  </p>
+      <!--<dt class="col-sm-3">Número de curso</dt>
+      <dd class="col-sm-9"><%#= course_instance.course_number %></dd>-->
 
-  <p>
-    <strong>Section:</strong>
-    <%= course_instance.section %>
-  </p>
+      <dt class="col-sm-3">Créditos</dt>
+      <dd class="col-sm-9"><%= course_instance.credits %></dd>
 
-  <p>
-    <strong>Curriculum:</strong>
-    <%= course_instance.curriculum %>
-  </p>
+      <dt class="col-sm-3">Plan de estudios</dt>
+      <dd class="col-sm-9"><%= course_instance.curriculum %></dd>
 
-  <p>
-    <strong>Liga:</strong>
-    <%= course_instance.liga %>
-  </p>
+      <% if (course_instance.liga != nil) %>
+        <dt class="col-sm-3">Conector liga</dt>
+        <dd class="col-sm-9"><%= course_instance.liga %></dd>
+      <% end %>
 
-  <p>
-    <strong>Lcruz:</strong>
-    <%= course_instance.lcruz %>
-  </p>
+      <% if (course_instance.lcruz != nil) %>
+        <dt class="col-sm-3">Lista cruzada</dt>
+        <dd class="col-sm-9"><%= course_instance.lcruz %></dd>
+      <% end %>
+    </dl>
 
+    <h5 class="card-title">Clases</h5>
+    
+    <p>...</p>
+  </div>
 </div>
