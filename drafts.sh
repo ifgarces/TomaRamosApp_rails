@@ -10,26 +10,26 @@ set -exu
 #     name:string{16}
 
 # rails generate model course_event \
-#     location:string{32} \
-#     day_of_week:string{16} \
-#     start_time:time \
-#     end_time:time \
-#     date:date
+    # location:string{32} \
+    # day_of_week:string{16} \
+    # start_time:time \
+    # end_time:time \
+    # date:date
 
 # rails generate model event_type \
 #     name:string{32}
 
 # rails generate model course_instance \
-#     nrc:string{16} \
-#     title:string{128} \
-#     teacher:string{128} \
-#     credits:integer \
-#     career:string{16} \
-#     course_number:integer \
-#     section:integer \
-#     curriculum:string{16} \
-#     liga:string{32} \
-#     lcruz:string{32}
+    # nrc:string{16} \
+    # title:string{128} \
+    # teacher:string{128} \
+    # credits:integer \
+    # career:string{16} \
+    # course_number:integer \
+    # section:integer \
+    # curriculum:string{16} \
+    # liga:string{32} \
+    # lcruz:string{32}
 
 # rails generate model user_course_inscription
 

@@ -23,7 +23,7 @@ class CourseEvent < ApplicationRecord
   belongs_to :course_instance
   belongs_to :event_type
 
-  # @return [String] multiline description of the event.
+  # @return [String] Long description of the event.
   def toReadableString()
     raise NotImplementedError.new("DEPRECATED METHOD NEEDING UPDATE!") #!
     dateOrDayString = self.is_evaluation() ? self.date.to_s() : DayOfWeekEnum.toStringSpanish(

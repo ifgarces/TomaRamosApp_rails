@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :course_instances
+  resources :event_types
+  resources :course_events
+  resources :academic_periods
+
   # MainController
   get "main/home"
   get "main/courses"
