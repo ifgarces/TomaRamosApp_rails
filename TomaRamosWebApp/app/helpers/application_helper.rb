@@ -1,11 +1,8 @@
 require "redcarpet"
 
 module ApplicationHelper
-  # Temporal only: it should be true in the views if the user is authenticated.
-  TEMP_DEBUG_SHOW_NAV_BARS = false
-
   TOP_NAV_BAR_HEIGHT = "80px"
-  BOTTOM_NAV_BAR_HEIGHT = "76px"
+  BOTTOM_NAV_BAR_HEIGHT = "72px"
 
   # Renders a Markdown from a file name.
   #

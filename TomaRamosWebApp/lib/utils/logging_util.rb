@@ -3,8 +3,6 @@ require "logger"
 # Simple interface for initializing loggers with a custom format for this application.
 
 module LoggingUtil
-  public
-
   # @param label [String] Label for tracing logging scope. Can be the file path in which the method
   # is called from.
   # @param level [Integer] Log level.

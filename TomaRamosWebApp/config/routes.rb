@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
-  get "sessions/new"
-  get "sessions/create"
+  # MainController
+  get "main/home"
+  get "main/courses"
+  get "main/schedule"
+  get "main/evaluations"
+
+  # SessionsController
+  get "sessions/new" => "sessions#new"
+  get "sessions/create" => "sessions#create"
 
   # PagesController
-  get "/home" => "pages#home"
+  get "/" => "pages#home"
   get "/about" => "pages#about"
   get "/wip" => "pages#wip"
   get "/not-found" => "pages#not_found"
@@ -15,8 +22,7 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback" => "sessions#create"
   get "/auth/google_oauth2/callback" => "sessions#create"
   get "/login" => "sessions#new"
-
-  get "/google-auth/custom-redirect" => "pages#awesome"
+  get "/google-auth/custom-redirect" => "pages#awesome" # callback for Google Oauth
 
   root "pages#home"
 end

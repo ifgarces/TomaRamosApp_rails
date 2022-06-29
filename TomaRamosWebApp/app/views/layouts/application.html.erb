@@ -30,14 +30,15 @@
     </style>
   </head>
 
+  <% displayNvBars = (params[:controller] == "main") %>
+
   <body>
     <div id="MainDivWhiteLayer" style="
       background-color: rgba(255, 255, 255, 0.92);
     ">
-
-      <% if (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) %>
+      <% if (displayNvBars) %>
         <nav id="TopNavBar" class="navbar navbar-light border-bottom" style="
-        height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
+          height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
           background-color: white;
           position: fixed;
           top: 0;
@@ -46,71 +47,86 @@
         ">
           <div id="TopNavBarContentDiv" class="container-fluid">
 
+            <%
+              # link_to(
+              #   image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+              #   root_path,
+              #   class: "navbar-brand"
+              # )
+            %>
+
             <%= link_to(
-                  image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-                  root_path,
+                  raw("<i class='bi bi-chevron-left'></i>"),
+                  :back,
+                  class: "btn btn-light",
+                  style: "margin-right: 10px; background-color: transparent;"
+                ) %>
+
+            <%= link_to(
+                  "TomaRamosApp",
+                  "/main/home",
                   class: "navbar-brand"
                 ) %>
 
             <ul id="TopNavBarLinks" class="navbar-nav">
-              <% if (false) %>
-                <%
-                  # If logged in, display link to user profile, showing their username
-                %>
-                <li class="nav-item">
-                  <a class="nav-link active" href="#">(username here)</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Cerrar sesión</a>
-                </li>
-              <% end %>
+
+              <li class="nav-item">
+                <%= link_to(
+                      "Salir",
+                      root_path,
+                      type: "button",
+                      class: "nav-link"
+                    ) %>
+              </li>
             </ul>
 
           </div>
         </nav>
+
+        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
+          background-color: rgba(238, 238, 238, 1);
+          height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          position: fixed;
+          bottom: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          width: 100%;
+          padding: 10px 8px 10px 8px;
+        ">
+          <%= link_to(
+                raw("<i class='bi bi-house-door-fill'></i> ") + "Inicio",
+                "/main/home",
+                type: "button",
+                class: "btn btn-lg %s" % [(request.path == "/main/home") ? "btn-secondary" : "btn-outline-secondary"]
+              ) %>
+          <%= link_to(
+                raw("<i class='bi bi-list-stars'></i> ") + "Ramos",
+                "/main/courses",
+                type: "button",
+                class: "btn btn-lg %s" % [(request.path == "/main/courses") ? "btn-secondary" : "btn-outline-secondary"]
+              ) %>
+          <%= link_to(
+                raw("<i class='bi bi-calendar-week-fill'></i> ") + "Horario",
+                "/main/schedule",
+                type: "button",
+                class: "btn btn-lg %s" % [(request.path == "/main/schedule") ? "btn-secondary" : "btn-outline-secondary"]
+              ) %>
+          <%= link_to(
+                raw("<i class='bi bi-clipboard-check'></i> ") + "Pruebas",
+                "/main/evaluations",
+                type: "button",
+                class: "btn btn-lg %s" % [(request.path == "/main/evaluations") ? "btn-secondary" : "btn-outline-secondary"]
+              ) %>
+        </div>
       <% end %>
 
       <div class="overflow-auto" style="
         height: 100vh;
         padding: 8px 10px 8px 10px;
-        margin-top: <%= (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
-        margin-bottom: <%= (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
+        margin-top: <%= (displayNvBars) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
+        margin-bottom: <%= (displayNvBars) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
         background: transparent;
       ">
         <%= yield %>
       </div>
-
-      <%
-        #TODO: move hardcoded styles to a proper CSS file.
-      %>
-      <% if (ApplicationHelper::TEMP_DEBUG_SHOW_NAV_BARS) %>
-        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
-          background-color: rgba(238,238,238,1);
-          height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          padding: 10px 8px 10px 8px;
-        ">
-          <button type="button" class="btn btn-lg btn-secondary">
-            <i class="bi bi-house-door-fill"></i>
-            Inicio
-          </button>
-          <button type="button" class="btn btn-lg btn-outline-secondary">
-            <i class="bi bi-list-stars"></i>
-            Ramos
-          </button>
-          <button type="button" class="btn btn-lg btn-outline-secondary">
-            <i class="bi bi-calendar-week-fill"></i>
-            Horario
-          </button>
-          <button type="button" class="btn btn-lg btn-outline-secondary">
-            <i class="bi bi-clipboard-check"></i>
-            Pruebas
-          </button>
-        </div>
-      <% end %>
 
     </div>
   </body>

@@ -30,11 +30,7 @@ class CourseEvent < ApplicationRecord
       self.day_of_week
     )
     locationString = (self.location == "") ? "(no informada)" : self.location
-    recurrentEventInfo = if ((!self.is_evaluation()) && (self.date != nil))
-        "Inicia desde: %s" % [self.date]
-      else
-        ""
-      end
+    recurrentEventInfo = ((!self.is_evaluation()) && (self.date != nil)) ? "Inicia desde: %s" % [self.date] : ""
     return %{
 Tipo: #{self.ramo_event_type.to_string_large()}
 Ramo: #{self.ramo.nombre} (NRC #{self.ramo.nrc})
