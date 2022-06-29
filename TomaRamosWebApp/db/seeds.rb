@@ -1,25 +1,30 @@
 require "logger"
 require "figaro"
 
-log = Rails.logger
+require "utils/logging_util"
+
+log = LoggingUtil.getStdoutLogger(__FILE__)
 
 # @param name [String]
-# @return [Boolean]
-def envExists(name)
-  return (ENV[name] != nil) && (!ENV[name].blank?)
+# @return [nil]
+# @raise [ArgumentError] In case the environment variable does not exist
+def assertEnvExists(name)
+  raise ArgumentError.new(
+    ""
+  ) unless (ENV[name] != nil) && (!ENV[name].blank?)
 end
 
-raise RuntimeError.new(
-  "Google Cloud secrets missing! Please fill your `.secrets.env` properly"
-) unless (envExists("OAUTH_CLIENT_ID") && envExists("OAUTH_CLIENT_SECRET"))
+# If an error triggers here, you have to fill your `.secrets.env` properly with stuff for Google
+# Cloud (for the Oauth2 button). This assert is just to ensure these are defined for the web
+# server, not needed on this file
+assertEnvExists("OAUTH_CLIENT_ID")
+assertEnvExists("OAUTH_CLIENT_SECRET")
 
 COURSE_EVENT_TYPES = ["CLAS", "AYUD", "LABT", "PRBA", "EXAM"]
 
 # @param log [Logger]
-def createUserPassword(log)
-  raise RuntimeError.new(
-    "ADMIN_USER_PASSWORD environment variable was not provided or is blank"
-  ) unless envExists("ADMIN_USER_PASSWORD")
+def createAdminUser(log)
+  assertEnvExists("ADMIN_USER_PASSWORD")
 
   adminPassword = ENV["ADMIN_USER_PASSWORD"]
 
@@ -54,7 +59,7 @@ def setCurrentAcademicPeriod(log)
   end
 end
 
-createUserPassword(log)
+createAdminUser(log)
 setEventTypes(log)
 setCurrentAcademicPeriod(log)
 

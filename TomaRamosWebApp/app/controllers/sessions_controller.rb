@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     user_info = request.env["omniauth.auth"]
     puts(">>> omniauth.auth: #{user_info}")
     puts(">>> request: #{request}")
-    raise NotImplementedError.new("Handle session")
+    raise NotImplementedError.new("Handle session, get user email and name")
     raise user_info # Your own session management should be placed here.
   end
 end

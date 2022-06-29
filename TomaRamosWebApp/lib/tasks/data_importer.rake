@@ -8,39 +8,62 @@ require "enums/day_of_week_enum"
 require "enums/event_type_enum"
 require "utils/logging_util"
 
-log = LoggingUtil.getStdoutLogger(Logger::INFO)
+log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO)
 
 CSV_FILE_PATH = "db/catalog-ing.csv"
 CSV_TIME_SEPARATOR = "-"
 
 namespace :data_importer do
+  # Mapping each column of the CSV file
+  CsvColumns = OpenStruct.new(
+    :planEstudios => 0,
+    :nrc => 1,
+    :conectorLiga => 2,
+    :listaCruzada => 3,
+    :materia => 4,
+    :númeroCurso => 5,
+    :sección => 6,
+    :nombre => 7,
+    :créditos => 8,
+    :lunes => 9,
+    :martes => 10,
+    :miércoles => 11,
+    :jueves => 12,
+    :viernes => 13,
+    :fechaInicio => 15,
+    :fechaFin => 16,
+    :sala => 17,
+    :tipoEvento => 18,
+    :profesor => 19
+  )
+
   # Helper class for parsing rows from the CSV
   class CsvRow
     attr_reader :pe, :nrc, :conectorLiga, :listaCruzada, :materia, :curso, :sección, :nombre,
-                :créditos, :lunes, :martes, :miércoles, :jueves, :viernes, :fechaInicio,
-                :fechaFin, :sala, :tipoEvento, :profesor
+                :créditos, :lunes, :martes, :miércoles, :jueves, :viernes, :fechaInicio, :fechaFin,
+                :sala, :tipoEvento, :profesor
 
-    # @param row_cells [Array<String>]
-    def initialize(row_cells)
-      @pe = row_cells[CsvColumns.plan_estudios] # String | nil
-      @nrc = row_cells[CsvColumns.nrc].to_i() # Integer
-      @conectorLiga = row_cells[CsvColumns.conectorLiga] # String | nil
-      @listaCruzada = row_cells[CsvColumns.listaCruzada] # String | nil
-      @materia = row_cells[CsvColumns.materia] # String | nil
-      @curso = row_cells[CsvColumns.número_curso].to_i() # Integer
-      @sección = row_cells[CsvColumns.sección] # String | nil
-      @nombre = row_cells[CsvColumns.nombre] # String | nil
-      @créditos = row_cells[CsvColumns.créditos] # String | nil
-      @lunes = CsvRow.parseTimeInterval(row_cells[CsvColumns.lunes]) # Array<Time, Time> | nil
-      @martes = CsvRow.parseTimeInterval(row_cells[CsvColumns.martes])
-      @miércoles = CsvRow.parseTimeInterval(row_cells[CsvColumns.miércoles])
-      @jueves = CsvRow.parseTimeInterval(row_cells[CsvColumns.jueves])
-      @viernes = CsvRow.parseTimeInterval(row_cells[CsvColumns.viernes])
-      @fechaInicio = CsvRow.parseDate(row_cells[CsvColumns.fechaInicio]) # Date | nil
-      @fechaFin = CsvRow.parseDate(row_cells[CsvColumns.fechaFin]) # Date | nil
-      @sala = row_cells[CsvColumns.sala] # String | nil
-      @tipoEvento = row_cells[CsvColumns.tipoEvento].tr("0-9", "").strip() # String, ignoring numbers (e.g. "PRBA 1" is treated as just "PRBA")
-      @profesor = row_cells[CsvColumns.profesor] # String | nil
+    # @param rowCells [Array<String>]
+    def initialize(rowCells)
+      @pe = rowCells[CsvColumns.planEstudios] # String | nil
+      @nrc = rowCells[CsvColumns.nrc].to_i() # Integer
+      @conectorLiga = rowCells[CsvColumns.conectorLiga] # String | nil
+      @listaCruzada = rowCells[CsvColumns.listaCruzada] # String | nil
+      @materia = rowCells[CsvColumns.materia] # String | nil
+      @curso = rowCells[CsvColumns.númeroCurso].to_i() # Integer
+      @sección = rowCells[CsvColumns.sección] # String | nil
+      @nombre = rowCells[CsvColumns.nombre] # String | nil
+      @créditos = rowCells[CsvColumns.créditos] # String | nil
+      @lunes = CsvRow.parseTimeInterval(rowCells[CsvColumns.lunes]) # Array<Time, Time> | nil
+      @martes = CsvRow.parseTimeInterval(rowCells[CsvColumns.martes])
+      @miércoles = CsvRow.parseTimeInterval(rowCells[CsvColumns.miércoles])
+      @jueves = CsvRow.parseTimeInterval(rowCells[CsvColumns.jueves])
+      @viernes = CsvRow.parseTimeInterval(rowCells[CsvColumns.viernes])
+      @fechaInicio = CsvRow.parseDate(rowCells[CsvColumns.fechaInicio]) # Date | nil
+      @fechaFin = CsvRow.parseDate(rowCells[CsvColumns.fechaFin]) # Date | nil
+      @sala = rowCells[CsvColumns.sala] # String | nil
+      @tipoEvento = rowCells[CsvColumns.tipoEvento].tr("0-9", "").strip() # String, ignoring numbers (e.g. "PRBA 1" is treated as just "PRBA")
+      @profesor = rowCells[CsvColumns.profesor] # String | nil
 
       # Ensuring mandatory fields are not null
       [@pe, @nrc, @materia, @sección, @nombre, @tipoEvento, @profesor].each do |field|
@@ -78,39 +101,14 @@ namespace :data_importer do
     end
   end
 
-  # Mapping each column of the CSV file
-  CsvColumns = OpenStruct.new(
-    :plan_estudios => 0,
-    :nrc => 1,
-    :conectorLiga => 2,
-    :listaCruzada => 3,
-    :materia => 4,
-    :número_curso => 5,
-    :sección => 6,
-    :nombre => 7,
-    :créditos => 8,
-    :lunes => 9,
-    :martes => 10,
-    :miércoles => 11,
-    :jueves => 12,
-    :viernes => 13,
-    :fechaInicio => 15,
-    :fechaFin => 16,
-    :sala => 17,
-    :tipoEvento => 18,
-    :profesor => 19
-  )
-
-  desc "
-    Rake task(s) for importing data from sheet files (e.g. CSV) for when the faculty performs
-    changes on the catalog.
+  task csv: :environment do
+    desc "
+    Imports course data from sheet files (e.g. CSV) for when the faculty performs changes on the
+    catalog for the latest `AcademicPeriod`.
     "
 
-  # Retrieves data from the CSV (standard engineering faculty format) and fills the database
-  task csv: :environment do
-
     # Mapping CSV cell values for actual indexed event type in database
-    csvEventTypesHash = {
+    csvEventTypesMapping = {
       "CLAS" => EventType.find_by(name: EventTypeEnum::CLASS),
       "AYUD" => EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP),
       "LABT" => EventType.find_by(name: EventTypeEnum::LABORATORY),
@@ -119,12 +117,11 @@ namespace :data_importer do
       "EXAM" => EventType.find_by(name: EventTypeEnum::EXAM)
     }
 
+    #TODO: instead of deleting everything, update existing records in a smart way
+
     log.info("Clearing CourseInstance and CourseEvent tables prior to CSV parsing...")
-
-    #TODO: only delete data for the current target academic period, not all!
-
     CourseEvent.delete_all()
-    CourseInstance.delete_all()
+    # CourseInstance.delete_all()
 
     log.info("%d AcademicPeriods existing in database" % [AcademicPeriod.count()])
 
@@ -153,19 +150,36 @@ namespace :data_importer do
       parsedRow = CsvRow.new(row)
       if (!allCoursesNRCs.include?(parsedRow.nrc))
         allCoursesNRCs.append(parsedRow.nrc)
-        CourseInstance.new(
-          nrc: parsedRow.nrc,
-          title: parsedRow.nombre,
-          teacher: parsedRow.profesor,
-          credits: parsedRow.créditos,
-          career: parsedRow.materia,
-          course_number: parsedRow.curso,
-          section: parsedRow.sección,
-          curriculum: parsedRow.pe,
-          liga: parsedRow.conectorLiga,
-          lcruz: parsedRow.listaCruzada,
-          academic_period: currentAcademicPeriod
-        ).save!()
+
+        course = CourseInstance.find_by(nrc: parsedRow.nrc)
+        if (course != nil) #! will only work for a given AcademicPeriod!
+          log.debug("Course NRC %s exists, updating..." % parsedRow.nrc) #! temp
+          course.title = parsedRow.nombre
+          course.teacher = parsedRow.profesor
+          course.credits = parsedRow.créditos
+          course.career = parsedRow.materia
+          course.course_number = parsedRow.curso
+          course.section = parsedRow.sección
+          course.curriculum = parsedRow.pe
+          course.liga = parsedRow.conectorLiga
+          course.lcruz = parsedRow.listaCruzada
+          course.academic_period = currentAcademicPeriod
+        else
+          course = CourseInstance.new(
+            nrc: parsedRow.nrc,
+            title: parsedRow.nombre,
+            teacher: parsedRow.profesor,
+            credits: parsedRow.créditos,
+            career: parsedRow.materia,
+            course_number: parsedRow.curso,
+            section: parsedRow.sección,
+            curriculum: parsedRow.pe,
+            liga: parsedRow.conectorLiga,
+            lcruz: parsedRow.listaCruzada,
+            academic_period: currentAcademicPeriod
+          )
+        end
+        course.save!()
       end
 
       eventTimeExists = false
@@ -178,10 +192,10 @@ namespace :data_importer do
       }.each do |dayOfWeek, eventTimes|
         if (eventTimes != nil)
           eventTimeExists = true
-          eventType = csvEventTypesHash[parsedRow.tipoEvento]
+          eventType = csvEventTypesMapping[parsedRow.tipoEvento]
           raise RuntimeError.new(
             "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
-              rowIndex + 2, parsedRow.tipoEvento, csvEventTypesHash.values()
+              rowIndex + 2, parsedRow.tipoEvento, csvEventTypesMapping.values()
             ]
           ) unless (eventType != nil)
 
