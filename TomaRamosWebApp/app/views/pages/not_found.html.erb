@@ -1,16 +1,18 @@
-<h1>
-  ¿Hm? Esta página no existe
-</h1>
+<h1>¿Hm? Esta página no existe...</h1>
 
 <%= image_tag(
       "404_spilled_coffee.jpg",
       alt: "Spilled coffee",
-      class: "mx-auto d-block img-fluid",
-      style: "max-height: 300px; padding: 10px 10px 10px 10px;"
+      class: "mx-auto d-block img-fluid p-2",
+      style: "max-height: 300px;"
     ) %>
 
-<p style="font-size: 10px; text-align: center;">
-  <%= link_to("Coffee Spill Vectors by Vecteezy", "https://www.vecteezy.com/free-vector/coffee-spill") %>
-</p>
+<div class="text-center">
+  <p aria-label="Image attribution" style="
+    font-size: 10px;
+  ">
+    <%= link_to("Coffee Spill Vectors by Vecteezy", "https://www.vecteezy.com/free-vector/coffee-spill") %>
+  </p>
 
-<br/>
+  <%= link_to("Volver", :back, class: "btn btn-secondary mb-1 mt-4") %>
+</div>

@@ -1,7 +1,11 @@
-<p>Oh my, has the Oauth with Google work?</p>
+<p>Oh my, has the Oauth with Google worked?</p>
 
 <p>Here's session: <%= session.inspect %></p>
 
 <% if (Rails.env.development?) %>
   <%= debug session %>
 <% end %>
+
+<div class="text-center pb-1 pt-3">
+  <%= link_to("Volver", :back, class: "btn btn-secondary") %>
+</div>

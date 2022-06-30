@@ -34,9 +34,9 @@ class MainController < ApplicationController
       )
     end
     if (session[:inscribedCourses].nil?)
-      session[:inscribedCourses] = []
+      session[:inscribedCourses] = [] # :Array<Integer>
     end
-    session[:inscribedCourses].append(targetCourse)
+    session[:inscribedCourses].append(targetCourse.id)
     redirect_to(
       course_instances_url,
       notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]

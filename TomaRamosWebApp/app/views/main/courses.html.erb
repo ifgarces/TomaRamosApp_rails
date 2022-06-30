@@ -1,16 +1,22 @@
-<div class="text-center">
-  <%= link_to(
-        raw("<i class='bi bi-book me-2'></i> ") + "Catálogo",
-        course_instances_path,
-        class: "btn btn-primary"
-      ) %>
-
-  <%= button_to(
-        raw("<i class='bi bi-trash3-fill me-2'></i> ") + "Limpiar cursos",
-        "/clear-inscribed-courses",
-        class: "btn btn-warning",
-        method: :post
-      ) %>
+<div class="container">
+  <div class="row text-center my-3">
+    <div class="col">
+      <%= link_to(
+            raw("<i class='bi bi-book me-2'></i> ") + "Catálogo",
+            course_instances_path,
+            class: "btn btn-primary"
+          ) %>
+    </div>
+    <div class="col">
+      <%= button_to(
+            raw("<i class='bi bi-trash3-fill me-2'></i> ") + "Limpiar cursos",
+            "/clear-inscribed-courses",
+            class: "btn btn-warning",
+            method: :post
+          ) %>
+    </div>
+  </div>
 </div>
+
 
 <%= debug session[:inscribedCourses] %>

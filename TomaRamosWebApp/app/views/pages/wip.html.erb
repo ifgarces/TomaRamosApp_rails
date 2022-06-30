@@ -9,12 +9,16 @@
   <%= image_tag(
         "wip_tense1983.gif",
         alt: "Man smashing",
-        class: "mx-auto d-block img-fluid",
-        style: "max-height: 150px; padding: 10px 10px 10px 10px;"
+        class: "mx-auto d-block img-fluid p-2",
+        style: "max-height: 150px;"
       ) %>
-  <div class="card-body">
-    <h4 style="text-align: center;">
+  <div class="card-body text-center">
+    <h4>
       Esta página está en desarrollo
     </h4>
   </div>
+</div>
+
+<div class="text-center pb-1 pt-3">
+  <%= link_to("Volver", :back, class: "btn btn-secondary") %>
 </div>

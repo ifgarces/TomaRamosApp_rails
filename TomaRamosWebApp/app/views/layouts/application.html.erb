@@ -122,12 +122,15 @@
       <div id="CurrentViewContainer" class="overflow-auto mx-1" style="
         height: 100%;
         padding: 8px 10px 8px 10px;
-        margin-top: <%= (displayNvBars) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
-        margin-bottom: <%= (displayNvBars) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
+        margin-top: <%= displayNvBars ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
+        margin-bottom: <%= displayNvBars ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
         background: transparent;
         overflow-x: hidden;
         overflow-y: auto;
       ">
+        <%
+          # Setting placeholders for flash messages
+        %>
         <% if (notice != nil) %>
           <div class="alert alert-success alert-dismissible fade show" role="alert">
             <%= notice %>
@@ -137,8 +140,8 @@
 
         <% if (alert != nil) %>
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             <%= alert %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
           </div>
         <% end %>
 
