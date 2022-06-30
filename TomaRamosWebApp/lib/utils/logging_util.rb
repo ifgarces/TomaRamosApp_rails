@@ -7,7 +7,7 @@ module LoggingUtil
   # is called from.
   # @param level [Integer] Log level.
   # @return [Logger]
-  def self.getStdoutLogger(label, level = Logger::DEBUG)
+  def self.newStdoutLogger(label, level = Logger::DEBUG)
     callerFilename = File.basename(label)
     logger = Logger.new(STDOUT)
     logger.level = level

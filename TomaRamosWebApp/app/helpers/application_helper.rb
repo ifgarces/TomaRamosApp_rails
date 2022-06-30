@@ -28,22 +28,36 @@ module ApplicationHelper
   # @param buttonHref [String]
   # @return [String]
   def getClassForBottomNavButton(buttonHref)
-    cssClass = "btn "
-    case (buttonHref)
-    when "/home"
-      cssClass += (request.path == "/home") ? "btn-secondary" : "btn-outline-secondary"
-    when "/courses"
-      cssClass += (
-        (request.path == "/courses") || request.path.match(/course_instance*/)
-      ) ? "btn-secondary" : "btn-outline-secondary"
-    when "/schedule"
-      cssClass += (request.path == "/schedule") ? "btn-secondary" : "btn-outline-secondary"
-    when "/evaluations"
-      cssClass += (request.path == "/evaluations") ? "btn-secondary" : "btn-outline-secondary"
+    return "btn " + case (buttonHref)
+      when "/home"
+        (request.path == "/home") ? "btn-secondary" : "btn-outline-secondary"
+      when "/courses"
+        (
+          (request.path == "/courses") || request.path.match(/course_instance*/)
+        ) ? "btn-secondary" : "btn-outline-secondary"
+      when "/schedule"
+        (request.path == "/schedule") ? "btn-secondary" : "btn-outline-secondary"
+      when "/evaluations"
+        (request.path == "/evaluations") ? "btn-secondary" : "btn-outline-secondary"
+      else
+        raise ArgumentError.new("Unexpected value '#{buttonHref}', can't get CSS class")
+      end
+  end
+
+  # @return [User] The stored user from the `session` (creates it if needed)
+  def getUserFromSession()
+    guestUserId = session[:guestUserId]
+    if (guestUserId.nil? || (User.find_by(id: guestUserId).nil?))
+      guestUser = User.getNewGuestUser()
+      guestUser.save!()
+      session[:guestUserId] = guestUser.id
+
+      Rails.logger.info("New guest User created: '#{guestUser.username}'")
     else
-      raise ArgumentError.new("Unexpected value '#{buttonHref}', can't get CSS class")
+      guestUser = User.find_by(id: guestUserId)
     end
-    return cssClass
+
+    return guestUser
   end
 
   # Renders a Markdown from a file name.
@@ -55,7 +69,7 @@ module ApplicationHelper
   # @return [String] Rendered HTML
   def renderMarkdownFile(filename)
     filename = "%s/%s" % [Rails.root, filename]
-    Rails.logger.info("Rendering Markdown '#{filename}'")
+    Rails.logger.debug("Rendering Markdown file '#{filename}'")
 
     raise ArgumentError.new(
       "Markdown file '#{filename}' not found"

@@ -4,7 +4,7 @@ require "date"
 require "utils/logging_util"
 require "enums/event_type_enum"
 
-@log = LoggingUtil.getStdoutLogger(__FILE__)
+@log = LoggingUtil.newStdoutLogger(__FILE__)
 
 ADMIN_USER_EMAIL = "admin@tomaramos.app"
 
@@ -36,7 +36,6 @@ def createAdminUser()
   adminUser.username = "admin"
   adminUser.password = adminPassword
   adminUser.is_admin = true
-  adminUser.last_activity = DateTime.now()
 
   adminUser.save!()
 end

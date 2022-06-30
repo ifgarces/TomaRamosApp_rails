@@ -104,7 +104,7 @@ module CsvDataImporter
   # @param csvFilePath [String]
   # @return [nil]
   def self.import(csvFilePath)
-    log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO)
+    log = LoggingUtil.newStdoutLogger(__FILE__, Logger::INFO)
 
     # Mapping CSV cell values for actual indexed event type in database
     csvEventTypesMapping = {

@@ -3,7 +3,9 @@ require "utils/logging_util"
 class MainController < ApplicationController
   def initialize()
     super
-    @log = LoggingUtil.getStdoutLogger(__FILE__)
+    @log = LoggingUtil.newStdoutLogger(__FILE__)
+
+    @guestUser = getUserFromSession()
   end
 
   def home()
@@ -33,6 +35,7 @@ class MainController < ApplicationController
         alert: "Error: ramo inválido"
       )
     end
+
     if (session[:inscribedCourses].nil?)
       session[:inscribedCourses] = [] # :Array<Integer>
     end

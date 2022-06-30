@@ -49,8 +49,7 @@ class ActiveSupport::TestCase
     return User.new(
              email: "deshka@foo.com",
              username: "deshka347",
-             password: "qwerty",
-             last_activity: DateTime.now()
+             password: "qwerty"
            )
   end
 end
