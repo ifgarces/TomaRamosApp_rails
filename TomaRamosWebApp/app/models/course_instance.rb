@@ -1,3 +1,5 @@
+require "enums/event_type_enum"
+
 # Inscribe-able course instance.
 #
 # @!attribute nrc
@@ -42,4 +44,24 @@ class CourseInstance < ApplicationRecord
   has_and_belongs_to_many :user_course_inscriptions
 
   validates :nrc, numericality: true
+
+  # @return [Array<CourseEvent>]
+  def getEventsClasses()
+    classType = EventType.find_by(name: EventTypeEnum::CLASS)
+    return CourseEvent.where(course_instance: self, event_type: classType)
+  end
+
+  # @return [Array<CourseEvent>]
+  def getEventsAssistantshipsAndLabs()
+    assistType = EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP)
+    labType = EventType.find_by(name: EventTypeEnum::LABORATORY)
+    return CourseEvent.where(course_instance: self, event_type: [assistType, labType])
+  end
+
+  # @return [Array<CourseEvent>]
+  def getEventsEvaluations()
+    testType = EventType.find_by(name: EventTypeEnum::TEST)
+    examType = EventType.find_by(name: EventTypeEnum::EXAM)
+    return CourseEvent.where(course_instance: self, event_type: [testType, examType])
+  end
 end

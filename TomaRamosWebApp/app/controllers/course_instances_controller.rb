@@ -5,6 +5,7 @@ class CourseInstancesController < ApplicationController
   def index
     @targetAcademicPeriod = AcademicPeriod.getLatest()
     @course_instances = @targetAcademicPeriod.getCourses()
+    #// @course_instances = @course_instances.paginate(page: params[:page], per_page: 30)
   end
 
   # GET /course_instances/1 or /course_instances/1.json

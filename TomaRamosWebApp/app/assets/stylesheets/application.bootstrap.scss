@@ -1,8 +1,9 @@
-// Overriding boostrap colors here
-// Ref: https://stackoverflow.com/a/50253707/12684271
 // $primary: #2ec5e0;
 $secondary: #232F3D; // default is #6c757d
 $danger: #eb0b64;
+
+$btn-border-radius: 20px;
+$btn-border-radius-lg: 24px;
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";

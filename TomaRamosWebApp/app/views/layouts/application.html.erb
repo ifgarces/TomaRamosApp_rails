@@ -17,11 +17,14 @@
     %>
     <style>
         html {
-            background: url(<%= image_url("background-white-geometric.jpg") %>) no-repeat center center fixed;
+            /*background: url(
+              <%=
+              # image_url("background-white-geometric.jpg")
+              %>) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
-            background-size: cover;
+            background-size: cover;*/
         }
         body {
             /* Warning: the following overrides Bootstrap stuff such as the navigation bar background color */
@@ -41,6 +44,7 @@
           height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
           background-color: white;
           position: fixed;
+          Z-index: 1000;
           top: 0;
           left: 0;
           width: 100%;
@@ -56,8 +60,8 @@
 
             <%=
               link_to(
-                image_tag("app_icon.png", size: 50, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
-                "/main/home",
+                image_tag("app_icon.png", size: 40, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+                "/home",
                 class: "navbar-brand"
               )
             %>
@@ -81,42 +85,45 @@
           background-color: rgba(238, 238, 238, 1);
           height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
           position: fixed;
+          Z-index: 1000;
           bottom: 0;
           width: 100%;
-          padding: 10px 8px 10px 8px;
+          padding: 10px 4px 10px 4px;
         ">
           <%= link_to(
-                raw("<i class='bi bi-house-door-fill'></i> ") + "Inicio",
-                "/main/home",
+                raw("<i class='bi bi-house-door-fill'></i><br/>") + "Inicio",
+                "/home",
                 type: "button",
-                class: "btn btn-lg %s" % [(request.path == "/main/home") ? "btn-secondary" : "btn-outline-secondary"]
+                class: getClassForBottomNavButton("/home")
               ) %>
           <%= link_to(
-                raw("<i class='bi bi-list-stars'></i> ") + "Ramos",
-                "/main/courses",
+                raw("<i class='bi bi-list-stars'></i><br/>") + "Ramos",
+                "/courses",
                 type: "button",
-                class: "btn btn-lg %s" % [(request.path == "/main/courses") ? "btn-secondary" : "btn-outline-secondary"]
+                class: getClassForBottomNavButton("/courses")
               ) %>
           <%= link_to(
-                raw("<i class='bi bi-calendar-week-fill'></i> ") + "Horario",
-                "/main/schedule",
+                raw("<i class='bi bi-calendar-week-fill'></i><br/>") + "Horario",
+                "/schedule",
                 type: "button",
-                class: "btn btn-lg %s" % [(request.path == "/main/schedule") ? "btn-secondary" : "btn-outline-secondary"]
+                class: getClassForBottomNavButton("/schedule")
               ) %>
           <%= link_to(
-                raw("<i class='bi bi-clipboard-check'></i> ") + "Pruebas",
-                "/main/evaluations",
+                raw("<i class='bi bi-clipboard-check'></i><br/>") + "Pruebas",
+                "/evaluations",
                 type: "button",
-                class: "btn btn-lg %s" % [(request.path == "/main/evaluations") ? "btn-secondary" : "btn-outline-secondary"]
+                class: getClassForBottomNavButton("/evaluations")
               ) %>
         </div>
       <% end %>
 
       <div class="overflow-auto" style="
-        height: 80vh;
+        height: 100%;
         padding: 8px 10px 8px 10px;
         margin-top: <%= (displayNvBars) ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
         margin-bottom: <%= (displayNvBars) ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
+        margin-left: 10px;
+        margin-right: 10px;
         background: transparent;
       ">
         <%= yield %>

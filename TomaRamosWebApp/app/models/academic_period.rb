@@ -12,12 +12,12 @@ class AcademicPeriod < ApplicationRecord
 
   # @return [Array<CourseInstance>]
   def getCourses()
-    return CourseInstance.where(academic_period: self)
+    return CourseInstance.where(academic_period: self).order(title: :asc)
   end
 
   # @return [Array<CourseEvent>]
   def getCourseEvents()
-    return CourseEvent.all().filter { |event|
+    return CourseEvent.all().order(course_instance_id: :asc).filter { |event|
       (event.course_instance.academic_period == self)
     }
   end

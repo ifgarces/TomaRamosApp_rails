@@ -104,3 +104,7 @@ gem "bcrypt" #! remove this later for when adding devise
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection" #? needed?
+
+# Pagination in views
+#// gem "kaminari"
+#// gem "will_paginate", "~> 3.3"

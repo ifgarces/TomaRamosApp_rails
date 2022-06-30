@@ -8,14 +8,43 @@ module ApplicationHelper
   APP_VERSION_CODE = 1
 
   # Navigation bars dimensions
-  TOP_NAV_BAR_HEIGHT = "80px"
-  BOTTOM_NAV_BAR_HEIGHT = "10vh" #"72px"
+  TOP_NAV_BAR_HEIGHT = "70px"
+  BOTTOM_NAV_BAR_HEIGHT = "82px"
 
   # @param requestParams [Hash]
   # @return [Boolean] Whether both navigation bars should be displayed depending on the request
   # (e.g. on the current controller or webpage)
   def shouldNavBarsBeHidden(requestParams)
     return (requestParams[:controller] != "pages")
+  end
+
+  # @param startTime [Time]
+  # @param endTime [Time]
+  # @return [String]
+  def getReadableTimeInterval(startTime, endTime)
+    return "%s:%s – %s:%s" % [startTime.hour, startTime.min, endTime.hour, endTime.min]
+  end
+
+  # Allows to set a button of the nav bar as highlighted based on the current request path.
+  # @param buttonHref [String]
+  # @return [String]
+  def getClassForBottomNavButton(buttonHref)
+    cssClass = "btn "
+    case (buttonHref)
+    when "/home"
+      cssClass += (request.path == "/home") ? "btn-secondary" : "btn-outline-secondary"
+    when "/courses"
+      cssClass += (
+        (request.path == "/courses") || request.path.match(/course_instance*/)
+      ) ? "btn-secondary" : "btn-outline-secondary"
+    when "/schedule"
+      cssClass += (request.path == "/schedule") ? "btn-secondary" : "btn-outline-secondary"
+    when "/evaluations"
+      cssClass += (request.path == "/evaluations") ? "btn-secondary" : "btn-outline-secondary"
+    else
+      raise ArgumentError.new("Unexpected value '#{buttonHref}', can't get CSS class")
+    end
+    return cssClass
   end
 
   # Renders a Markdown from a file name.

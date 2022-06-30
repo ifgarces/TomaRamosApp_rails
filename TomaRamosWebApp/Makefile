@@ -13,7 +13,7 @@ DB_URL_TEST = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES
 .PHONY: build web_server import_csv migrate seed packages assets test
 
 # Executes migrations, resets database, cleans assets and compiles javascript
-build: packages assets migrate seed
+build: packages assets migrate seed import_csv
 
 # Runs the server, but not in background
 web_server:
