@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :academic_periods
 
   post "/inscribe-course" => "main#inscribe_course"
+  post "/clear-inscribed-courses" => "main#clear_inscribed_courses"
 
   # MainController
   get "/home" => "main#home"

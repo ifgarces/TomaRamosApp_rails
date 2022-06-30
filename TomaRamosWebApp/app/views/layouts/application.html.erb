@@ -128,6 +128,20 @@
         overflow-x: hidden;
         overflow-y: auto;
       ">
+        <% if (notice != nil) %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= notice %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        <% end %>
+
+        <% if (alert != nil) %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            <%= alert %>
+          </div>
+        <% end %>
+
         <%= yield %>
       </div>
 

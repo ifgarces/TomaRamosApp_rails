@@ -1,6 +1,4 @@
 class PagesController < ApplicationController
-  public
-
   def home()
     render :home
   end

@@ -1,23 +1,33 @@
+require "utils/logging_util"
+
 class MainController < ApplicationController
-  def home
+  def initialize()
+    super
+    @log = LoggingUtil.getStdoutLogger(__FILE__)
+  end
+
+  def home()
     render :home
   end
 
-  def courses
+  def courses()
     render :courses
   end
 
-  def schedule
+  def schedule()
     render :schedule
   end
 
-  def evaluations
+  def evaluations()
     render :evaluations
   end
 
+  # Inscribes a course in `session` given a `courseId`
+  # @return [nil]
   def inscribe_course()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
     if (targetCourse == nil)
+      @log.error("Cannot inscribe course ID '#{params[:courseId]}': invalid ID")
       redirect_to(
         course_instances_url,
         alert: "Error: ramo inválido"
@@ -30,6 +40,19 @@ class MainController < ApplicationController
     redirect_to(
       course_instances_url,
       notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
+    )
+  end
+
+  # @return [nil]
+  def clear_inscribed_courses()
+    if (session[:inscribedCourses].nil?)
+      return
+    end
+    count = session[:inscribedCourses].count()
+    session.delete(:inscribedCourses)
+    redirect_to(
+      "/courses",
+      notice: "%d cursos des-inscritos" % [count]
     )
   end
 end

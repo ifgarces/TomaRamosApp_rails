@@ -5,10 +5,11 @@
         class: "btn btn-primary"
       ) %>
 
-  <%= link_to(
+  <%= button_to(
         raw("<i class='bi bi-trash3-fill me-2'></i> ") + "Limpiar cursos",
-        "/pages/wip",
-        class: "btn btn-warning"
+        "/clear-inscribed-courses",
+        class: "btn btn-warning",
+        method: :post
       ) %>
 </div>
 
