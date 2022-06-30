@@ -24,7 +24,7 @@ class MainController < ApplicationController
 
   # Inscribes a course in `session` given a `courseId`
   # @return [nil]
-  def inscribe_course()
+  def inscribeCourse()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
     if (targetCourse == nil)
       @log.error("Cannot inscribe course ID '#{params[:courseId]}': invalid ID")
@@ -44,7 +44,7 @@ class MainController < ApplicationController
   end
 
   # @return [nil]
-  def clear_inscribed_courses()
+  def clearInscribedCourses()
     if (session[:inscribedCourses].nil?)
       return
     end

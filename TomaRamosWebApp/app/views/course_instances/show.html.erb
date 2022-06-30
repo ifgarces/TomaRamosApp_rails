@@ -41,8 +41,6 @@
       <% end %>
     </dl>
 
-    <hr>
-
     <!-- Class events -->
     <%= render(
           partial: "course_instances/course_events_collection_card",
@@ -80,7 +78,7 @@
 
     <div class="text-center mt-4 mb-2">
       <%= button_to(
-            raw("<i class='bi bi-plus-lg'></i> ") + "Inscribir ramo",
+            raw("<i class='bi bi-plus-lg me-2'></i> ") + "Inscribir ramo",
             "/inscribe-course",
             params: {courseId: @course_instance.id},
             method: :post,

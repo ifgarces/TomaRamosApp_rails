@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resources :course_events
   resources :academic_periods
 
-  post "/inscribe-course" => "main#inscribe_course"
-  post "/clear-inscribed-courses" => "main#clear_inscribed_courses"
+  post "/inscribe-course" => "main#inscribeCourse"
+  post "/clear-inscribed-courses" => "main#clearInscribedCourses"
 
   # MainController
   get "/home" => "main#home"

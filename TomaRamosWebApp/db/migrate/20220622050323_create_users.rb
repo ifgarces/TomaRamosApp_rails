@@ -4,6 +4,7 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :email, limit: 128, null: false
       t.string :username, limit: 64, null: false
       t.string :password_digest
+      t.datetime :last_activity, null: false
       t.boolean :is_admin, default: false #TODO: improve this, use roles instead, etc.
 
       t.timestamps
