@@ -1,0 +1,25 @@
+<div class="p-2 bg-transparent text-body text-center" style="
+  background-color: <%= titleBackgroundColor %>!important;
+  border-radius: 10px 10px 0 0;
+">
+  <h5 class="card-title m-0"><%= cardTitle %></h5>
+</div>
+<div class="p-1 mb-2 bg-transparent text-body" style="
+  background-color: <%= bodyBackgroundColor %>!important;
+">
+  <div style="
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  ">
+    <%= "(vacío)" if (cardEvents.count() == 0) %>
+
+    <% cardEvents.each do |event| %>
+      <div style="
+        display: inline-block;
+      ">
+        <%= render(event) %>
+      </div>
+    <% end %>
+  </div>
+</div>

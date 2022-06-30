@@ -10,7 +10,7 @@ include ../.secrets.env
 DB_URL_DEVELOPMENT = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_development"
 DB_URL_TEST = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_test"
 
-.PHONY: build web_server import_csv migrate seed packages assets test
+.PHONY: build web_server import_csv migrate seed packages assets clear_sessions test
 
 # Executes migrations, resets database, cleans assets and compiles javascript
 build: packages assets migrate seed import_csv
@@ -49,6 +49,10 @@ packages:
 assets:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails assets:clobber assets:precompile
+
+clear_sessions:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+		rake tmp:clear
 
 # Run all Rails tests
 test:

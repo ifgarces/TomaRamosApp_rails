@@ -13,10 +13,4 @@ class EventType < ApplicationRecord
   def isEvaluation()
     return [EventTypeEnum::TEST, EventTypeEnum::EXAM].include?(self.name)
   end
-
-  # @return [String]
-  def toReadableString()
-    #TODO
-    raise NotImplementedError.new()
-  end
 end

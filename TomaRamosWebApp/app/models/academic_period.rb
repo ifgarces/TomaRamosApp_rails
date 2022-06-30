@@ -6,13 +6,15 @@
 class AcademicPeriod < ApplicationRecord
   has_many :course_instances
 
-  public
+  private
 
   @@LATEST_PERIOD_NAME = "2022-10"
 
+  public
+
   # @return [Array<CourseInstance>]
   def getCourses()
-    return CourseInstance.where(academic_period: self).order(title: :asc)
+    return CourseInstance.where(academic_period: self).order(title: :asc, section: :asc)
   end
 
   # @return [Array<CourseEvent>]

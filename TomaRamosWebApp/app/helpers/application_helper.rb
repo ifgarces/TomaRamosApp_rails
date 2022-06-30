@@ -4,8 +4,7 @@ module ApplicationHelper
 
   #? Is there a better way to encapsulate this? could this be automated maybe based on releases on
   #? the private GitHub repo of the project
-  APP_VERSION_NAME = "2022-20.0"
-  APP_VERSION_CODE = 1
+  APP_VERSION_NAME = "0.1" #"2022-20.0"
 
   # Navigation bars dimensions
   TOP_NAV_BAR_HEIGHT = "70px"

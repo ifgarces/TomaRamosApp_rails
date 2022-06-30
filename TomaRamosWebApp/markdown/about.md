@@ -6,11 +6,9 @@ Nota: *inscribir ramos a través de esta plataforma no tiene ninguna validez*, s
 
 ## Funcionalidades
 
-<!-- TODO: add some screenshots of the views -->
-
 1. Construcción automática de horario.
 2. Actualización automática del catálogo online actual, pero pudiendo seleccionar periodos académicos (semestres) anteriores.
 3. Detección de conflictos de horario y de evaluaciones entre ramos tomados.
-4. Los ramos que inscriba quedan guardados, asociados con su cuenta `@miuandes.cl` con la que inició sesión.
+4. (funcionalidad pendiente) ~~Los ramos que inscriba quedan guardados, asociados con su cuenta `@miuandes.cl` con la que inició sesión.~~
 
-De momento sólo se dispone de la malla de las carreras de **ingeniería civil** (y sus especialidades).
+De momento, sólo se dispone de la malla de las carreras de **ingeniería civil**.

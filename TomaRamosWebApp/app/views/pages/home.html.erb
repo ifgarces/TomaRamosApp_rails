@@ -1,17 +1,18 @@
-<div class="text-center" style="margin-top: 40px; margin-bottom: 40px;">
+<div class="text-center mt-5">
 
   <%= image_tag(
         "app_icon.png",
         alt: "Logo",
-        class: "mx-auto d-block img-fluid",
-        style: "max-height: 300px; padding: 10px 10px 10px 10px;"
+        class: "mx-auto d-block img-fluid p-2",
+        size: 300
       ) %>
 
-  <h1>TomaRamosApp</h1>
+  <h1 class="text-secondary mb-4">TomaRamosApp</h1>
 
-  <br/>
-
-  <p style="font-size: 18px; font-style: italic;">
+  <p style="
+    font-size: 18px;
+    font-style: italic;
+  ">
     Planificador no oficial para la toma de ramos Uandes
   </p>
 
@@ -27,24 +28,25 @@
   <%= link_to(
         raw("<i class='bi bi-box-arrow-in-right'></i> ") + "Entrar",
         "/home",
-        class: "btn btn-large btn-secondary",
-        style: "margin: 60px 10px 40px 10px;"
+        class: "btn btn-large btn-secondary mx-3 my-5"
       ) %>
 
   <%= link_to(
         raw("<i class='bi bi-question-circle-fill'></i> ") + "¿Qué es esto?",
         "/pages/about",
-        class: "btn btn-large btn-outline-secondary",
-        style: "margin: 60px 10px 40px 10px;"
+        class: "btn btn-large btn-outline-secondary mx-3 my-5"
       ) %>
 
-  <div class="text-center" style="
+  <div id="HomeFooter" class="text-center px-1 py-2" style="
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding: 10px 8px 10px 8px;
   ">
-    <p style='font-family: "Source Code Pro", Monaco, monospace; font-size: 12px; color: dimgray;'>
+    <p style='
+      font-family: "Source Code Pro", Monaco, monospace;
+      font-size: 12px;
+      color: dimgray;
+    '>
       Versión <%= ApplicationHelper::APP_VERSION_NAME %>
       <br/>
       ifgarces' solutions

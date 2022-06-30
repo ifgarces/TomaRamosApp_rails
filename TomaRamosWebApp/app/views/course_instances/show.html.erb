@@ -46,85 +46,47 @@
     <hr>
 
     <!-- Class events -->
-    <div class="p-2 bg-transparent text-body text-center" style="
-      background-color: #c4c4c4!important;
-      border-radius: 10px 10px 0 0;
-    ">
-      <h5 class="card-title m-0">Clases</h5>
-    </div>
-    <div class="p-1 mb-2 bg-light text-body">
-      <div style="
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-      ">
-        <% @course_instance.getEventsClasses().each do |event| %>
-          <div style="
-            display: inline-block;
-          ">
-            <%= render(event) %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= render(
+          partial: "course_instances/course_events_collection_card",
+          locals: {
+            cardTitle: "Clases",
+            cardEvents: @course_instance.getEventsClasses(),
+            titleBackgroundColor: "#c4c4c4",
+            bodyBackgroundColor: "#f8f9fa"
+          }
+        ) %>
 
     <!-- Assistantships and laboratory events -->
-    <div class="p-2 mt-4 bg-transparent text-body text-center" style="
-      background-color: #eddab2!important;
-      border-radius: 10px 10px 0 0;
-    ">
-      <h5 class="card-title m-0">Ayudantías y laboratorios</h5>
-    </div>
-    <div class="p-1 mb-2 bg-transparent text-body" style="
-      background-color: #FDF7F2!important;
-    ">
-      <div style="
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-      ">
-        <% @course_instance.getEventsAssistantshipsAndLabs().each do |event| %>
-          <div style="
-            display: inline-block;
-          ">
-            <%= render(event) %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= render(
+          partial: "course_instances/course_events_collection_card",
+          locals: {
+            cardTitle: "Ayudantías y laboratorios",
+            cardEvents: @course_instance.getEventsAssistantshipsAndLabs(),
+            titleBackgroundColor: "#eddab2",
+            bodyBackgroundColor: "#FDF7F2"
+          }
+        ) %>
 
     <!-- Evaluation events -->
-    <div class="p-2 mt-4 bg-transparent text-body text-center" style="
-      background-color: #f0bbc6!important;
-      border-radius: 10px 10px 0 0;
-    ">
-      <h5 class="card-title m-0">Evaluaciones</h5>
-    </div>
-    <div class="p-1 mb-2 bg-transparent text-body" style="
-      background-color: #F8EEF0!important;
-    ">
-      <div style="
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-      ">
-        <% @course_instance.getEventsEvaluations().each do |event| %>
-          <div style="
-            display: inline-block;
-          ">
-            <%= render(event) %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <%= render(
+          partial: "course_instances/course_events_collection_card",
+          locals: {
+            cardTitle: "Evaluaciones",
+            cardEvents: @course_instance.getEventsEvaluations(),
+            titleBackgroundColor: "#f0bbc6",
+            bodyBackgroundColor: "#F8EEF0"
+          }
+        ) %>
 
     <hr>
 
     <div class="text-center mt-4 mb-2">
-      <%= link_to(
+      <%= button_to(
             raw("<i class='bi bi-plus-lg'></i> ") + "Inscribir ramo",
-            "/pages/wip",
-            class: "btn btn-primary disabled"
+            "/inscribe-course",
+            params: {courseId: @course_instance.id},
+            method: :post,
+            class: "btn btn-primary"
           ) %>
     </div>
 

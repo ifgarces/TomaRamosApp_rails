@@ -62,6 +62,8 @@ class CourseInstance < ApplicationRecord
   def getEventsEvaluations()
     testType = EventType.find_by(name: EventTypeEnum::TEST)
     examType = EventType.find_by(name: EventTypeEnum::EXAM)
-    return CourseEvent.where(course_instance: self, event_type: [testType, examType])
+    return CourseEvent.where(
+      course_instance: self, event_type: [testType, examType]
+    ).order(date: :asc)
   end
 end

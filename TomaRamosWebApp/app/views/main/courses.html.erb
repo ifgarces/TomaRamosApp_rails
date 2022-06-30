@@ -1,10 +1,15 @@
-<h1>Main#courses</h1>
-<p>Find me in app/views/courses.html.erb</p>
-
 <div class="text-center">
   <%= link_to(
-        "Catálogo",
+        raw("<i class='bi bi-book me-2'></i> ") + "Catálogo",
         course_instances_path,
         class: "btn btn-primary"
       ) %>
+
+  <%= link_to(
+        raw("<i class='bi bi-trash3-fill me-2'></i> ") + "Limpiar cursos",
+        "/pages/wip",
+        class: "btn btn-warning"
+      ) %>
 </div>
+
+<%= debug session[:inscribedCourses] %>
