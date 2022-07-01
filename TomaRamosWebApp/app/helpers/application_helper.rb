@@ -44,22 +44,6 @@ module ApplicationHelper
       end
   end
 
-  # @return [User] The stored user from the `session` (creates it if needed)
-  def getUserFromSession()
-    guestUserId = session[:guestUserId]
-    if (guestUserId.nil? || (User.find_by(id: guestUserId).nil?))
-      guestUser = User.createNewGuestUser()
-      guestUser.save!()
-      session[:guestUserId] = guestUser.id
-
-      Rails.logger.info("New guest User created: '#{guestUser.username}'")
-    else
-      guestUser = User.find_by(id: guestUserId)
-    end
-
-    return guestUser
-  end
-
   # Renders a Markdown from a file name.
   #
   # References (many thanks, boys):

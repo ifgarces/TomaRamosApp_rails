@@ -1,11 +1,20 @@
 require "utils/logging_util"
 
 class MainController < ApplicationController
+  before_action :getUser
+  before_action :updateUserLastActivity
+
   def initialize()
     super
     @log = LoggingUtil.newStdoutLogger(__FILE__)
+  end
 
-    @guestUser = getUserFromSession()
+  def getUser()
+    @currentUser = self.getUserFromSession()
+  end
+
+  def updateUserLastActivity()
+    @currentUser.updateLastActivity()
   end
 
   def home()
@@ -36,26 +45,44 @@ class MainController < ApplicationController
       )
     end
 
-    if (session[:inscribedCourses].nil?)
-      session[:inscribedCourses] = [] # :Array<Integer>
-    end
-    session[:inscribedCourses].append(targetCourse.id)
+    @currentUser.inscribeNewCourse(targetCourse)
+
+    # if (session[:inscribedCourses].nil?)
+    #   session[:inscribedCourses] = [] # :Array<Integer>
+    # end
+    # session[:inscribedCourses].append(targetCourse.id)
     redirect_to(
-      course_instances_url,
+      "/courses",
       notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
     )
   end
 
   # @return [nil]
-  def clearInscribedCourses()
-    if (session[:inscribedCourses].nil?)
-      return
-    end
-    count = session[:inscribedCourses].count()
-    session.delete(:inscribedCourses)
+  def debugClearSession()
+    session[:guestUserId] = nil
+    @currentUser = nil
+
+    # Refreshing current page for changes to be reflected immediately
     redirect_to(
-      "/courses",
-      notice: "%d cursos des-inscritos" % [count]
+      request.path,
+      notice: "[debug] Session cleared"
     )
+  end
+
+  private
+  # @return [User] The stored user from the `session` (creates it if needed)
+  def getUserFromSession()
+    guestUserId = session[:guestUserId]
+    if (guestUserId.nil? || (User.find_by(id: guestUserId).nil?))
+      guestUser = User.createNewGuestUser()
+      guestUser.save!()
+      session[:guestUserId] = guestUser.id
+
+      Rails.logger.info("New guest User created: '#{guestUser.username}'")
+    else
+      guestUser = User.find_by(id: guestUserId)
+    end
+
+    return guestUser
   end
 end

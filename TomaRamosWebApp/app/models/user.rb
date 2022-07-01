@@ -24,11 +24,13 @@ class User < ApplicationRecord
 
   GUEST_USER_PREFIX = "guest¬"
 
+  # @return [Array<CourseInstance>]
   def getInscribedCourses()
     return self.inscriptions.first().course_instances
   end
 
   # @param course [CourseInstance]
+  # @return [nil]
   def inscribeNewCourse(course)
     raise RuntimeError.new(
       "For now, there should be a single Inscription for each user (not #{self.inscriptions.count()})"

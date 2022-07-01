@@ -9,14 +9,21 @@
     </div>
     <div class="col">
       <%= button_to(
-            raw("<i class='bi bi-trash3-fill me-2'></i> ") + "Limpiar cursos",
-            "/clear-inscribed-courses",
-            class: "btn btn-warning",
+            raw("<i class='bi bi-trash3-fill me-2'></i> ") + "[debug] Clear session",
+            "/debug-clear-session",
+            class: "btn btn-danger text-white",
             method: :post
           ) %>
     </div>
   </div>
 </div>
 
+<%= debug request.path %>
 
-<%= debug session[:inscribedCourses] %>
+<%= debug session[:guestUserId] %>
+
+<% if (session[:guestUserId] != nil) %>
+  <% User.find_by(id: session[:guestUserId]).getInscribedCourses().each do |course| %>
+    <%= render(course) %>
+  <% end %>
+<% end %>
