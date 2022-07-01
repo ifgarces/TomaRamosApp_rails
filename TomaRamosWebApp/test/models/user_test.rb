@@ -7,13 +7,14 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil(testUser.last_activity)
   end
 
-  test "getNewGuestUser" do
-    guest = User.getNewGuestUser()
-    assert_equal(true, guest.save())
+  test "createNewGuestUser success" do
+    assert_nothing_raised {
+      User.createNewGuestUser()
+    }
   end
 
   test "isGuestUser true" do
-    guest = User.getNewGuestUser()
+    guest = User.createNewGuestUser()
     assert_equal(true, guest.isGuestUser())
   end
 

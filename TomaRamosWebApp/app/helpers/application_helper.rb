@@ -48,7 +48,7 @@ module ApplicationHelper
   def getUserFromSession()
     guestUserId = session[:guestUserId]
     if (guestUserId.nil? || (User.find_by(id: guestUserId).nil?))
-      guestUser = User.getNewGuestUser()
+      guestUser = User.createNewGuestUser()
       guestUser.save!()
       session[:guestUserId] = guestUser.id
 

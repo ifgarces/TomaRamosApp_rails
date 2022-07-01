@@ -20,9 +20,19 @@ class User < ApplicationRecord
   has_secure_password #* bcrypt
   validates :email, presence: true, uniqueness: true, email: true
 
-  has_many :user_courses_inscriptions, dependent: :destroy
+  has_many :user_course_inscriptions, dependent: :destroy
 
   GUEST_USER_PREFIX = "guest¬"
+
+  # @param course [CourseInstance]
+  def inscribeNewCourse(course)
+    inscriptions = self.user_course_inscriptions
+    raise RuntimeError.new(
+      "For now, there should be a single Inscription for each user (not #{inscriptions.count()})"
+    ) unless (inscriptions.count() == 1)
+
+    inscriptions.first().course_instances.append(course)
+  end
 
   # Updates the `last_activity` attribute with the current `DateTime`
   # @return [nil]
@@ -37,16 +47,19 @@ class User < ApplicationRecord
     return self.username.start_with?(GUEST_USER_PREFIX)
   end
 
-  # Used for creating a user from `session` (not yet saved in database).
+  # Generates a new guest User (intended for `session`), saves it in database, and returns it. 
   # @return [User]
-  def self.getNewGuestUser()
+  def self.createNewGuestUser()
     newUsername = self.generateGuestUsername()
-    return User.new(
+    guestUser = User.new(
       email: "%s@email.com" % [newUsername],
       username: newUsername,
       password: "qwerty", #* maybe add a `can_log_in` attribute and set to false for guest users?
       last_activity: DateTime.now()
     )
+    guestUser.user_course_inscriptions = UserCourseInscription.new()
+    guestUser.save!()
+    return guestUser
   end
 
   private

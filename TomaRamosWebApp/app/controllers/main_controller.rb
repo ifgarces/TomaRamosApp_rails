@@ -28,7 +28,7 @@ class MainController < ApplicationController
   # @return [nil]
   def inscribeCourse()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
-    if (targetCourse == nil)
+    if (targetCourse.nil?)
       @log.error("Cannot inscribe course ID '#{params[:courseId]}': invalid ID")
       redirect_to(
         course_instances_url,
