@@ -20,18 +20,22 @@ class User < ApplicationRecord
   has_secure_password #* bcrypt
   validates :email, presence: true, uniqueness: true, email: true
 
-  has_many :user_course_inscriptions, dependent: :destroy
+  has_many :inscriptions, dependent: :destroy
 
   GUEST_USER_PREFIX = "guest¬"
 
+  def getInscribedCourses()
+    return self.inscriptions.first().course_instances
+  end
+
   # @param course [CourseInstance]
   def inscribeNewCourse(course)
-    inscriptions = self.user_course_inscriptions
     raise RuntimeError.new(
-      "For now, there should be a single Inscription for each user (not #{inscriptions.count()})"
-    ) unless (inscriptions.count() == 1)
+      "For now, there should be a single Inscription for each user (not #{self.inscriptions.count()})"
+    ) unless (self.inscriptions.count() == 1)
 
-    inscriptions.first().course_instances.append(course)
+    self.inscriptions.first().course_instances.append(course)
+    self.save!()
   end
 
   # Updates the `last_activity` attribute with the current `DateTime`
@@ -57,7 +61,7 @@ class User < ApplicationRecord
       password: "qwerty", #* maybe add a `can_log_in` attribute and set to false for guest users?
       last_activity: DateTime.now()
     )
-    guestUser.user_course_inscriptions = UserCourseInscription.new()
+    guestUser.inscriptions.append(Inscription.new())
     guestUser.save!()
     return guestUser
   end

@@ -41,7 +41,7 @@ require "enums/event_type_enum"
 class CourseInstance < ApplicationRecord
   has_many :course_events, :dependent => :destroy
   belongs_to :academic_period
-  has_and_belongs_to_many :user_course_inscriptions
+  has_and_belongs_to_many :inscriptions
 
   validates :nrc, numericality: true
 

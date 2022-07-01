@@ -8,9 +8,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "createNewGuestUser success" do
-    assert_nothing_raised {
-      User.createNewGuestUser()
-    }
+    assert_equal(0, User.count())
+    User.createNewGuestUser()
+    assert_equal(1, User.count())
   end
 
   test "isGuestUser true" do
@@ -21,5 +21,17 @@ class UserTest < ActiveSupport::TestCase
   test "isGuestUser false" do
     guest = getFooUser()
     assert_equal(false, guest.isGuestUser())
+  end
+
+  test "inscribeNewCourse" do
+    guest = User.createNewGuestUser()
+
+    fooCourse = getFooCourseInstance(title: "abcabc")
+    guest.inscribeNewCourse(fooCourse)
+
+    expected = [fooCourse]
+    got = guest.getInscribedCourses()
+
+    assert_equal(expected, got)
   end
 end
