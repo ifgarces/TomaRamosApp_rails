@@ -1,5 +1,6 @@
 require "date"
 require "faker"
+require "utils/events_conflict"
 
 # Web application user.
 #
@@ -52,6 +53,21 @@ class User < ApplicationRecord
   def uninscribeCourse(course)
     self.inscriptions.first().course_instances = []
     self.save!()
+  end
+
+  # @param newCourse [CourseInstance]
+  # @return [Array<EventsConflict>] Computed conflicts between events, checking the current
+  # inscribed courses by the user, and a target course
+  def getConflictsForNewCourse(newCourse)
+    allConflicts = []
+
+    self.getInscribedCourses().each do |currentCourse|
+      allConflicts.concat(
+        CourseInstance.getConflictsBetween(currentCourse, newCourse)
+      )
+    end
+
+    return allConflicts
   end
 
   # Updates the `last_activity` attribute with the current `DateTime`

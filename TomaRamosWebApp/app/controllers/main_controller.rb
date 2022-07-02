@@ -1,42 +1,58 @@
 require "utils/logging_util"
 
 class MainController < ApplicationController
-  before_action :getUser
+  before_action :initLog
+  before_action :initCurrentUser
   before_action :updateUserLastActivity
 
-  def initialize()
-    super
+  # @return [nil]
+  def initLog()
     @log = LoggingUtil.newStdoutLogger(__FILE__)
   end
 
-  def getUser()
+  # @return [nil]
+  def initCurrentUser()
     @currentUser = self.getUserFromSession()
   end
 
+  # @return [nil]
   def updateUserLastActivity()
     @currentUser.updateLastActivity()
   end
 
+  # @return [nil]
   def home()
     redirect_to(:courses) #* temporally disabling this view
-    # render :home
+    #// render :home
   end
 
+  # @return [nil]
   def courses()
     render :courses
   end
 
+  # @return [nil]
   def schedule()
     render :schedule
   end
 
+  # @return [nil]
   def evaluations()
     render :evaluations
   end
 
-  # Inscribes a course in `session` given a `courseId`.
   # @return [nil]
-  def inscribeCourse()
+  def conflict_dialog()
+    # @log.info(">>> #{params[:hello]}")
+    @hello = params[:hello]
+    @log.debug(">>> hello=#{@hello}")
+    render :conflict_dialog
+  end
+
+  # Inscribes a course in `session` given a `courseId`, checking for conflicts with the current
+  # inscribed events first.
+  # @return [nil]
+  def inscribe_course_safe()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
     if (targetCourse.nil?)
       @log.error("Cannot inscribe course ID '#{params[:courseId]}': invalid ID")
@@ -46,14 +62,31 @@ class MainController < ApplicationController
       )
     end
 
-    @currentUser.inscribeNewCourse(targetCourse)
+    isAlreadyInscribed = @currentUser.getInscribedCourses().map { |course|
+      course.id
+    }.include?(targetCourse.id)
 
-    redirect_to(
-      :courses,
-      notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
-    )
+    if (isAlreadyInscribed)
+      redirect_to(
+        course_instances_url,
+        alert: "El ramo NRC #{targetCourse.nrc} ya está inscrito"
+      )
+    end
+
+    conflicts = @currentUser.getConflictsForNewCourse(targetCourse)
+
+    if (conflicts.count() == 0)
+      self.inscribeCourseAction(targetCourse)
+    else
+      @conflicts = conflicts
+      @targetCourse = targetCourse
+      redirect_to(
+        :conflict_dialog => { hello: "world" }
+      )
+    end
   end
 
+  # @return [nil]
   def uninscribeAllCourses()
     userCourses = @currentUser.getInscribedCourses()
     count = userCourses.count()
@@ -81,6 +114,16 @@ class MainController < ApplicationController
   end
 
   private
+
+  # Intended to be called from `inscribe_course_safe` when succeeded.
+  # @return [nil]
+  def inscribeCourseAction(targetCourse)
+    @currentUser.inscribeNewCourse(targetCourse)
+    redirect_to(
+      :courses,
+      notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
+    )
+  end
 
   # @return [User] The stored user from the `session`, creating it if needed.
   def getUserFromSession()

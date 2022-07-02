@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :course_events
   resources :academic_periods
 
-  post "/inscribe-course" => "main#inscribeCourse"
+  post "/inscribe-course" => "main#inscribe_course_safe"
   post "/uninscribe-all" => "main#uninscribeAllCourses"
   post "/debug-clear-session" => "main#debugClearSession"
 
@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get "/courses" => "main#courses"
   get "/schedule" => "main#schedule"
   get "/evaluations" => "main#evaluations"
+  get "/conflict_dialog" => "main#conflict_dialog"
 
   # SessionsController
   get "sessions/new" => "sessions#new"

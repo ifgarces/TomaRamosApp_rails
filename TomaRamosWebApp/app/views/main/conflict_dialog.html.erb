@@ -1,24 +1,27 @@
+<%= @hello %>
+
 <div class="container card shadow bg-light border-warning m-4">
   <div class="card-body text-center">
+
     <h2 class="card-title">
       <i class="bi bi-exclamation-diamond"></i>
       Conflicto de ramos
     </h2>
 
     <p class="card-text">
-      Los ramos <%= leftCourse.title %> y <%= rightCourse.title %> tienen eventos en conflicto:
+      Existen conflictos de eventos entre los ramos actualmente inscritos y <%= @targetCourse.title %>
+      (NRC <%= @targetCourse.nrc %>):
     </p>
 
-    <div>
-      <%= debug leftConflictedEvents %>
-    </div>
-
-    <div>
-      <%= debug rightConflictedEvents %>
-    </div>
+    <% @conflicts.each do |eventConflict| %>
+      <div class="mb-2">
+        <%= eventConflict.leftEvent.to_s() %>
+        <%= eventConflict.rightEvent.to_s() %>
+      </div>
+    <% end %>
 
     <p class="card-text mt-4">
-      ¿Inscribir <%= rightCourse.title %> de todas formas?
+      ¿Inscribir <%= @targetCourse.title %> de todas formas?
     </p>
 
     <div class="text-center mt-2 mb-2">
@@ -26,13 +29,13 @@
             raw("<i class='bi bi-plus-lg me-2'></i> ") + "Sí",
             "todo",
             class: "btn btn-sm btn-primary shadow-sm",
-            ) %>
+          ) %>
 
       <%= link_to(
             "No",
             "todo",
             class: "btn btn-sm btn-secondary shadow-sm",
-            ) %>
+          ) %>
     </div>
 
   </div>

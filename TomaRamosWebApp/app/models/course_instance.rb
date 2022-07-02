@@ -1,4 +1,5 @@
 require "enums/event_type_enum"
+require "utils/events_conflict"
 
 # Inscribe-able course instance.
 #
@@ -45,33 +46,52 @@ class CourseInstance < ApplicationRecord
 
   validates :nrc, numericality: true
 
-  # @param course1 [CourseInstance]
-  # @param course2 [CourseInstance]
-  # @return [Boolean] Whether the given courses have events that collide with each other
-  def self.areCoursesInConflict(course1, course2)
-    #TODO
-    raise NotImplementedError.new()
+  # @param leftCourse [CourseInstance]
+  # @param rightCourse [CourseInstance]
+  # @return [Array<EventConflict>] Whether the given courses have events that collide with each
+  # other
+  def self.getConflictsBetween(leftCourse, rightCourse)
+    raise ArgumentError.new(
+      "Cannot compare equal courses: #{leftCourse}"
+    ) unless (leftCourse.id != rightCourse.id)
+
+    conflicts = []
+
+    leftEvents = leftCourse.course_events
+    rightEvents = rightCourse.course_events
+
+    leftEvents.each do |left|
+      rightEvents.each do |right|
+        if (left.event_type.isEvaluation() == right.event_type.isEvaluation())
+          if (CourseEvent.areEventsInConflict(left, right))
+            conflicts.append(
+              EventsConflict.new(left, right)
+            )
+          end
+        end
+      end
+    end
+
+    return conflicts
   end
 
   # @return [Array<CourseEvent>]
   def getEventsClasses()
     classType = EventType.find_by(name: EventTypeEnum::CLASS)
-    return CourseEvent.where(course_instance: self, event_type: classType)
+    return self.course_events.where(event_type: classType)
   end
 
   # @return [Array<CourseEvent>]
   def getEventsAssistantshipsAndLabs()
     assistType = EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP)
     labType = EventType.find_by(name: EventTypeEnum::LABORATORY)
-    return CourseEvent.where(course_instance: self, event_type: [assistType, labType])
+    return self.course_events.where(event_type: [assistType, labType])
   end
 
   # @return [Array<CourseEvent>]
   def getEventsEvaluations()
     testType = EventType.find_by(name: EventTypeEnum::TEST)
     examType = EventType.find_by(name: EventTypeEnum::EXAM)
-    return CourseEvent.where(
-      course_instance: self, event_type: [testType, examType]
-    ).order(date: :asc)
+    return self.course_events.where(event_type: [testType, examType]).order(date: :asc)
   end
 end

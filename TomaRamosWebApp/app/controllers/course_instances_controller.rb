@@ -1,5 +1,5 @@
 require "utils/logging_util"
-require "enums/career_enum"
+require "utils/string_util"
 
 class CourseInstancesController < ApplicationController
   before_action :set_course_instance, only: %i[ show edit update destroy ]
