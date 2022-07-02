@@ -18,7 +18,8 @@ class MainController < ApplicationController
   end
 
   def home()
-    render :home
+    redirect_to("/courses") #* temporally disabling this view
+    # render :home
   end
 
   def courses()
@@ -47,10 +48,6 @@ class MainController < ApplicationController
 
     @currentUser.inscribeNewCourse(targetCourse)
 
-    # if (session[:inscribedCourses].nil?)
-    #   session[:inscribedCourses] = [] # :Array<Integer>
-    # end
-    # session[:inscribedCourses].append(targetCourse.id)
     redirect_to(
       "/courses",
       notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]

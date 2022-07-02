@@ -1,15 +1,29 @@
 class CourseInstancesController < ApplicationController
   before_action :set_course_instance, only: %i[ show edit update destroy ]
+  before_action :abortAndRedirect, only: %i[ new edit create update destroy ]
+
+  def initialize()
+    super
+    @log = LoggingUtil.newStdoutLogger(__FILE__)
+  end
+
+  # For disabling some operations on this controller (temporal workaround)
+  # @return [nil]
+  def abortAndRedirect()
+    @log.warn("abortAndRedirect for CUD request: #{request.path}")
+    redirect_to(root_path)
+  end
 
   # GET /course_instances or /course_instances.json
   def index
     @targetAcademicPeriod = AcademicPeriod.getLatest()
     @course_instances = @targetAcademicPeriod.getCourses()
-    #// @course_instances = @course_instances.paginate(page: params[:page], per_page: 30)
+    render :index
   end
 
   # GET /course_instances/1 or /course_instances/1.json
   def show
+    render :show
   end
 
   # GET /course_instances/new
@@ -19,6 +33,7 @@ class CourseInstancesController < ApplicationController
 
   # GET /course_instances/1/edit
   def edit
+    render :edit
   end
 
   # POST /course_instances or /course_instances.json
@@ -67,6 +82,9 @@ class CourseInstancesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_instance_params
-      params.require(:course_instance).permit(:nrc, :title, :teacher, :credits, :career, :course_number, :section, :curriculum, :liga, :lcruz)
+      params.require(:course_instance).permit(
+        :nrc, :title, :teacher, :credits, :career, :course_number, :section, :curriculum, :liga,
+        :lcruz
+      )
     end
 end

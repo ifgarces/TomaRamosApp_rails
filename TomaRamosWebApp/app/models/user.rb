@@ -22,7 +22,8 @@ class User < ApplicationRecord
 
   has_many :inscriptions, dependent: :destroy
 
-  GUEST_USER_PREFIX = "guest¬"
+  GUEST_USERNAME_PREFIX = "¬¬"
+  GUEST_EMAIL_DOMAIN = "guest.com"
 
   # @return [Array<CourseInstance>]
   def getInscribedCourses()
@@ -50,7 +51,7 @@ class User < ApplicationRecord
 
   # @return [Boolean] Whether this user is of type "guest".
   def isGuestUser()
-    return self.username.start_with?(GUEST_USER_PREFIX)
+    return self.username.start_with?(GUEST_USERNAME_PREFIX)
   end
 
   # Generates a new guest User (intended for `session`), saves it in database, and returns it. 
@@ -58,7 +59,7 @@ class User < ApplicationRecord
   def self.createNewGuestUser()
     newUsername = self.generateGuestUsername()
     guestUser = User.new(
-      email: "%s@email.com" % [newUsername],
+      email: "%s@%s" % [newUsername, GUEST_EMAIL_DOMAIN],
       username: newUsername,
       password: "qwerty", #* maybe add a `can_log_in` attribute and set to false for guest users?
       last_activity: DateTime.now()
@@ -73,7 +74,7 @@ class User < ApplicationRecord
   # @return [String] A unique new guest username.
   def self.generateGuestUsername()
     while (true)
-      newUsername = "%s%s" % [GUEST_USER_PREFIX, Faker::Lorem.characters(number: 10)]
+      newUsername = "%s%s" % [GUEST_USERNAME_PREFIX, Faker::Lorem.characters(number: 10)]
       isUnique = User.find_by(username: newUsername).nil?
       if (isUnique)
         return newUsername

@@ -1,18 +1,17 @@
 <h1>Catálogo <%= @targetAcademicPeriod.name %></h1>
 
-<div id="SearchBarContainer" class="input-group" style="
-  margin: 26px 10px 26px 10px;
-">
+<div id="SearchBarContainer" class="input-group mx-3 my-4">
   <form class="d-flex">
-    <input class="form-control me-2" type="search" placeholder="Buscar ramo..." aria-label="Search">
-    <button class="btn btn-primary" type="submit" style="padding: 0px 30px 0px 30px;">
+    <input class="form-control me-2" type="search" placeholder="Buscar por NRC o nombre..." aria-label="Búsqueda">
+    <button class="btn btn-primary px-4" type="submit">
       <i class="bi bi-search"></i>
     </button>
   </form>
 </div>
 
-<div id="course_instances">
-  <% @course_instances.each do |course_instance| %>
-    <%= render(course_instance) %>
-  <% end %>
-</div>
+<%= render(
+      partial: "course_instances/course_instance_collection",
+      locals: {
+        courseInstances: @course_instances
+      }
+    ) %>

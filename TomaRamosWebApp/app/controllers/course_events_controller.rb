@@ -1,5 +1,18 @@
 class CourseEventsController < ApplicationController
   before_action :set_course_event, only: %i[ show edit update destroy ]
+  before_action :abortAndRedirect, only: %i[ index show new edit create update destroy ]
+
+  def initialize()
+    super
+    @log = LoggingUtil.newStdoutLogger(__FILE__)
+  end
+
+  # For disabling some operations on this controller (temporal workaround)
+  # @return [nil]
+  def abortAndRedirect()
+    @log.warn("abortAndRedirect for CUD request: #{request.path}")
+    redirect_to(root_path)
+  end
 
   # GET /course_events or /course_events.json
   def index

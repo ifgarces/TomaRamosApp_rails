@@ -18,12 +18,13 @@
   </div>
 </div>
 
-<%= debug request.path %>
-
-<%= debug session[:guestUserId] %>
-
-<% if (session[:guestUserId] != nil) %>
-  <% User.find_by(id: session[:guestUserId]).getInscribedCourses().each do |course| %>
-    <%= render(course) %>
+<div id="UserInscribedCoursesContainer">
+  <% if (session[:guestUserId] != nil) %>
+    <%= render(
+          partial: "course_instances/course_instance_collection",
+          locals: {
+            courseInstances: User.find_by(id: session[:guestUserId]).getInscribedCourses()
+          }
+        ) %>
   <% end %>
-<% end %>
+</div>

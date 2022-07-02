@@ -1,5 +1,18 @@
 class EventTypesController < ApplicationController
   before_action :set_event_type, only: %i[ show edit update destroy ]
+  before_action :abortAndRedirect, only: %i[ index show new edit create update destroy ]
+
+  def initialize()
+    super
+    @log = LoggingUtil.newStdoutLogger(__FILE__)
+  end
+
+  # For disabling some operations on this controller (temporal workaround)
+  # @return [nil]
+  def abortAndRedirect()
+    @log.warn("abortAndRedirect for CUD request: #{request.path}")
+    redirect_to(root_path)
+  end
 
   # GET /event_types or /event_types.json
   def index
