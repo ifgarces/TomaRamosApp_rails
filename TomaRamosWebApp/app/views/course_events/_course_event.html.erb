@@ -1,0 +1,20 @@
+<div id="<%= dom_id course_event %>" class="card shadow-sm text-dark bg-white text-center" style="
+  width: 160px;
+  margin: 6px;
+  padding: 6px;
+  border-radius: 10px;
+">
+  <div class="bg-secondary text-white" style="
+    border-radius: 2px;
+  ">
+    <%= course_event.event_type.isEvaluation() ? course_event.date : course_event.day_of_week %>
+  </div>
+
+  <%= StringUtil.getReadableTimeInterval(course_event.start_time, course_event.end_time) %>
+
+  <% if (course_event.location != nil) %>
+    <strong class="text-danger"><%= course_event.location %></strong>
+  <% else %>
+    <small>(sala no informada)</small>
+  <% end %>
+</div>

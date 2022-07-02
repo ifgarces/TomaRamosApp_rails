@@ -1,0 +1,55 @@
+<div class="text-center mt-5">
+
+  <%= image_tag(
+        "app_icon.png",
+        alt: "Logo",
+        class: "mx-auto d-block img-fluid p-2",
+        size: 300
+      ) %>
+
+  <h1 class="text-secondary mb-4">TomaRamosApp</h1>
+
+  <p style="
+    font-size: 18px;
+    font-style: italic;
+  ">
+    Planificador no oficial para la toma de ramos Uandes
+  </p>
+
+  <%
+    # link_to(
+    #     raw("<i class='bi bi-box-arrow-in-right'></i> ") + "Entrar con Google",
+    #     "/auth/google_oauth2",
+    #     class: "btn btn-large btn-secondary",
+    #     style: "margin: 60px 10px 40px 10px;"
+    #   )
+  %>
+
+  <%= link_to(
+        raw("<i class='bi bi-box-arrow-in-right me-2'></i> ") + "Entrar",
+        "/courses",
+        class: "btn btn-large btn-secondary shadow-sm mx-3 my-5"
+      ) %>
+
+  <%= link_to(
+        raw("<i class='bi bi-question-circle-fill me-2'></i> ") + "¿Qué es esto?",
+        "/pages/about",
+        class: "btn btn-large btn-outline-secondary shadow-sm mx-3 my-5"
+      ) %>
+
+  <div id="HomeFooter" class="text-center px-1 py-2" style="
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  ">
+    <p style='
+      font-family: "Source Code Pro", Monaco, monospace;
+      font-size: 12px;
+      color: dimgray;
+    '>
+      Versión <%= ApplicationHelper::APP_VERSION_NAME %>
+      <br/>
+      ifgarces' solutions
+    </p>
+  </div>
+</div>

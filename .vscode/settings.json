@@ -1,0 +1,11 @@
+{
+    // Setting code formatting rules for the project
+    "[ruby]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        // "editor.formatOnSave": true
+    },
+    "cSpell.words": [
+        "Assistantships"
+    ],
+}

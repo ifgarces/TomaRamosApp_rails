@@ -1,0 +1,67 @@
+<%= form_with(model: course_instance) do |form| %>
+  <% if course_instance.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(course_instance.errors.count, "error") %> prohibited this course_instance from being saved:</h2>
+
+      <ul>
+        <% course_instance.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :nrc, style: "display: block" %>
+    <%= form.text_field :nrc %>
+  </div>
+
+  <div>
+    <%= form.label :title, style: "display: block" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div>
+    <%= form.label :teacher, style: "display: block" %>
+    <%= form.text_field :teacher %>
+  </div>
+
+  <div>
+    <%= form.label :credits, style: "display: block" %>
+    <%= form.number_field :credits %>
+  </div>
+
+  <div>
+    <%= form.label :career, style: "display: block" %>
+    <%= form.text_field :career %>
+  </div>
+
+  <div>
+    <%= form.label :course_number, style: "display: block" %>
+    <%= form.number_field :course_number %>
+  </div>
+
+  <div>
+    <%= form.label :section, style: "display: block" %>
+    <%= form.number_field :section %>
+  </div>
+
+  <div>
+    <%= form.label :curriculum, style: "display: block" %>
+    <%= form.text_field :curriculum %>
+  </div>
+
+  <div>
+    <%= form.label :liga, style: "display: block" %>
+    <%= form.text_field :liga %>
+  </div>
+
+  <div>
+    <%= form.label :lcruz, style: "display: block" %>
+    <%= form.text_field :lcruz %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

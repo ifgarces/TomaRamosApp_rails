@@ -1,0 +1,36 @@
+# Database schema
+db/schema.rb
+
+# Various cache and temp config files
+.idea/
+node_modules/
+Gemfile.lock
+.browserslistrc
+.ruby-version
+Procfile.dev
+yarn.lock
+
+
+# --------------------------------------------------------------------------------------------------
+# Recommended (-ish) rails .gitignore from here
+# --------------------------------------------------------------------------------------------------
+
+# Ignore bundler config
+.bundle
+
+# Ignore all logfiles and tempfiles
+log/
+tmp/
+
+# Ignore uploaded files in development
+storage/
+
+public/assets
+
+# Ignore master key for decrypting credentials and more
+config/master.key
+
+# Ignore application configuration
+config/application.yml
+
+app/assets/builds

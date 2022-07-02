@@ -1,0 +1,8 @@
+<%= render @course_event %>
+
+<div>
+  <%= link_to "Edit this course event", edit_course_event_path(@course_event) %> |
+  <%= link_to "Back to course events", course_events_path %>
+
+  <%= button_to "Destroy this course event", @course_event, method: :delete %>
+</div>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TomaRamosApp</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="google-signin-client_id" content="<%= ENV["OAUTH_CLIENT_ID"] %>">
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag("application", "data-turbo-track": "reload") %>
+    <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
+    <%= stylesheet_link_tag(params[:controller]) %>
+
+    <%= favicon_link_tag(asset_path("app_icon.svg")) %>
+
+    <%
+      # Setting image as background. Ref: https://www.syedaslam.com/dynamic-full-page-background-images-in-rails/
+    %>
+    <style>
+        html {
+            /* Uh, this is not properly shown as the `CurrentViewContainer` does not have a constant height... must fix
+               its dimensions. */
+            /*background: url(
+              <%=
+              # image_url("background-white-geometric.jpg")
+              %>) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;*/
+        }
+        body {
+            /* Warning: the following overrides Bootstrap stuff such as the navigation bar background color */
+            /*background: transparent;*/
+        }
+    </style>
+  </head>
+
+  <% displayNvBars = shouldNavBarsBeHidden(params) %>
+
+  <body>
+    <div id="MainDivWhiteLayer" style="
+      background-color: rgba(255, 255, 255, 0.9);
+    ">
+      <% if (displayNvBars) %>
+        <nav id="TopNavBar" class="navbar navbar-light shadow-sm border-bottom" style="
+          height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
+          background-color: white;
+          position: fixed;
+          Z-index: 1000;
+          top: 0;
+          left: 0;
+          width: 100%;
+        ">
+          <div id="TopNavBarContentDiv" class="container-fluid">
+
+            <%= link_to(
+                  raw("<i class='bi bi-chevron-left'></i>"),
+                  :back,
+                  class: "btn btn-lg btn-light shadow-none me-1",
+                  style: "background-color: transparent;"
+                ) %>
+
+            <%= link_to(
+                  image_tag("app_icon.png", size: 40, alt: "Logo", style: "margin-right: 10px;") + "TomaRamosApp",
+                  "/home",
+                  class: "navbar-brand"
+                ) %>
+
+            <ul id="TopNavBarLinks" class="navbar-nav">
+
+              <li class="nav-item">
+                <%= link_to(
+                      "Salir",
+                      root_path,
+                      type: "button",
+                      class: "nav-link"
+                    ) %>
+              </li>
+            </ul>
+
+          </div>
+        </nav>
+
+        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
+          background-color: rgba(238, 238, 238, 1);
+          height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          position: fixed;
+          Z-index: 1000;
+          bottom: 0;
+          width: 100%;
+          padding: 10px 4px 10px 4px;
+        ">
+          <%
+              # link_to(
+              #   raw("<i class='bi bi-house-door-fill'></i><br/>") + "Inicio",
+              #   "/home",
+              #   type: "button",
+              #   class: getClassForBottomNavButton("/home")
+              # )
+          %>
+          <%= link_to(
+                raw("<i class='bi bi-list-stars'></i><br/>") + "Ramos",
+                "/courses",
+                type: "button",
+                class: getClassForBottomNavButton("/courses")
+              ) %>
+          <%= link_to(
+                raw("<i class='bi bi-calendar-week-fill'></i><br/>") + "Horario",
+                "/schedule",
+                type: "button",
+                class: getClassForBottomNavButton("/schedule")
+              ) %>
+          <%= link_to(
+                raw("<i class='bi bi-clipboard-check'></i><br/>") + "Pruebas",
+                "/evaluations",
+                type: "button",
+                class: getClassForBottomNavButton("/evaluations")
+              ) %>
+        </div>
+      <% end %>
+
+      <div id="CurrentViewContainer" class="overflow-auto mx-1" style="
+        height: 100%;
+        padding: 8px 10px 8px 10px;
+        margin-top: <%= displayNvBars ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
+        margin-bottom: <%= displayNvBars ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
+        background: transparent;
+        overflow-x: hidden;
+        overflow-y: auto;
+      ">
+        <%
+          # Setting placeholders for flash messages
+        %>
+        <% if (notice != nil) %>
+          <div class="container alert alert-success alert-dismissible fade show" role="alert">
+            <%= notice %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        <% end %>
+
+        <% if (alert != nil) %>
+          <div class="container alert alert-danger alert-dismissible fade show" role="alert">
+            <%= alert %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+
+    </div>
+  </body>
+</html>

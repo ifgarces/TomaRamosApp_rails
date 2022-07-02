@@ -1,0 +1,53 @@
+version: "3.9"
+
+networks:
+  ifgarces-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.12.0.0/16
+          gateway: 10.12.0.1
+
+services:
+  # ---------------------- DBMS ---------------------- #
+  tomaramos-postgres:
+    container_name: tomaramos-postgres-container
+    build:
+      context: PostgresDB
+      args:
+        UBUNTU_VERSION: 22.04
+    environment:
+      POSTGRES_LOG_LEVEL: ${POSTGRES_LOG_LEVEL}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    networks:
+      ifgarces-net:
+        ipv4_address: 10.12.0.2
+    restart: "unless-stopped" # <- so that `docker-compose stop` for this won't destroy the database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 4
+      start_period: 10s
+
+  # ---------------------- Rails web app ---------------------- #
+  tomaramos-rails:
+    container_name: tomaramos-rails-container
+    build:
+      context: TomaRamosWebApp
+      args:
+        RUBY_VERSION: ${RUBY_VERSION}
+        WEB_SERVER_PORT: ${WEB_SERVER_PORT}
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      WEB_SERVER_PORT: ${WEB_SERVER_PORT}
+      WEB_SERVER_HOST: ${WEB_SERVER_HOST}
+    networks:
+      ifgarces-net:
+        ipv4_address: 10.12.0.3
+    ports:
+      - "${WEB_SERVER_PORT}:${WEB_SERVER_PORT}"
+    depends_on:
+      tomaramos-postgres:
+        condition: service_healthy
+    restart: "no"

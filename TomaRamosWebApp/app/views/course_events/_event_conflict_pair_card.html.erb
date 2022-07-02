@@ -1,0 +1,37 @@
+<div class="container border border-2 shadow rounded text-body text-center mb-3 py-2" style="
+  border-color: #2f2f2f;
+  /*background-color: #fdf5d3;*/
+">
+
+  <div class="row row-cols-2">
+    <div class="col">
+      <strong>
+        <small><%= conflictPair.leftEvent.course_instance.title %></small>
+      </strong>
+    </div>
+    <div class="col">
+      <strong>
+        <small><%= conflictPair.rightEvent.course_instance.title %></small>
+      </strong>
+    </div>
+  </div>
+
+  <div class="row row-cols-2">
+    <div class="col">
+      <small><%= conflictPair.leftEvent.event_type.name %></small>
+    </div>
+    <div class="col">
+      <small><%= conflictPair.rightEvent.event_type.name %></small>
+    </div>
+  </div>
+
+  <div class="row row-cols-2">
+    <div class="col">
+      <%= render(conflictPair.leftEvent) %>
+    </div>
+    <div class="col">
+      <%= render(conflictPair.rightEvent) %>
+    </div>
+  </div>
+
+</div>

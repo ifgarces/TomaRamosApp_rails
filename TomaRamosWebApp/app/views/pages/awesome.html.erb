@@ -1,0 +1,20 @@
+<div>
+  <p>Oh my, has the Oauth with Google worked?</p>
+
+  <% if (Rails.env.development?) %>
+    <%= debug session %>
+  <% end %>
+</div>
+
+<div class="text-center mb-4" style="
+position: fixed;
+  Z-index: 99;
+  bottom: 0;
+  width: 100%;
+">
+  <%= link_to(
+        "Volver",
+        :back,
+        class: "btn btn-secondary shadow-sm",
+        ) %>
+</div>
