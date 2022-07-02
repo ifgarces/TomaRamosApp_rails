@@ -18,7 +18,7 @@ class MainController < ApplicationController
   end
 
   def home()
-    redirect_to("/courses") #* temporally disabling this view
+    redirect_to(:courses) #* temporally disabling this view
     # render :home
   end
 
@@ -49,7 +49,7 @@ class MainController < ApplicationController
     @currentUser.inscribeNewCourse(targetCourse)
 
     redirect_to(
-      "/courses",
+      :courses,
       notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
     )
   end
@@ -62,7 +62,7 @@ class MainController < ApplicationController
     end
 
     redirect_to(
-      "/courses",
+      :courses,
       notice: "#{count} cursos des-inscritos"
     )
   end
@@ -82,14 +82,14 @@ class MainController < ApplicationController
 
   private
 
-  # @return [User] The stored user from the `session` (creates it if needed)
+  # @return [User] The stored user from the `session`, creating it if needed.
   def getUserFromSession()
     guestUserId = session[:guestUserId]
-    if ((guestUserId == nil) || (User.find_by(id: guestUserId == nil)))
+
+    if ((guestUserId == nil) || (User.find_by(id: guestUserId) == nil))
       guestUser = User.createNewGuestUser()
       guestUser.save!()
       session[:guestUserId] = guestUser.id
-
       @log.info("New guest User created: '#{guestUser.username}'")
     else
       guestUser = User.find_by(id: guestUserId)

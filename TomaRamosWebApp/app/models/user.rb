@@ -29,6 +29,13 @@ class User < ApplicationRecord
     return self.inscriptions.first().course_instances
   end
 
+  # @return [Integer] The total amount of credits inscribed by the user
+  def computeCredits()
+    return self.getInscribedCourses().map { |course|
+      course.credits
+    }.sum()
+  end
+
   # @param course [CourseInstance]
   # @return [nil]
   def inscribeNewCourse(course)

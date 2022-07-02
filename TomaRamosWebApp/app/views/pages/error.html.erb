@@ -1,0 +1,36 @@
+<div class="container bg-danger text-center text-white rounded-top py-3">
+  <h1>Ocurrió un error</h1>
+</div>
+
+<div class="container text-center border border-2 border-danger rounded-bottom p-5 shadow">
+  <p class="mb-4" style='
+    font-family: "Arial", sans-serif;
+    font-size: 80px;
+  '>
+    ಥ‿ಥ
+  </p>
+
+  <p>
+    Mmm, ocurrió un problema en la aplicación con eso último...
+  </p>
+
+  <!-- TODO: show error, or error ticket -->
+</div>
+
+<div class="text-center mb-4" style="
+  position: fixed;
+  Z-index: 99;
+  bottom: 0;
+  width: 100%;
+">
+  <%= link_to(
+        "Volver al inicio",
+        root_path,
+        class: "btn btn-secondary shadow-sm",
+      ) %>
+
+  <%
+    #TODO: form for reporting an error, or just the general feedback form
+    #link_to("Quejarse", :back, class: "btn btn-outline-secondary shadow-sm mb-1 mt-5")
+  %>
+</div>

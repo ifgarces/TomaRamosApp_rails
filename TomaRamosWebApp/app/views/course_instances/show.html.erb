@@ -1,3 +1,5 @@
+<% readableCareer = CareerEnum.parseStringCareer(@course_instance.career) %>
+
 <div class="card shadow-sm mb-4">
   <div class="card-header">
     <span class="badge rounded-pill bg-secondary" style='
@@ -20,7 +22,13 @@
       <dd class="col-sm-9"><%= @course_instance.teacher %></dd>
 
       <dt class="col-sm-3">Materia</dt>
-      <dd class="col-sm-9"><%= @course_instance.career %></dd>
+      <dd class="col-sm-9">
+        <% if (readableCareer == nil) %>
+          <%= @course_instance.career %>
+        <% else %>
+          <%= "(%s) %s" % [@course_instance.career, readableCareer] %>
+        <% end %>
+      </dd>
 
       <!--<dt class="col-sm-3">Número de curso</dt>
       <dd class="col-sm-9"><%#= @course_instance.course_number %></dd>-->

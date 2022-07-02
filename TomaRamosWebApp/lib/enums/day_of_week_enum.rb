@@ -12,10 +12,10 @@ module DayOfWeekEnum
   SATURDAY = "SÁBADO"
   SUNDAY = "DOMINGO"
 
-  # @param cleanDay [String]
-  # @return [Boolean]
-  def self.isDayStringValid(cleanDay)
-    return [
+  # @param day [String]
+  # @return [DayOfWeekEnum]
+  def self.parseStringDay(day)
+    validValues = [
       DayOfWeekEnum::MONDAY,
       DayOfWeekEnum::TUESDAY,
       DayOfWeekEnum::WEDNESDAY,
@@ -23,16 +23,13 @@ module DayOfWeekEnum
       DayOfWeekEnum::FRIDAY,
       DayOfWeekEnum::SATURDAY,
       DayOfWeekEnum::SUNDAY
-    ].include?(cleanDay)
-  end
+    ]
 
-  # @param dayString [String]
-  # @return [DayOfWeekEnum]
-  def self.parseStringDay(dayString)
-    day = dayString.upcase().strip()
     raise ArgumentError.new(
-      "Provided value '%s' is not a valid DayOfWeekEnum, must be one of %s" % [dayString, validValues]
-    ) unless (self.isDayStringValid(day))
+      "Provided value '#%s' is not a valid DayOfWeekEnum, must be one of %s" % [
+        day, validValues
+      ]
+    ) unless validValues.include?(day)
     return day
   end
 end

@@ -11,8 +11,23 @@
   <p aria-label="Image attribution" style="
     font-size: 10px;
   ">
-    <%= link_to("Coffee Spill Vectors by Vecteezy", "https://www.vecteezy.com/free-vector/coffee-spill") %>
+    <%= link_to(
+          "Coffee Spill Vectors by Vecteezy",
+          "https://www.vecteezy.com/free-vector/coffee-spill",
+          class: "text-decoration-none link-danger"
+        ) %>
   </p>
+</div>
 
-  <%= link_to("Volver", :back, class: "btn btn-secondary mb-1 mt-4") %>
+<div class="text-center mb-4" style="
+  position: fixed;
+  Z-index: 99;
+  bottom: 0;
+  width: 100%;
+">
+  <%= link_to(
+        "Volver",
+        :back,
+        class: "btn btn-secondary shadow-sm",
+        ) %>
 </div>
