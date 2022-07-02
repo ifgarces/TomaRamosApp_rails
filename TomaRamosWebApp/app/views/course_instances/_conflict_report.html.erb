@@ -1,0 +1,45 @@
+<div class="modal-header">
+  <h2 class="modal-title">
+    <i class="bi bi-exclamation-diamond"></i>
+    Conflicto de ramos
+  </h2>
+</div>
+
+<di class="modal-body">
+  <p>
+    Se detectaron conflictos de eventos para los ramos actualmente inscritos y <strong><%= targetCourse.title %></strong>
+    (NRC <%= targetCourse.nrc %>):
+  </p>
+
+  <% conflicts.each do |eventConflict| %>
+    <div class="mb-2">
+      <%= render(
+            partial: "course_events/event_conflict_pair_card",
+            locals: {
+              conflictPair: eventConflict
+            }
+          ) %>
+    </div>
+  <% end %>
+
+  <div class="modal-footer mt-4 mb-2">
+    <p>
+      ¿Inscribir <strong><%= targetCourse.title %></strong> de todas formas?
+    </p>
+
+    <button type="button" class="btn btn-secondary shadow-sm px-4 mx-3" data-bs-dismiss="modal">
+      No
+    </button>
+    <%= button_to(
+          "Sí",
+          "/inscribe-course",
+          type: "button",
+          class: "btn btn-primary shadow-sm px-4 mx-3",
+          params: {
+            courseId: targetCourse.id
+          },
+          method: :post
+        ) %>
+  </div>
+
+</di>

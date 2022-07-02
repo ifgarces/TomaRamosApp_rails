@@ -1,4 +1,45 @@
-<% readableCareer = StringUtil.getReadableCareer(@course_instance.career) %>
+<% debug @displayConflictReport %>
+
+<%
+  floatingButtonOptions = {
+    :class => "btn btn-lg btn-primary shadow mt-5 me-4",
+    :style => "
+      Z-index: 99;
+      position: fixed;
+      top: #{ApplicationHelper::TOP_NAV_BAR_HEIGHT};
+      right: 0;
+    ",
+    "data-bs-toggle" => "tooltip",
+    "data-bs-placement" => "left",
+    "title" => "Inscribir ramo"
+  }
+
+  if (@displayConflictReport)
+    # Adding modal display action
+    floatingButtonOptions = floatingButtonOptions.merge(
+      :type => "button",
+      "data-bs-toggle" => "modal",
+      "data-bs-target" => "#conflictReportModal"
+    )
+  end
+%>
+
+<% if (@displayConflictReport) %>
+  <%= button_tag(
+        raw("<i class='bi bi-plus-lg' style='font-size: 30px;'></i>"),
+        **floatingButtonOptions
+      ) %>
+<% else %>
+  <%= button_to(
+        raw("<i class='bi bi-plus-lg' style='font-size: 30px;'></i>"),
+        "/inscribe-course",
+        params: {
+          courseId: @course_instance.id
+        },
+        method: :post,
+        **floatingButtonOptions
+      ) %>
+<% end %>
 
 <div class="card shadow-sm mb-4">
   <div class="card-header">
@@ -28,13 +69,12 @@
         '>
           <%= @course_instance.career %>
         </span>
-        <% if (readableCareer != nil) %>
-          <%= readableCareer %>
+        <% if (@readableCareer != nil) %>
+          <%= @readableCareer %>
         <% end %>
       </dd>
 
-      <!--<dt class="col-sm-3">Número de curso</dt>
-      <dd class="col-sm-9"><%#= @course_instance.course_number %></dd>-->
+      <%# @course_instance.course_number %>
 
       <dt class="col-sm-3">Créditos</dt>
       <dd class="col-sm-9"><%= @course_instance.credits %></dd>
@@ -55,7 +95,7 @@
 
     <!-- Class events -->
     <%= render(
-          partial: "course_instances/course_events_collection_card",
+          partial: "course_events/course_events_collection_card",
           locals: {
             cardTitle: "Clases",
             cardEvents: @course_instance.getEventsClasses(),
@@ -66,7 +106,7 @@
 
     <!-- Assistantships and laboratory events -->
     <%= render(
-          partial: "course_instances/course_events_collection_card",
+          partial: "course_events/course_events_collection_card",
           locals: {
             cardTitle: "Ayudantías y laboratorios",
             cardEvents: @course_instance.getEventsAssistantshipsAndLabs(),
@@ -77,7 +117,7 @@
 
     <!-- Evaluation events -->
     <%= render(
-          partial: "course_instances/course_events_collection_card",
+          partial: "course_events/course_events_collection_card",
           locals: {
             cardTitle: "Evaluaciones",
             cardEvents: @course_instance.getEventsEvaluations(),
@@ -89,21 +129,18 @@
   </div>
 </div>
 
-<%= button_to(
-      raw("<i class='bi bi-plus-lg' style='font-size: 30px;'></i>"),
-      "/inscribe-course",
-      params: {
-        courseId: @course_instance.id
-      },
-      method: :post,
-      class: "btn btn-lg btn-primary shadow mt-5 me-4",
-      style: "
-        Z-index: 99;
-        position: fixed;
-        top: #{ApplicationHelper::TOP_NAV_BAR_HEIGHT};
-        right: 0;
-      ",
-      "data-bs-toggle" => "tooltip",
-      "data-bs-placement" => "left",
-      "title" => "Inscribir ramo"
-    ) %>
+<div id="conflictReportModal" class="modal">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <% if (@displayConflictReport) %>
+        <%= render(
+              partial: "course_instances/conflict_report",
+              locals: {
+                targetCourse: @course_instance,
+                conflicts: @conflicts
+              }
+            ) %>
+      <% end %>
+    </div>
+  </div>
+</div>

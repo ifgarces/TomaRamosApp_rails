@@ -1,8 +1,8 @@
 require "utils/logging_util"
 
 class EventTypesController < ApplicationController
-  before_action :set_event_type, only: %i[ show edit update destroy ]
   before_action :abortAndRedirect, only: %i[ index show new edit create update destroy ]
+  before_action :set_event_type, only: %i[ show edit update destroy ]
 
   def initialize()
     super

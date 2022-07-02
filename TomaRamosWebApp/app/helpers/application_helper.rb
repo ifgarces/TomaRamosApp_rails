@@ -10,6 +10,22 @@ module ApplicationHelper
   TOP_NAV_BAR_HEIGHT = "70px"
   BOTTOM_NAV_BAR_HEIGHT = "82px"
 
+  # @return [User] The stored user from the `session`, creating it if needed.
+  def getUserFromSession()
+    guestUserId = session[:guestUserId]
+
+    if ((guestUserId == nil) || (User.find_by(id: guestUserId) == nil))
+      guestUser = User.createNewGuestUser()
+      guestUser.save!()
+      session[:guestUserId] = guestUser.id
+      @log.info("New guest User created: '#{guestUser.username}'")
+    else
+      guestUser = User.find_by(id: guestUserId)
+    end
+
+    return guestUser
+  end
+
   # @param requestParams [Hash]
   # @return [Boolean] Whether both navigation bars should be displayed depending on the request
   # (e.g. on the current controller or webpage)

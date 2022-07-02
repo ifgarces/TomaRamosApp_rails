@@ -12,7 +12,7 @@ class MainController < ApplicationController
 
   # @return [nil]
   def initCurrentUser()
-    @currentUser = self.getUserFromSession()
+    @currentUser = helpers.getUserFromSession()
   end
 
   # @return [nil]
@@ -41,16 +41,8 @@ class MainController < ApplicationController
     render :evaluations
   end
 
-  # @return [nil]
-  def conflict_dialog()
-    # @log.info(">>> #{params[:hello]}")
-    @hello = params[:hello]
-    @log.debug(">>> hello=#{@hello}")
-    render :conflict_dialog
-  end
-
-  # Inscribes a course in `session` given a `courseId`, checking for conflicts with the current
-  # inscribed events first.
+  # Inscribes a course in `session` given a `courseId`. Assumes the user was properly noticed of
+  # possible conflicts with their currently inscribed courses.
   # @return [nil]
   def inscribe_course_safe()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
@@ -66,24 +58,19 @@ class MainController < ApplicationController
       course.id
     }.include?(targetCourse.id)
 
-    if (isAlreadyInscribed)
+    if (@currentUser.isCourseAlreadyInscribed(targetCourse))
       redirect_to(
         course_instances_url,
         alert: "El ramo NRC #{targetCourse.nrc} ya está inscrito"
       )
     end
 
-    conflicts = @currentUser.getConflictsForNewCourse(targetCourse)
+    @currentUser.inscribeNewCourse(targetCourse)
 
-    if (conflicts.count() == 0)
-      self.inscribeCourseAction(targetCourse)
-    else
-      @conflicts = conflicts
-      @targetCourse = targetCourse
-      redirect_to(
-        :conflict_dialog => { hello: "world" }
-      )
-    end
+    redirect_to(
+      :courses,
+      notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
+    )
   end
 
   # @return [nil]
@@ -111,33 +98,5 @@ class MainController < ApplicationController
       request.path, #? <- is this a bad practice? should be fine for `href` (GET) buttons, right?
       notice: "[debug] Session cleared"
     )
-  end
-
-  private
-
-  # Intended to be called from `inscribe_course_safe` when succeeded.
-  # @return [nil]
-  def inscribeCourseAction(targetCourse)
-    @currentUser.inscribeNewCourse(targetCourse)
-    redirect_to(
-      :courses,
-      notice: "%s (NRC %s) inscrito" % [targetCourse.title, targetCourse.nrc]
-    )
-  end
-
-  # @return [User] The stored user from the `session`, creating it if needed.
-  def getUserFromSession()
-    guestUserId = session[:guestUserId]
-
-    if ((guestUserId == nil) || (User.find_by(id: guestUserId) == nil))
-      guestUser = User.createNewGuestUser()
-      guestUser.save!()
-      session[:guestUserId] = guestUser.id
-      @log.info("New guest User created: '#{guestUser.username}'")
-    else
-      guestUser = User.find_by(id: guestUserId)
-    end
-
-    return guestUser
   end
 end

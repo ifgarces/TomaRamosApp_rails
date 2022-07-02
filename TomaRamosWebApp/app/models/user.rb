@@ -30,6 +30,16 @@ class User < ApplicationRecord
     return self.inscriptions.first().course_instances
   end
 
+  # @param course [Course]
+  # @return [Boolean]
+  def isCourseAlreadyInscribed(course)
+    result = self.getInscribedCourses().map { |it| it.id }.include?(course.id)
+    Rails.logger.info(">>> Course(id=%s, nrc=%s) is inscribed? %s" % [
+      course.id, course.nrc, result
+    ])
+    return result
+  end
+
   # @return [Integer] The total amount of credits inscribed by the user
   def computeCredits()
     return self.getInscribedCourses().map { |course|

@@ -13,7 +13,6 @@ Rails.application.routes.draw do
   get "/courses" => "main#courses"
   get "/schedule" => "main#schedule"
   get "/evaluations" => "main#evaluations"
-  get "/conflict_dialog" => "main#conflict_dialog"
 
   # SessionsController
   get "sessions/new" => "sessions#new"
