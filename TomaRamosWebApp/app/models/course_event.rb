@@ -1,4 +1,5 @@
 require "enums/event_type_enum"
+require "utils/string_util"
 
 # An event from a `CourseInstance` event, such as a class or evaluation, belonging to a
 # `CourseInstance`. Evaluations are not "recurrent", as non-evaluation events are "recurrent",
@@ -23,20 +24,36 @@ class CourseEvent < ApplicationRecord
   belongs_to :course_instance
   belongs_to :event_type
 
-  # @return [String] Long description of the event.
-  def toReadableString()
-    raise NotImplementedError.new("DEPRECATED METHOD NEEDING UPDATE!") #!
-    dateOrDayString = self.is_evaluation() ? self.date.to_s() : DayOfWeekEnum.toStringSpanish(
-      self.day_of_week
-    )
-    locationString = (self.location == "") ? "(no informada)" : self.location
-    recurrentEventInfo = ((!self.is_evaluation()) && (self.date != nil)) ? "Inicia desde: %s" % [self.date] : ""
+  # @param event1 [CourseEvent]
+  # @param event2 [CourseEvent]
+  # @return [Boolean]
+  def self.areEventsInConflict(event1, event2)
+    #TODO
+    raise NotImplementedError.new()
+  end
+
+  # @return [String] Short description
+  def toReadableStringShort()
+    #TODO
+    raise NotImplementedError.new()
+  end
+
+  # @return [String] Long description
+  def toReadableStringLong()
+    dateOrDayString = self.event_type.isEvaluation() \
+      ? self.date.to_s() : self.day_of_week
+    locationString = (
+      (self.location == nil) || (self.location == "")
+    ) ? "(no informada)": self.location
+    recurrentEventStart = (
+      (!self.event_type.isEvaluation()) && (self.date != nil)
+    ) ? "Inicia desde: #{self.date}" : ""
     return %{
-Tipo: #{self.ramo_event_type.to_string_large()}
-Ramo: #{self.ramo.nombre} (NRC #{self.ramo.nrc})
-Fecha: #{dateOrDayString} (#{self.start_time} - #{self.end_time})
+Tipo: #{self.event_type.name}
+Ramo: #{self.course_instance.title} (NRC #{self.course_instance.nrc})
+Fecha: #{dateOrDayString} (#{StringUtil.getReadableTimeInterval(self.start_time, self.end_time)})
 Sala: #{locationString}
-#{recurrentEventInfo}
+#{recurrentEventStart}
 }.strip()
   end
 end

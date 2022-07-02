@@ -1,3 +1,6 @@
+require "utils/logging_util"
+require "utils/string_util"
+
 class CourseEventsController < ApplicationController
   before_action :set_course_event, only: %i[ show edit update destroy ]
   before_action :abortAndRedirect, only: %i[ index show new edit create update destroy ]

@@ -45,6 +45,14 @@ class CourseInstance < ApplicationRecord
 
   validates :nrc, numericality: true
 
+  # @param course1 [CourseInstance]
+  # @param course2 [CourseInstance]
+  # @return [Boolean] Whether the given courses have events that collide with each other
+  def self.areCoursesInConflict(course1, course2)
+    #TODO
+    raise NotImplementedError.new()
+  end
+
   # @return [Array<CourseEvent>]
   def getEventsClasses()
     classType = EventType.find_by(name: EventTypeEnum::CLASS)

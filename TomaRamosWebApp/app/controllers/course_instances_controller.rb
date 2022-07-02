@@ -1,3 +1,5 @@
+require "utils/logging_util"
+
 class CourseInstancesController < ApplicationController
   before_action :set_course_instance, only: %i[ show edit update destroy ]
   before_action :abortAndRedirect, only: %i[ new edit create update destroy ]

@@ -34,7 +34,7 @@ class MainController < ApplicationController
     render :evaluations
   end
 
-  # Inscribes a course in `session` given a `courseId`
+  # Inscribes a course in `session` given a `courseId`.
   # @return [nil]
   def inscribeCourse()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
@@ -62,29 +62,30 @@ class MainController < ApplicationController
     end
 
     redirect_to(
-      request.path,
+      "/courses",
       notice: "#{count} cursos des-inscritos"
     )
   end
 
   # @return [nil]
   def debugClearSession()
-    @currentUser.destroy!() #!
+    @currentUser.destroy!() #! deleting guest user
     session[:guestUserId] = nil
     @currentUser = nil
 
     # Refreshing current page for changes to be reflected immediately
     redirect_to(
-      request.path,
+      request.path, #? <- is this a bad practice? should be fine for `href` (GET) buttons, right?
       notice: "[debug] Session cleared"
     )
   end
 
   private
+
   # @return [User] The stored user from the `session` (creates it if needed)
   def getUserFromSession()
     guestUserId = session[:guestUserId]
-    if (guestUserId.nil? || (User.find_by(id: guestUserId).nil?))
+    if ((guestUserId == nil) || (User.find_by(id: guestUserId == nil)))
       guestUser = User.createNewGuestUser()
       guestUser.save!()
       session[:guestUserId] = guestUser.id

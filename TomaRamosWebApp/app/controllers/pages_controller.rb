@@ -1,3 +1,5 @@
+require "utils/logging_util"
+
 class PagesController < ApplicationController
   def home()
     render :home

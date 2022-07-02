@@ -17,13 +17,6 @@ module ApplicationHelper
     return (requestParams[:controller] != "pages")
   end
 
-  # @param startTime [Time]
-  # @param endTime [Time]
-  # @return [String]
-  def getReadableTimeInterval(startTime, endTime)
-    return "%s:%s – %s:%s" % [startTime.hour, startTime.min, endTime.hour, endTime.min]
-  end
-
   # Allows to set a button of the nav bar as highlighted based on the current request path.
   # @param buttonHref [String]
   # @return [String]

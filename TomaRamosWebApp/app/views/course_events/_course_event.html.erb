@@ -11,7 +11,7 @@
     <%= course_event.event_type.isEvaluation() ? course_event.date : course_event.day_of_week %>
   </div>
 
-  <%= getReadableTimeInterval(course_event.start_time, course_event.end_time) %>
+  <%= StringUtil.getReadableTimeInterval(course_event.start_time, course_event.end_time) %>
 
   <strong class="text-danger"><%= course_event.location %></strong>
 </div>
