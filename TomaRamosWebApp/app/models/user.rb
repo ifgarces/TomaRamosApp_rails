@@ -22,8 +22,7 @@ class User < ApplicationRecord
 
   has_many :inscriptions, dependent: :destroy
 
-  GUEST_USERNAME_PREFIX = "¬¬"
-  GUEST_EMAIL_DOMAIN = "guest.com"
+  GUEST_EMAIL_DOMAIN = "guest-user.com"
 
   # @return [Array<CourseInstance>]
   def getInscribedCourses()
@@ -41,6 +40,13 @@ class User < ApplicationRecord
     self.save!()
   end
 
+  # @param course [CourseInstance]
+  # @return [nil]
+  def uninscribeCourse(course)
+    self.inscriptions.first().course_instances = []
+    self.save!()
+  end
+
   # Updates the `last_activity` attribute with the current `DateTime`
   # @return [nil]
   def updateLastActivity()
@@ -51,7 +57,7 @@ class User < ApplicationRecord
 
   # @return [Boolean] Whether this user is of type "guest".
   def isGuestUser()
-    return self.username.start_with?(GUEST_USERNAME_PREFIX)
+    return self.email.end_with?(GUEST_EMAIL_DOMAIN)
   end
 
   # Generates a new guest User (intended for `session`), saves it in database, and returns it. 
@@ -74,7 +80,7 @@ class User < ApplicationRecord
   # @return [String] A unique new guest username.
   def self.generateGuestUsername()
     while (true)
-      newUsername = "%s%s" % [GUEST_USERNAME_PREFIX, Faker::Lorem.characters(number: 10)]
+      newUsername = Faker::Lorem.characters(number: 10)
       isUnique = User.find_by(username: newUsername).nil?
       if (isUnique)
         return newUsername

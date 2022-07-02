@@ -54,8 +54,22 @@ class MainController < ApplicationController
     )
   end
 
+  def uninscribeAllCourses()
+    userCourses = @currentUser.getInscribedCourses()
+    count = userCourses.count()
+    userCourses.each do |course|
+      @currentUser.uninscribeCourse(course)
+    end
+
+    redirect_to(
+      request.path,
+      notice: "#{count} cursos des-inscritos"
+    )
+  end
+
   # @return [nil]
   def debugClearSession()
+    @currentUser.destroy!() #!
     session[:guestUserId] = nil
     @currentUser = nil
 
@@ -75,7 +89,7 @@ class MainController < ApplicationController
       guestUser.save!()
       session[:guestUserId] = guestUser.id
 
-      Rails.logger.info("New guest User created: '#{guestUser.username}'")
+      @log.info("New guest User created: '#{guestUser.username}'")
     else
       guestUser = User.find_by(id: guestUserId)
     end

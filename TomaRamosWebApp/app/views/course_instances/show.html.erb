@@ -1,8 +1,9 @@
-<div class="card">
+<div class="card shadow-sm mb-4">
   <div class="card-header">
     <span class="badge rounded-pill bg-secondary" style='
       margin-right: 8px;
-      font-family: "Source Code Pro", monospace;
+      font-size: 14px;
+      font-family: "Verdana", sans-serif;
     '>
       NRC <%= @course_instance.nrc %>
     </span>
@@ -74,17 +75,24 @@
           }
         ) %>
 
-    <hr>
-
-    <div class="text-center mt-4 mb-2">
-      <%= button_to(
-            raw("<i class='bi bi-plus-lg me-2'></i> ") + "Inscribir ramo",
-            "/inscribe-course",
-            params: {courseId: @course_instance.id},
-            method: :post,
-            class: "btn btn-primary"
-          ) %>
-    </div>
-
   </div>
 </div>
+
+<%= button_to(
+      raw("<i class='bi bi-plus-lg' style='font-size: 30px;'></i>"),
+      "/inscribe-course",
+      params: {
+        courseId: @course_instance.id
+      },
+      method: :post,
+      class: "btn btn-lg btn-primary shadow mt-5 me-4",
+      style: "
+        Z-index: 99;
+        position: fixed;
+        top: #{ApplicationHelper::TOP_NAV_BAR_HEIGHT};
+        right: 0;
+      ",
+      "data-bs-toggle" => "tooltip",
+      "data-bs-placement" => "left",
+      "title" => "Inscribir ramo"
+    ) %>

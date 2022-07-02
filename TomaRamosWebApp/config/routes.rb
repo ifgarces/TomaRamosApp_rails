@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :academic_periods
 
   post "/inscribe-course" => "main#inscribeCourse"
+  post "/uninscribe-all" => "main#uninscribeAllCourses"
   post "/debug-clear-session" => "main#debugClearSession"
 
   # MainController
@@ -20,11 +21,10 @@ Rails.application.routes.draw do
   # PagesController
   get "/" => "pages#home"
   get "/pages/about" => "pages#about"
-  get "/pages/wip" => "pages#wip"
   get "/pages/not-found" => "pages#not_found"
   # Some legal stuff here required for Google Oauth
-  get "/pages/privacy-policy" => "pages#wip" #TODO
-  get "/pages/terms-of-service" => "pages#wip" #TODO
+  get "/pages/privacy-policy" => "pages#privacy_policy"
+  get "/pages/terms-of-service" => "pages#terms_of_service"
 
   # OmniAuth
   get "/auth/:provider/callback" => "sessions#create"

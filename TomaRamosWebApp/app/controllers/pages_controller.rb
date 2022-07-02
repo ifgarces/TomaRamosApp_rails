@@ -7,10 +7,6 @@ class PagesController < ApplicationController
     render :about
   end
 
-  def wip()
-    render :wip
-  end
-
   def not_found()
     render :not_found
   end

@@ -1,4 +1,4 @@
-<div id="<%= dom_id(course_instance) %>" class="card text-dark bg-light mb-3">
+<div id="<%= dom_id(course_instance) %>" class="card shadow-sm text-dark bg-light mb-3">
   <div class="card-body">
 
     <div class="container">
@@ -16,13 +16,13 @@
       <div class="row">
         <div class="col-8">
           <span class="badge rounded-pill bg-info" style='
-            font-family: "Source Code Pro", monospace;
+            font-family: "Verdana", sans-serif;
           '>
             <%= course_instance.career %>
           </span>
 
           <span class="badge rounded-pill bg-secondary" style='
-            font-family: "Source Code Pro", monospace;
+            font-family: "Verdana", sans-serif;
           '>
             <%= link_to("NRC %s" % [course_instance.nrc], course_instance, class: "text-decoration-none link-light") %>
           </span>

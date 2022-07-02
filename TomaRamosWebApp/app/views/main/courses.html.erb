@@ -1,5 +1,7 @@
-<div class="container">
-  <div class="row text-center my-3">
+<% userInscribedCourses = @currentUser.getInscribedCourses() %>
+<% userHasCourses = (userInscribedCourses.count() != 0) %>
+<div class="container text-center mb-4">
+  <div class="row my-3">
     <div class="col">
       <%= link_to(
             raw("<i class='bi bi-book me-2'></i> ") + "Catálogo",
@@ -7,24 +9,43 @@
             class: "btn btn-primary"
           ) %>
     </div>
-    <div class="col">
-      <%= button_to(
-            raw("<i class='bi bi-trash3-fill me-2'></i> ") + "[debug] Clear session",
-            "/debug-clear-session",
-            class: "btn btn-danger text-white",
-            method: :post
-          ) %>
-    </div>
+    <% if (userHasCourses) %>
+      <div class="col">
+        <%= button_to(
+              raw("<i class='bi bi-trash3-fill me-2'></i> ") + "Limpiar cursos",
+              "/uninscribe-all",
+              class: "btn btn-outline-warning",
+              method: :post
+            ) %>
+      </div>
+    <% end %>
   </div>
+
+  <% if (Rails.env.development?) %>
+    <%= button_to(
+          "[debug] Clear session",
+          "/debug-clear-session",
+          class: "btn btn-sm btn-danger text-white",
+          method: :post
+        ) %>
+  <% end %>
 </div>
 
-<div id="UserInscribedCoursesContainer">
-  <% if (session[:guestUserId] != nil) %>
+<hr>
+
+<div class="bg-secondary text-white text-center text-uppercase rounded-top py-1 mb-0 mt-4">
+  <small>Ramos inscritos</small>
+</div>
+
+<div id="UserInscribedCoursesContainer" class="border-start border-end border-bottom border-secondary px-2 pt-2 pb-1 mt-0">
+  <% if (userHasCourses) %>
     <%= render(
           partial: "course_instances/course_instance_collection",
           locals: {
-            courseInstances: User.find_by(id: session[:guestUserId]).getInscribedCourses()
+            courseInstances: userInscribedCourses
           }
         ) %>
+  <% else %>
+    <p>(vacío)</p>
   <% end %>
 </div>

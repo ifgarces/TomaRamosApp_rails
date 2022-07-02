@@ -2,9 +2,10 @@
   background-color: <%= titleBackgroundColor %>!important;
   border-radius: 10px 10px 0 0;
 ">
-  <h5 class="card-title m-0"><%= cardTitle %></h5>
+  <h6 class="card-title m-0 text-dark text-uppercase"><%= cardTitle %></h6>
 </div>
-<div class="p-1 mb-2 bg-transparent text-body" style="
+
+<div class="p-1 mb-4 bg-transparent text-body border-bottom border-start border-end" style="
   background-color: <%= bodyBackgroundColor %>!important;
 ">
   <div style="
@@ -15,9 +16,7 @@
     <%= "(vacío)" if (cardEvents.count() == 0) %>
 
     <% cardEvents.each do |event| %>
-      <div style="
-        display: inline-block;
-      ">
+      <div style="display: inline-block;">
         <%= render(event) %>
       </div>
     <% end %>
