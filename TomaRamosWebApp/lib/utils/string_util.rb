@@ -1,4 +1,5 @@
 require "time"
+require "enums/event_type_enum"
 
 module StringUtil
   # @param startTime [Time]
@@ -29,5 +30,27 @@ module StringUtil
       "ICA" => "Ing. Civil Ambiental"
     }
     return careerMappings.keys().include?(career) ? careerMappings[career] : nil
+  end
+
+  # Returns the larger description of the event (by its `name`).
+  # @param eventTypeStr [String]
+  # @return [String]
+  def self.getReadableEventType(eventTypeStr)
+    return case (eventTypeStr)
+      when EventTypeEnum::CLASS
+        "Clase"
+      when EventTypeEnum::ASSISTANTSHIP
+        "Ayudantía"
+      when EventTypeEnum::LABORATORY
+        "Laboratorio"
+      when EventTypeEnum::TEST
+        "Prueba"
+      when EventTypeEnum::EXAM
+        "Examen"
+      else
+        raise ArgumentError.new(
+          "Unknown EventType name '%s', can't convert to large string" % [self.name]
+        )
+      end
   end
 end
