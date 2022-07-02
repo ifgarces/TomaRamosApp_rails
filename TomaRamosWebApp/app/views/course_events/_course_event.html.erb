@@ -12,5 +12,9 @@
 
   <%= StringUtil.getReadableTimeInterval(course_event.start_time, course_event.end_time) %>
 
-  <strong class="text-danger"><%= course_event.location %></strong>
+  <% if (course_event.location != nil) %>
+    <strong class="text-danger"><%= course_event.location %></strong>
+  <% else %>
+    <small>(sala no informada)</small>
+  <% end %>
 </div>

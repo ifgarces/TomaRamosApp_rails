@@ -6,8 +6,9 @@
 </div>
 
 <di class="modal-body">
+
   <p>
-    Se detectaron conflictos de eventos para los ramos actualmente inscritos y <strong><%= targetCourse.title %></strong>
+    Se detectaron conflictos entre sus ramos actualmente inscritos y <strong><%= targetCourse.title %></strong>
     (NRC <%= targetCourse.nrc %>):
   </p>
 
@@ -22,14 +23,15 @@
     </div>
   <% end %>
 
-  <div class="modal-footer mt-4 mb-2">
-    <p>
-      ¿Inscribir <strong><%= targetCourse.title %></strong> de todas formas?
-    </p>
+  <p class="mt-4">
+    ¿Inscribir <strong><%= targetCourse.title %></strong> de todas formas?
+  </p>
 
+  <div class="modal-footer my-2">
     <button type="button" class="btn btn-secondary shadow-sm px-4 mx-3" data-bs-dismiss="modal">
       No
     </button>
+
     <%= button_to(
           "Sí",
           "/inscribe-course",
