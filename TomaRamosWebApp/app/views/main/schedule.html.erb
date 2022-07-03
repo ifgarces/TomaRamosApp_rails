@@ -11,7 +11,9 @@
 
   <% @weekScheduleData.each_with_index do |weekScheduleRow, rowIndex| %>
     <div class="row row-6 py-1 <%= (rowIndex % 2 == 0) ? "row-lighter-gray" : "row-light-gray" %>">
-      <div class="col-1 cell-time"><%= "%d:30" % [WeekSchedule::FIRST_BLOCK_HOUR + rowIndex] %></div>
+      <div class="col-1 cell-time">
+        <small><%= "%d:30" % [WeekSchedule::FIRST_BLOCK_HOUR + rowIndex] %></small>
+      </div>
 
       <div class="col">
         <% weekScheduleRow.monday.each do |event| %>

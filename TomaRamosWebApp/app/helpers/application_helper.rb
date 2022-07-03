@@ -62,9 +62,9 @@ module ApplicationHelper
       when EventTypeEnum::CLASS
         "white"
       when EventTypeEnum::ASSISTANTSHIP
-        "#d6ffc2"
+        "#cafccd"
       when EventTypeEnum::LABORATORY
-        "#c2daff"
+        "#cadefc"
       else
         raise RuntimeError.new("Unexpected type name '%s' for event %s: should be non-evaluation type" % [
           event.event_type.name, event]
