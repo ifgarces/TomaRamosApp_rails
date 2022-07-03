@@ -11,11 +11,11 @@ module ApplicationHelper
     @@log = LoggingUtil.getStdoutLogger(__FILE__)
   end
 
-  #? Is there a better way to encapsulate this? could this be automated maybe based on releases on
-  #? the private GitHub repo of the project
-  APP_VERSION_NAME = "0.1" #"2022-20.0"
+  #? Could the app version name be automated?
+  APP_VERSION_NAME = "0.1"
 
-  # Navigation bars dimensions
+  # Dimension constants
+  MAX_WEBPAGE_WIDTH = "650px"
   TOP_NAV_BAR_HEIGHT = "70px"
   BOTTOM_NAV_BAR_HEIGHT = "82px"
 

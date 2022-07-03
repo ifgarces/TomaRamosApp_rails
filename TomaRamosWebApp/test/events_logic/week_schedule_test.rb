@@ -1,3 +1,4 @@
+require "test_helper"
 require "time"
 require "events_logic/week_schedule"
 
