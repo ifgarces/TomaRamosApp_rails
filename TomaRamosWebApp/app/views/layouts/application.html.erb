@@ -40,8 +40,24 @@
   <% displayNvBars = shouldNavBarsBeHidden(params) %>
 
   <body>
+    <div id="BetterInMobileNotice" class="text-center text-uppercase px-4 py-3" style="
+      position: fixed;
+      Z-index: -2;
+      top: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
+      right: 0;
+      color: gray;
+      width: 200px;
+    ">
+      <i class="bi bi-phone" style="font-size: 60px;"></i>
+      <br/>
+      <small style='font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'>
+        Use la app en su teléfono en vertical para una mejor experiencia
+      </small>
+    </div>
+
     <div id="MainDivWhiteLayer" style="
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(255, 255, 255, 1);
+      max-width: <%= ApplicationHelper::MAX_WEBPAGE_WIDTH %>;
     ">
       <% if (displayNvBars) %>
         <nav id="TopNavBar" class="navbar navbar-light shadow-sm border-bottom" style="
@@ -52,6 +68,7 @@
           top: 0;
           left: 0;
           width: 100%;
+          max-width: <%= ApplicationHelper::MAX_WEBPAGE_WIDTH %>;
         ">
           <div id="TopNavBarContentDiv" class="container-fluid">
 
@@ -84,13 +101,14 @@
         </nav>
 
         <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
-          background-color: rgba(238, 238, 238, 1);
           height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
+          background-color: rgba(238, 238, 238, 1);
           position: fixed;
           Z-index: 1000;
           bottom: 0;
           width: 100%;
           padding: 10px 4px 10px 4px;
+          max-width: <%= ApplicationHelper::MAX_WEBPAGE_WIDTH %>;
         ">
           <%
               # link_to(

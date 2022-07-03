@@ -1,0 +1,11 @@
+<div class="border border-dark rounded p-1 m-1" style="
+  background-color: <%= ApplicationHelper.getScheduleColorForEvent(courseEvent) %>;
+">
+  <p class="text-black text-uppercase text-center m-0 p-0" style="
+    font-size: 11px;
+  ">
+    <%= courseEvent.course_instance.title %>
+    <br/>
+    <strong><%= courseEvent.location %></strong>
+  </p>
+</div>

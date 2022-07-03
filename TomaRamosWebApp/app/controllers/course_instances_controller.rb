@@ -8,7 +8,7 @@ class CourseInstancesController < ApplicationController
 
   # @return [nil]
   def initLog()
-    @log = LoggingUtil.newStdoutLogger(__FILE__)
+    @log = LoggingUtil.getStdoutLogger(__FILE__)
   end
 
   # For disabling some operations on this controller (temporal workaround)

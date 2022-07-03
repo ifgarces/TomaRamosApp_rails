@@ -72,7 +72,7 @@ group :test do
 end
 
 # jQuery
-gem "jquery-rails"
+#// gem "jquery-rails"
 
 # For generating great Fake data
 gem "faker"

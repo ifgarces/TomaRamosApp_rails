@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :course_events
   resources :academic_periods
 
-  post "/inscribe-course" => "main#inscribe_course_safe"
+  post "/inscribe-course" => "main#inscribeCourse"
   post "/uninscribe-all" => "main#uninscribeAllCourses"
   post "/debug-clear-session" => "main#debugClearSession"
 

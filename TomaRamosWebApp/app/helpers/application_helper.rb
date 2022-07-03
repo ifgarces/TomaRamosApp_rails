@@ -1,12 +1,21 @@
 require "redcarpet"
+require "utils/logging_util"
+require "enums/event_type_enum"
 
 module ApplicationHelper
 
-  #? Is there a better way to encapsulate this? could this be automated maybe based on releases on
-  #? the private GitHub repo of the project
-  APP_VERSION_NAME = "0.1" #"2022-20.0"
+  # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
+  # these myself...
+  def initialize(context, optionsHash, originController)
+    super(context, optionsHash, originController)
+    @@log = LoggingUtil.getStdoutLogger(__FILE__)
+  end
 
-  # Navigation bars dimensions
+  #? Could the app version name be automated?
+  APP_VERSION_NAME = "0.1"
+
+  # Dimension constants
+  MAX_WEBPAGE_WIDTH = "650px"
   TOP_NAV_BAR_HEIGHT = "70px"
   BOTTOM_NAV_BAR_HEIGHT = "82px"
 
@@ -53,6 +62,24 @@ module ApplicationHelper
       end
   end
 
+  # Gets the background color for a [non-evaluation] event in the week schedule view.
+  # @param event [CourseEvent]
+  # @return [String]
+  def self.getScheduleColorForEvent(event)
+    return case (event.event_type.name)
+      when EventTypeEnum::CLASS
+        "white"
+      when EventTypeEnum::ASSISTANTSHIP
+        "#cafccd"
+      when EventTypeEnum::LABORATORY
+        "#cadefc"
+      else
+        raise RuntimeError.new("Unexpected type name '%s' for event %s: should be non-evaluation type" % [
+          event.event_type.name, event]
+        )
+    end
+  end
+
   # Renders a Markdown from a file name.
   #
   # References (many thanks, boys):
@@ -62,7 +89,8 @@ module ApplicationHelper
   # @return [String] Rendered HTML
   def renderMarkdownFile(filename)
     filename = "%s/%s" % [Rails.root, filename]
-    Rails.logger.debug("Rendering Markdown file '#{filename}'")
+    
+    @@log.debug("Rendering Markdown file '#{filename}'")
 
     raise ArgumentError.new(
       "Markdown file '#{filename}' not found"

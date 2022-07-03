@@ -1,6 +1,7 @@
 require "date"
 require "faker"
-require "utils/events_conflict"
+require "utils/logging_util"
+require "events_logic/conflict"
 
 # Web application user.
 #
@@ -33,11 +34,7 @@ class User < ApplicationRecord
   # @param course [Course]
   # @return [Boolean]
   def isCourseAlreadyInscribed(course)
-    result = self.getInscribedCourses().map { |it| it.id }.include?(course.id)
-    Rails.logger.info(">>> Course(id=%s, nrc=%s) is inscribed? %s" % [
-      course.id, course.nrc, result
-    ])
-    return result
+    return self.getInscribedCourses().map { |it| it.id } .include?(course.id)
   end
 
   # @return [Integer] The total amount of credits inscribed by the user
@@ -66,7 +63,7 @@ class User < ApplicationRecord
   end
 
   # @param newCourse [CourseInstance]
-  # @return [Array<EventsConflict>] Computed conflicts between events, checking the current
+  # @return [Array<Conflict>] Computed conflicts between events, checking the current
   # inscribed courses by the user, and a target course
   def getConflictsForNewCourse(newCourse)
     allConflicts = []

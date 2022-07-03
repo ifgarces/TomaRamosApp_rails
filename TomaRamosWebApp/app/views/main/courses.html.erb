@@ -39,7 +39,9 @@
   <small style="font-size: 11px;">Créditos: <%= @currentUser.computeCredits() %></small>
 </div>
 
-<div id="UserInscribedCoursesContainer" class="container container-xl border-start border-end border-bottom border-secondary px-2 pt-2 pb-1 mt-0">
+<div id="UserInscribedCoursesContainer" class="container container-xl border-start border-end border-bottom border-secondary px-2 pt-2 pb-1 mt-0" style="
+  background-color: #dfe3e8;
+">
   <% if (userHasCourses) %>
     <%= render(
           partial: "course_instances/course_instance_collection",

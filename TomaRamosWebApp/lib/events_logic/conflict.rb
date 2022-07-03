@@ -1,7 +1,7 @@
 require "utils/string_util"
 
 # Represents a mapping between two events that are conflicted with each other.
-class EventsConflict
+class Conflict
   attr_reader :leftEvent, :rightEvent
 
   # @param leftEvent [CourseEvent]
@@ -10,7 +10,7 @@ class EventsConflict
     @leftEvent = leftEvent
     @rightEvent = rightEvent
 
-    raise ArgumentError.new(
+    raise TypeError.new(
       "One of the provided arguments is not a CourseEvents: #{self}"
     ) unless (@leftEvent.is_a?(CourseEvent) && @rightEvent.is_a?(CourseEvent))
   end
@@ -18,7 +18,7 @@ class EventsConflict
   # @return [String]
   def to_s()
     return StringUtil.unindent("
-      EventsConflict(
+      Conflict(
         leftEvent: %s,
         rightEvent: %s
       )
@@ -26,7 +26,7 @@ class EventsConflict
   end
 
   def ==(obj)
-    if ((obj.nil?) || (!obj.is_a?(EventsConflict)))
+    if ((obj.nil?) || (!obj.is_a?(Conflict)))
       return false
     end
     return (
