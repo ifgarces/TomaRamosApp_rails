@@ -20,7 +20,7 @@ web_server:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
 	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-		rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST}
+		rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST} --no-log-to-stdout
 
 # Runs the task for importing course data
 import_csv:

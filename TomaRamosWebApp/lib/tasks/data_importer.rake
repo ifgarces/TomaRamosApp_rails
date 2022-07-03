@@ -1,7 +1,7 @@
 require "logger"
 require "utils/csv_data_importer"
 
-@log = LoggingUtil.newStdoutLogger(__FILE__)
+@log = LoggingUtil.getStdoutLogger(__FILE__)
 
 CSV_FILE_PATH = "db/catalog-ing.csv"
 

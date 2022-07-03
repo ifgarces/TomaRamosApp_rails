@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
 
   # @return [nil]
   def initLog()
-    @log = LoggingUtil.newStdoutLogger(__FILE__)
+    @log = LoggingUtil.getStdoutLogger(__FILE__)
   end
 
   def new()

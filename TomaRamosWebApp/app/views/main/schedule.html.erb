@@ -2,7 +2,10 @@
   <div id="WeekScheduleHeader" class="row row-6 text-center">
     <div class="col-1 text-white cell-day-darker-gray">Hora</div>
     <% [
-         DayOfWeekEnum::MONDAY, DayOfWeekEnum::TUESDAY, DayOfWeekEnum::WEDNESDAY, DayOfWeekEnum::THURSDAY,
+         DayOfWeekEnum::MONDAY,
+         DayOfWeekEnum::TUESDAY,
+         DayOfWeekEnum::WEDNESDAY,
+         DayOfWeekEnum::THURSDAY,
          DayOfWeekEnum::FRIDAY
       ].each do |dayOfWeek| %>
       <div class="col text-white cell-day-dark-gray text-uppercase"><%= dayOfWeek %></div>
@@ -25,6 +28,7 @@
               ) %>
         <% end %>
       </div>
+
       <div class="col">
         <% weekScheduleRow.tuesday.each do |event| %>
           <%= render(
@@ -35,6 +39,7 @@
               ) %>
         <% end %>
       </div>
+
       <div class="col">
         <% weekScheduleRow.wednesday.each do |event| %>
           <%= render(
@@ -45,6 +50,7 @@
               ) %>
         <% end %>
       </div>
+
       <div class="col">
         <% weekScheduleRow.thursday.each do |event| %>
           <%= render(
@@ -55,6 +61,7 @@
               ) %>
         <% end %>
       </div>
+
       <div class="col">
         <% weekScheduleRow.friday.each do |event| %>
           <%= render(
@@ -67,15 +74,4 @@
       </div>
     </div>
   <% end %>
-
-
-<!--  <div class="row row-light-gray py-1">
-    <div class="col-1 cell-time">9:30</div>
-    <div class="col">...</div>
-    <div class="col">...</div>
-    <div class="col">...</div>
-    <div class="col">...</div>
-    <div class="col">...</div>
-  </div>-->
-
 </div>

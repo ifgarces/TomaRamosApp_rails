@@ -4,7 +4,7 @@ require "date"
 require "utils/logging_util"
 require "enums/event_type_enum"
 
-@log = LoggingUtil.newStdoutLogger(__FILE__)
+@log = LoggingUtil.getStdoutLogger(__FILE__)
 
 ADMIN_USER_EMAIL = "admin@tomaramos.app"
 

@@ -1,7 +1,15 @@
 require "redcarpet"
+require "utils/logging_util"
 require "enums/event_type_enum"
 
 module ApplicationHelper
+
+  # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
+  # these myself...
+  def initialize(context, optionsHash, originController)
+    super(context, optionsHash, originController)
+    @@log = LoggingUtil.getStdoutLogger(__FILE__)
+  end
 
   #? Is there a better way to encapsulate this? could this be automated maybe based on releases on
   #? the private GitHub repo of the project
@@ -81,7 +89,8 @@ module ApplicationHelper
   # @return [String] Rendered HTML
   def renderMarkdownFile(filename)
     filename = "%s/%s" % [Rails.root, filename]
-    Rails.logger.debug("Rendering Markdown file '#{filename}'")
+    
+    @@log.debug("Rendering Markdown file '#{filename}'")
 
     raise ArgumentError.new(
       "Markdown file '#{filename}' not found"

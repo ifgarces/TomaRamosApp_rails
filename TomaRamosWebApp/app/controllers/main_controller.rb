@@ -9,7 +9,7 @@ class MainController < ApplicationController
 
   # @return [nil]
   def initLog()
-    @log = LoggingUtil.newStdoutLogger(__FILE__)
+    @log = LoggingUtil.getStdoutLogger(__FILE__)
   end
 
   # @return [nil]
@@ -36,9 +36,6 @@ class MainController < ApplicationController
   # @return [nil]
   def schedule()
     courses = @currentUser.getInscribedCourses()
-    @log.info("--------------------------------------------------------------------------------------------------")
-    @log.info(courses.count())
-    @log.info("--------------------------------------------------------------------------------------------------")
     if ((courses.nil?) || (courses.count() == 0))
       redirect_to(
         :courses,
@@ -58,7 +55,7 @@ class MainController < ApplicationController
   # Inscribes a course in `session` given a `courseId`. Assumes the user was properly noticed of
   # possible conflicts with their currently inscribed courses.
   # @return [nil]
-  def inscribe_course_safe()
+  def inscribeCourse()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
     if (targetCourse.nil?)
       @log.error("Cannot inscribe course ID '#{params[:courseId]}': invalid ID")
@@ -66,6 +63,7 @@ class MainController < ApplicationController
         course_instances_url,
         alert: "Error: ramo inválido"
       )
+      return
     end
 
     isAlreadyInscribed = @currentUser.getInscribedCourses().map { |course|
@@ -74,9 +72,10 @@ class MainController < ApplicationController
 
     if (@currentUser.isCourseAlreadyInscribed(targetCourse))
       redirect_to(
-        course_instances_url,
+        :courses,
         alert: "El ramo NRC #{targetCourse.nrc} ya está inscrito"
       )
+      return
     end
 
     @currentUser.inscribeNewCourse(targetCourse)
@@ -99,6 +98,7 @@ class MainController < ApplicationController
       :courses,
       notice: "#{count} cursos des-inscritos"
     )
+    return
   end
 
   # @return [nil]
