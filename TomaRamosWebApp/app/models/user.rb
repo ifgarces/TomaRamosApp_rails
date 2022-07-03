@@ -1,6 +1,6 @@
 require "date"
 require "faker"
-require "utils/events_conflict"
+require "events_logic/conflict"
 
 # Web application user.
 #
@@ -66,7 +66,7 @@ class User < ApplicationRecord
   end
 
   # @param newCourse [CourseInstance]
-  # @return [Array<EventsConflict>] Computed conflicts between events, checking the current
+  # @return [Array<Conflict>] Computed conflicts between events, checking the current
   # inscribed courses by the user, and a target course
   def getConflictsForNewCourse(newCourse)
     allConflicts = []

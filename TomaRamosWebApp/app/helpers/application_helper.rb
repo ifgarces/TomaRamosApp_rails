@@ -1,4 +1,5 @@
 require "redcarpet"
+require "enums/event_type_enum"
 
 module ApplicationHelper
 
@@ -51,6 +52,24 @@ module ApplicationHelper
       else
         raise ArgumentError.new("Unexpected value '#{buttonHref}', can't get CSS class")
       end
+  end
+
+  # Gets the background color for a [non-evaluation] event in the week schedule view.
+  # @param event [CourseEvent]
+  # @return [String]
+  def self.getScheduleColorForEvent(event)
+    return case (event.event_type.name)
+      when EventTypeEnum::CLASS
+        "white"
+      when EventTypeEnum::ASSISTANTSHIP
+        "#d6ffc2"
+      when EventTypeEnum::LABORATORY
+        "#c2daff"
+      else
+        raise RuntimeError.new("Unexpected type name '%s' for event %s: should be non-evaluation type" % [
+          event.event_type.name, event]
+        )
+    end
   end
 
   # Renders a Markdown from a file name.

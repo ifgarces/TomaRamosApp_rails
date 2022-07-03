@@ -1,4 +1,6 @@
 require "utils/logging_util"
+require "enums/day_of_week_enum"
+require "events_logic/week_schedule"
 
 class MainController < ApplicationController
   before_action :initLog
@@ -33,6 +35,18 @@ class MainController < ApplicationController
 
   # @return [nil]
   def schedule()
+    courses = @currentUser.getInscribedCourses()
+    @log.info("--------------------------------------------------------------------------------------------------")
+    @log.info(courses.count())
+    @log.info("--------------------------------------------------------------------------------------------------")
+    if ((courses.nil?) || (courses.count() == 0))
+      redirect_to(
+        :courses,
+        notice: "Primero debe inscribir al menos un ramo"
+      )
+      return
+    end
+    @weekScheduleData = WeekSchedule.computeWeekScheduleBlocks(courses)
     render :schedule
   end
 

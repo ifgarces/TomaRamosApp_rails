@@ -1,5 +1,5 @@
 require "enums/event_type_enum"
-require "utils/events_conflict"
+require "events_logic/conflict"
 
 # Inscribe-able course instance.
 #
@@ -65,7 +65,7 @@ class CourseInstance < ApplicationRecord
         if (left.event_type.isEvaluation() == right.event_type.isEvaluation())
           if (CourseEvent.areEventsInConflict(left, right))
             conflicts.append(
-              EventsConflict.new(left, right)
+              Conflict.new(left, right)
             )
           end
         end

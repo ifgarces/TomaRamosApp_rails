@@ -102,8 +102,9 @@ module CsvDataImporter
   public
 
   # @param csvFilePath [String]
+  # @param academicPeriod AcademicPeriod
   # @return [nil]
-  def self.import(csvFilePath)
+  def self.import(csvFilePath, academicPeriod)
     log = LoggingUtil.newStdoutLogger(__FILE__, Logger::INFO)
 
     # Mapping CSV cell values for actual indexed event type in database
@@ -116,23 +117,20 @@ module CsvDataImporter
       "EXAM" => EventType.find_by(name: EventTypeEnum::EXAM)
     }
 
-    currentAcademicPeriod = AcademicPeriod.getLatest()
-    log.info("%d AcademicPeriods existing in database" % [AcademicPeriod.count()])
-
     # Not deleting `CourseInstance`s so as to update them only, avoiding losing references with
     # users
     log.info("Clearing CourseEvent table prior to CSV parsing...")
-    currentAcademicPeriod.getCourseEvents().each do |event|
+    academicPeriod.getCourseEvents().each do |event|
       event.destroy!()
     end
 
     raise RuntimeError.new(
       "Huh? CourseEvent table should be cleared before processing CSV for events..."
-    ) unless (currentAcademicPeriod.getCourseEvents().count() == 0)
+    ) unless (academicPeriod.getCourseEvents().count() == 0)
 
     # Now parsing the CSV and populating database tables `CourseInstance` and `CourseEvent`
     log.info("Reading courses from CSV '%s' for current AcademicPeriod '%s'..." % [
-      csvFilePath, currentAcademicPeriod.name
+      csvFilePath, academicPeriod.name
     ])
 
     if (!File.exist?(csvFilePath))
@@ -154,7 +152,7 @@ module CsvDataImporter
       if (!allCoursesNRCs.include?(parsedRow.nrc))
         allCoursesNRCs.append(parsedRow.nrc)
 
-        course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: currentAcademicPeriod)
+        course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: academicPeriod)
         if (course == nil)
           course = CourseInstance.new(nrc: parsedRow.nrc)
         else
@@ -170,7 +168,7 @@ module CsvDataImporter
         course.curriculum = parsedRow.pe
         course.liga = parsedRow.conectorLiga
         course.lcruz = parsedRow.listaCruzada
-        course.academic_period = currentAcademicPeriod
+        course.academic_period = academicPeriod
 
         course.save!()
       end
@@ -178,7 +176,7 @@ module CsvDataImporter
       # ...
       #// raise RuntimeError.new(
       #//   "Huh? CourseEvent table should be cleared before processing CSV for events..."
-      #// ) unless (currentAcademicPeriod.getCourseEvents().count() == 0)
+      #// ) unless (academicPeriod.getCourseEvents().count() == 0)
 
       eventTimeExists = false
 
