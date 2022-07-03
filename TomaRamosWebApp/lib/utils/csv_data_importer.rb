@@ -105,7 +105,7 @@ module CsvDataImporter
   # @param academicPeriod AcademicPeriod
   # @return [nil]
   def self.import(csvFilePath, academicPeriod)
-    log = LoggingUtil.getStdoutLogger(__FILE__, Logger::INFO)
+    log = LoggingUtil.getStdoutLogger(__FILE__)
 
     # Mapping CSV cell values for actual indexed event type in database
     csvEventTypesMapping = {

@@ -52,4 +52,31 @@ class ActiveSupport::TestCase
              password: "qwerty"
            )
   end
+
+  # Compares two `CourseInstance`s without minding IDs.
+  # @param leftCourse [CourseInstance]
+  # @param rightCourse [CourseInstance]
+  def assertEqualCourseInstances(leftCourse, rightCourse)
+    assert_equal(leftCourse.nrc, rightCourse.nrc)
+    assert_equal(leftCourse.title, rightCourse.title)
+    assert_equal(leftCourse.teacher, rightCourse.teacher)
+    assert_equal(leftCourse.credits, rightCourse.credits)
+    assert_equal(leftCourse.career, rightCourse.career)
+    assert_equal(leftCourse.course_number, rightCourse.course_number)
+    assert_equal(leftCourse.section, rightCourse.section)
+    assert_equal(leftCourse.curriculum, rightCourse.curriculum)
+    assert_equal(leftCourse.liga, rightCourse.liga)
+    assert_equal(leftCourse.lcruz, rightCourse.lcruz)
+  end
+
+  # Compares two `CourseEvent`s without minding IDs.
+  # @param leftEvent [CourseEvent]
+  # @param rightEvent [CourseEvent]
+  def assertEqualCourseEvents(leftEvent, rightEvent)
+    assert_equal(leftEvent.location, rightEvent.location)
+    assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
+    assert_equal(leftEvent.start_time, rightEvent.start_time)
+    assert_equal(leftEvent.end_time, rightEvent.end_time)
+    assert_equal(leftEvent.date, rightEvent.date)
+  end
 end
