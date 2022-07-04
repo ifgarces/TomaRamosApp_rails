@@ -16,5 +16,5 @@ rails assets:clobber assets:precompile
 # Filling database with data parsed from CSV
 rake data_importer:csv --trace
 
-# Starting web server
-rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST}
+# Starting web server, logs Rails stuff to the default `logs/development.log` instead of STDOUT
+rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST} --no-log-to-stdout

@@ -2,6 +2,8 @@ require "omniauth"
 require "figaro"
 
 Rails.application.config.middleware.use OmniAuth::Builder do
+  #TODO: assert the ENV variables exist when implementing Oauth
+
   provider :developer if (Rails.env.development?)
   provider :google_oauth2,
            ENV["OAUTH_CLIENT_ID"],

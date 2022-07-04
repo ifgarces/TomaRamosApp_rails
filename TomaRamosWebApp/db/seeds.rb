@@ -20,8 +20,9 @@ end
 # If an error triggers here, you have to fill your `.secrets.env` properly with stuff for Google
 # Cloud (for the Oauth2 button). This assert is just to ensure these are defined for the web
 # server, not needed on this file
-assertEnvExists("OAUTH_CLIENT_ID")
-assertEnvExists("OAUTH_CLIENT_SECRET")
+#! Disabled for now as Oauth is not yet implemented
+# assertEnvExists("OAUTH_CLIENT_ID")
+# assertEnvExists("OAUTH_CLIENT_SECRET")
 
 def createAdminUser()
   assertEnvExists("ADMIN_USER_PASSWORD")
