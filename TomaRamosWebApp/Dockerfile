@@ -25,6 +25,7 @@ COPY bin/ bin/
 COPY config/ config/
 COPY db/ db/
 COPY lib/ lib/
+COPY markdown/ markdown/
 COPY public/ public/
 COPY test/ test/
 
