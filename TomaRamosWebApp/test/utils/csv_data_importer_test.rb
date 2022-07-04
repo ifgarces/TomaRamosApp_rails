@@ -19,20 +19,20 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     end
   end
 
-  teardown do
-    CourseEvent.delete_all()
-    CourseInstance.delete_all()
+  # teardown do
+  #   CourseEvent.delete_all()
+  #   CourseInstance.delete_all()
 
-    [
-      EventTypeEnum::CLASS,
-      EventTypeEnum::ASSISTANTSHIP,
-      EventTypeEnum::LABORATORY,
-      EventTypeEnum::TEST,
-      EventTypeEnum::EXAM
-    ].each do |eventTypeName|
-      EventType.find_by(name: eventTypeName).destroy!()
-    end
-  end
+  #   [
+  #     EventTypeEnum::CLASS,
+  #     EventTypeEnum::ASSISTANTSHIP,
+  #     EventTypeEnum::LABORATORY,
+  #     EventTypeEnum::TEST,
+  #     EventTypeEnum::EXAM
+  #   ].each do |eventTypeName|
+  #     EventType.find_by(name: eventTypeName).destroy!()
+  #   end
+  # end
 
   test "import success" do
     csvTempFile = Tempfile.new("csv")
@@ -81,7 +81,21 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
       csvTempFile.unlink()
     end
 
-    gotCourses = period.getCourses()
+    gotCourses = period.getCourses().to_a().dup()
+    # gotEvents = CourseEvent.all()
+
+    CourseEvent.delete_all()
+    CourseInstance.delete_all()
+
+    eventClass = EventType.find_by(name: EventTypeEnum::CLASS)
+    eventAssist = EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP)
+    eventLab = EventType.find_by(name: EventTypeEnum::LABORATORY)
+    eventTest = EventType.find_by(name: EventTypeEnum::TEST)
+    eventExam = EventType.find_by(name: EventTypeEnum::EXAM)
+  
+    [eventClass, eventAssist, eventLab, eventTest, eventExam].each do |ev|
+      raise "Huh?" unless (ev.is_a?(EventType))
+    end
 
     expectedCourses = [
       CourseInstance.new(
@@ -141,7 +155,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
     eventsHash = {
       3789 => [
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "R-14",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -149,7 +163,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "R-14",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -157,7 +171,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::ASSISTANTSHIP),
+          event_type: eventAssist,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 14, 30),
@@ -165,7 +179,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -173,7 +187,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 24)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "",
           day_of_week: DayOfWeekEnum::TUESDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -181,7 +195,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::EXAM),
+          event_type: eventExam,
           location: "",
           day_of_week: DayOfWeekEnum::TUESDAY,
           start_time: Time.utc(2000, 1, 1, 9, 30),
@@ -189,7 +203,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 6, 28)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::ASSISTANTSHIP),
+          event_type: eventAssist,
           location: "",
           day_of_week: DayOfWeekEnum::WEDNESDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -197,7 +211,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -207,7 +221,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
       ],
       3790 => [
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -215,7 +229,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 24)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -223,7 +237,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::ASSISTANTSHIP),
+          event_type: eventAssist,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 14, 30),
@@ -231,7 +245,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -239,7 +253,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 4, 11)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "R-11",
           day_of_week: DayOfWeekEnum::TUESDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -247,7 +261,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::EXAM),
+          event_type: eventExam,
           location: "",
           day_of_week: DayOfWeekEnum::TUESDAY,
           start_time: Time.utc(2000, 1, 1, 9, 30),
@@ -255,7 +269,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 6, 28)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::ASSISTANTSHIP),
+          event_type: eventAssist,
           location: "",
           day_of_week: DayOfWeekEnum::WEDNESDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -263,7 +277,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "R-12",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -273,7 +287,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
       ],
       3794 => [
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "B-32",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -281,7 +295,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -289,7 +303,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 4, 4)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -297,7 +311,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 5, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::ASSISTANTSHIP),
+          event_type: eventAssist,
           location: "",
           day_of_week: DayOfWeekEnum::TUESDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -305,7 +319,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 14)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::EXAM),
+          event_type: eventExam,
           location: "",
           day_of_week: DayOfWeekEnum::WEDNESDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -313,7 +327,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 6, 29)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "R-14",
           day_of_week: DayOfWeekEnum::FRIDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
@@ -321,7 +335,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -329,7 +343,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 5, 26)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -339,7 +353,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
       ],
       3795 => [
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -347,7 +361,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 4, 4)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -355,7 +369,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 5, 2)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "I201",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 14, 30),
@@ -363,7 +377,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -371,7 +385,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 5, 26)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::ASSISTANTSHIP),
+          event_type: eventAssist,
           location: "",
           day_of_week: DayOfWeekEnum::TUESDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -379,7 +393,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 14)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "H-208",
           day_of_week: DayOfWeekEnum::WEDNESDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -387,7 +401,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 3, 7)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::EXAM),
+          event_type: eventExam,
           location: "",
           day_of_week: DayOfWeekEnum::WEDNESDAY,
           start_time: Time.utc(2000, 1, 1, 11, 30),
@@ -395,7 +409,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
           date: Date.new(2022, 6, 29)
         ),
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::TEST),
+          event_type: eventTest,
           location: "",
           day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 19, 30),
@@ -405,7 +419,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
       ],
       3797 => [
         CourseEvent.new(
-          event_type: EventType.new(name: EventTypeEnum::CLASS),
+          event_type: eventClass,
           location: "",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 15, 30),
@@ -415,22 +429,52 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
       ]
     }
 
+    expectedCourses.each do |course|
+      course.academic_period = period
+      course.save!()
+    end
+
+    eventsHash.each do |nrc, events|
+      course = CourseInstance.find_by(nrc: nrc)
+      course.course_events = events
+      course.save!()
+    end
+
     assert_equal(expectedCourses.count(), gotCourses.count())
+
+    # expectedEvents = CourseEvent.all()
 
     expectedCourses.each_index do |courseIndex|
       assertEqualCourseInstances(expectedCourses[courseIndex], gotCourses[courseIndex])
 
-      NRC = expectedCourses[courseIndex].nrc.to_i()
+      gotEvents = gotCourses[courseIndex].course_events.order(date: :asc, start_time: :asc)
+      expectedEvents = expectedCourses[courseIndex].course_events.order(date: :asc, start_time: :asc)
 
-      expectedEvents = eventsHash[NRC]
-      gotEvents = gotCourses[courseIndex].course_events
-
-      assert_equal(expectedEvents.count(), gotEvents.count())
-
-      # The comparison is not right, should sort both arrays first, by some very consistent criteria
-      expectedEvents.each_index do |eventIndex|
-        assertEqualCourseEvents(expectedEvents[eventIndex], gotEvents[eventIndex])
-      end
+      assert_equal(expectedEvents, gotEvents)
     end
+
+    # expectedCourses.each_index do |courseIndex|
+    #   assertEqualCourseInstances(expectedCourses[courseIndex], gotCourses[courseIndex])
+
+    #   NRC = expectedCourses[courseIndex].nrc.to_i()
+
+    #   expectedEvents = eventsHash[NRC]
+    #   gotEvents = gotCourses[courseIndex].course_events.to_a()
+
+    #   expectedEvents = expectedEvents.sort_by { |it| it.date }
+    #   gotEvents = gotEvents.sort_by { |it| it.date }
+
+    #   assert_equal(expectedEvents.count(), gotEvents.count())
+
+      # expectedEvents.each do |event|
+      #   puts(">>> Checking event #{event.inspect()}...") #! debug
+      #   assert_equal(true, isCourseEventInArray(gotEvents, event))
+      # end
+
+      #! The comparison is not right, should sort both arrays first, by some very consistent criteria
+      # expectedEvents.each_index do |eventIndex|
+      #   assertEqualCourseEvents(expectedEvents[eventIndex], gotEvents[eventIndex])
+      # end
+    # end
   end
 end

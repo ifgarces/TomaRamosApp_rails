@@ -32,28 +32,28 @@ class ActiveSupport::TestCase
   # @return [CourseInstance]
   def getFooCourseInstance(title:)
     return CourseInstance.new(
-             nrc: "1234",
-             title: title,
-             teacher: "Lerma/González Ariadna",
-             credits: 6,
-             career: "ICC",
-             course_number: 666,
-             section: 1,
-             curriculum: "PE2033",
-             academic_period: self.getFooAcademicPeriod()
-           )
+      nrc: "1234",
+      title: title,
+      teacher: "Lerma/González Ariadna",
+      credits: 6,
+      career: "ICC",
+      course_number: 666,
+      section: 1,
+      curriculum: "PE2033",
+      academic_period: self.getFooAcademicPeriod()
+    )
   end
 
   # @return [User]
   def getFooUser()
     return User.new(
-             email: "deshka@foo.com",
-             username: "deshka347",
-             password: "qwerty"
-           )
+      email: "deshka@foo.com",
+      username: "deshka347",
+      password: "qwerty"
+    )
   end
 
-  # Compares two `CourseInstance`s without minding IDs.
+  # Compares two `CourseInstance`s without minding IDs nor db timestamps.
   # @param leftCourse [CourseInstance]
   # @param rightCourse [CourseInstance]
   def assertEqualCourseInstances(leftCourse, rightCourse)
@@ -69,14 +69,32 @@ class ActiveSupport::TestCase
     assert_equal(leftCourse.lcruz, rightCourse.lcruz)
   end
 
-  # Compares two `CourseEvent`s without minding IDs.
+  # Compares two `CourseEvent`s without minding IDs nor db timestamps.
   # @param leftEvent [CourseEvent]
   # @param rightEvent [CourseEvent]
-  def assertEqualCourseEvents(leftEvent, rightEvent)
-    assert_equal(leftEvent.location, rightEvent.location)
-    assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
-    assert_equal(leftEvent.start_time, rightEvent.start_time)
-    assert_equal(leftEvent.end_time, rightEvent.end_time)
-    assert_equal(leftEvent.date, rightEvent.date)
+  # def assertEqualCourseEvents(leftEvent, rightEvent)
+  #   puts(">>> Comparing events: \n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #! debug
+  #   assert_equal(leftEvent.location, rightEvent.location)
+  #   assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
+  #   assert_equal(leftEvent.start_time, rightEvent.start_time)
+  #   assert_equal(leftEvent.end_time, rightEvent.end_time)
+  #   assert_equal(leftEvent.date, rightEvent.date)
+  # end
+
+  # @param array [Array]
+  # @param event [CourseEvent]
+  def isCourseEventInArray(array, event)
+    array.each do |item|
+      if (
+        (item.location == event.location) &&
+        (item.day_of_week == event.day_of_week) &&
+        (item.start_time == event.start_time) &&
+        (item.end_time == event.end_time) &&
+        (item.date == event.date)
+      )
+        return true
+      end
+    end
+    return false
   end
 end

@@ -20,7 +20,21 @@ web_server:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
 	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-		rails server --port=${WEB_SERVER_PORT} --binding=${WEB_SERVER_HOST} --no-log-to-stdout
+		rails server \
+			--port=${WEB_SERVER_PORT} \
+			--binding=${WEB_SERVER_HOST} \
+			--environment=development \
+			--no-log-to-stdout
+
+https_web_server:
+	echo "Not yet implemented" && exit 1
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
+	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
+		rails server \
+			--using=puma \
+			--port=${WEB_SERVER_PORT} \
+			--binding="ssl://${WEB_SERVER_HOST}:${WEB_SERVER_PORT}?key=./localhost.key&cert=./localhost.crt"
 
 # Runs the task for importing course data
 import_csv:
