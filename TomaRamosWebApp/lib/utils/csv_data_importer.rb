@@ -103,7 +103,8 @@ module CsvDataImporter
 
   # @param csvFilePath [String]
   # @param academicPeriod AcademicPeriod
-  # @return [nil]
+  # @return [Array<Object>] A pair with courses `Array<CourseInstance>` and mapping of events
+  #   `Hash<Integer, Array<CourseEvent>>`
   def self.import(csvFilePath, academicPeriod)
     log = LoggingUtil.getStdoutLogger(__FILE__)
 
@@ -116,13 +117,6 @@ module CsvDataImporter
       "PRBA" => EventType.find_by(name: EventTypeEnum::TEST),
       "EXAM" => EventType.find_by(name: EventTypeEnum::EXAM)
     }
-
-    # Not deleting `CourseInstance`s so as to update them only, avoiding losing references with
-    # users
-    log.info("Clearing CourseEvent table prior to CSV parsing...")
-    academicPeriod.getCourseEvents().each do |event|
-      event.destroy!()
-    end
 
     raise RuntimeError.new(
       "Huh? CourseEvent table should be cleared before processing CSV for events..."
@@ -145,18 +139,23 @@ module CsvDataImporter
         (item == nil) ? nil : item.strip()
       }
     }
-    allCoursesNRCs = [] # :Array<String>
+
+    gotCourses = [] # :Array<CourseInstances>
+    nrcEventsMapping = {} # :Hash<Integer, Array<CourseEvent>>
+
+    allCoursesNRCs = [] # :Array<String>, for small optimization
     csvRows.each_with_index do |row, rowIndex|
       #// log.debug("Processing row %s" % [row])
       parsedRow = CsvRow.new(row)
+
       if (!allCoursesNRCs.include?(parsedRow.nrc))
         allCoursesNRCs.append(parsedRow.nrc)
 
-        course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: academicPeriod)
+        course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: academicPeriod) # updating `CourseInstance`s in database, if needed
+        mustAppend = false
         if (course == nil)
           course = CourseInstance.new(nrc: parsedRow.nrc)
-        else
-          log.debug("Course NRC %s exists, updating..." % parsedRow.nrc)
+          mustAppend = true
         end
 
         course.title = parsedRow.nombre
@@ -170,13 +169,10 @@ module CsvDataImporter
         course.lcruz = parsedRow.listaCruzada
         course.academic_period = academicPeriod
 
-        course.save!()
+        if (mustAppend)
+          gotCourses.append(course)
+        end
       end
-
-      # ...
-      #// raise RuntimeError.new(
-      #//   "Huh? CourseEvent table should be cleared before processing CSV for events..."
-      #// ) unless (academicPeriod.getCourseEvents().count() == 0)
 
       eventTimeExists = false
 
@@ -196,15 +192,20 @@ module CsvDataImporter
             ]
           ) unless (eventType != nil)
 
-          CourseEvent.new(
-            location: parsedRow.sala,
-            day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
-            start_time: eventTimes.first(),
-            end_time: eventTimes.second(),
-            date: parsedRow.fechaInicio,
-            course_instance: CourseInstance.find_by(nrc: parsedRow.nrc), #// course_instance: CourseInstance.last(),
-            event_type: eventType
-          ).save!()
+          if (!nrcEventsMapping.keys().include?(parsedRow.nrc))
+            nrcEventsMapping[parsedRow.nrc] = []  
+          end
+          nrcEventsMapping[parsedRow.nrc].append(
+            CourseEvent.new(
+              location: parsedRow.sala,
+              day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
+              start_time: eventTimes.first(),
+              end_time: eventTimes.second(),
+              date: parsedRow.fechaInicio,
+              course_instance: course,
+              event_type: eventType
+            )
+          )
         end
       end
 
@@ -216,8 +217,6 @@ module CsvDataImporter
       end
     end
 
-    log.info("✔️ CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
-      CourseInstance.count(), CourseEvent.count()
-    ])
+    return [gotCourses, nrcEventsMapping]
   end
 end

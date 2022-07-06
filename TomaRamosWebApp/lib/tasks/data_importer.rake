@@ -15,6 +15,27 @@ namespace :data_importer do
 
     targetPeriod = AcademicPeriod.getLatest()
 
-    CsvDataImporter.import(CSV_FILE_PATH, targetPeriod)
+    @log.info("Clearing CourseEvent table prior to CSV parsing...")
+    targetPeriod.getCourseEvents().each do |event|
+      event.destroy!()
+    end
+
+    courses, eventsMapping = CsvDataImporter.import(CSV_FILE_PATH, targetPeriod)
+
+    courses.each do |courseInstance|
+      courseInstance.save!()
+    end
+
+    eventsMapping.each do |nrc, events|
+      events.each do |courseEvent|
+        courseEvent.course_instance = CourseInstance.find_by(nrc: nrc)
+        raise "Huh?" unless (courseEvent.course_instance != nil)
+        courseEvent.save!()
+      end
+    end
+
+    @log.info("✔️ CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
+      CourseInstance.count(), CourseEvent.count()
+    ])
   end
 end
