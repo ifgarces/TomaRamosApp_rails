@@ -25,10 +25,10 @@ services:
     restart: "unless-stopped" # <- so that `docker-compose stop` for this won't destroy the database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 4
-      start_period: 10s
+      retries: 2
+      start_period: 20s
 
   # ---------------------- Rails web app ---------------------- #
   tomaramos-rails:
@@ -43,6 +43,7 @@ services:
       ADMIN_USER_PASSWORD: "qwerty"
       WEB_SERVER_PORT: ${WEB_SERVER_PORT}
       WEB_SERVER_HOST: ${WEB_SERVER_HOST}
+      SERVE_OVER_HTTPS: ${SERVE_OVER_HTTPS} #! has to be defined on the fly... TODO: make documentation of this!
     networks:
       ifgarces-net:
         ipv4_address: 10.12.0.3
