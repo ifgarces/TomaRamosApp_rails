@@ -132,7 +132,7 @@ module CsvDataImporter
       exit(1)
     end
 
-    csvRows = CSV.read(csvFilePath)
+    csvRows = CSV.read(csvFilePath, encoding: "UTF-8")
     csvRows.delete_at(0) # ignoring CSV headers
     csvRows = csvRows.map { |row|
       row.map { |item|

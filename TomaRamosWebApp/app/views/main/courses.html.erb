@@ -22,7 +22,7 @@
     <% end %>
   </div>
 
-  <% if (Rails.env.development?) %>
+  <% if (@inDebugMode) %>
     <%= button_to(
           "[debug] Clear session",
           "/debug-clear-session",

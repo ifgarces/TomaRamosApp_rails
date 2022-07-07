@@ -1,3 +1,7 @@
+#! ---
+#TODO: delete this controller entirely.
+#! ---
+
 require "utils/logging_util"
 
 class AcademicPeriodsController < ApplicationController
