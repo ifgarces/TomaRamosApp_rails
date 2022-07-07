@@ -19,17 +19,17 @@ rake data_importer:csv --trace
 
 # Starting web server, logs Rails stuff to the default `logs/development.log` instead of STDOUT
 if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
-rails server \
-    --using=puma \
-    --binding="ssl://${WEB_SERVER_HOST}:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app-bundle.crt" \
-    --environment=development \
-    --no-log-to-stdout
+    rails server \
+        --using=puma \
+        --binding="ssl://${WEB_SERVER_HOST}:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app-bundle.crt" \
+        --environment=development \
+        --no-log-to-stdout
 elif [[ "${SERVE_OVER_HTTPS}" == "false" ]]; then
-rails server \
-    --port=${WEB_SERVER_PORT} \
-    --binding=${WEB_SERVER_HOST} \
-    --no-log-to-stdout
+    rails server \
+        --port=${WEB_SERVER_PORT} \
+        --binding=${WEB_SERVER_HOST} \
+        --no-log-to-stdout
 else
-echo "Invalid value ${SERVE_OVER_HTTPS} for boolean-like value" >&2
-exit 1
+    echo "Invalid value ${SERVE_OVER_HTTPS} for boolean-like value" >&2
+    exit 1
 fi
