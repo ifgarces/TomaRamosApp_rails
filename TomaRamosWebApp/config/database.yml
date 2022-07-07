@@ -80,7 +80,7 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: tomaramosuandes_production
-  username: tomaramosuandes
-  password: <%= ENV["TOMARAMOSUANDES_DATABASE_PASSWORD"] %>
+  <<: *development
+  # database: tomaramosuandes_production
+  # username: tomaramosuandes
+  # password: <%= ENV["TOMARAMOSUANDES_DATABASE_PASSWORD"] %>
