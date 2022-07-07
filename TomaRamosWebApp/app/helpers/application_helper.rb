@@ -3,6 +3,12 @@ require "utils/logging_util"
 require "enums/event_type_enum"
 
 module ApplicationHelper
+  APP_VERSION_NAME = "0.1"
+
+  # Dimension constants
+  MAX_WEBPAGE_WIDTH = "650px"
+  TOP_NAV_BAR_HEIGHT = "70px"
+  BOTTOM_NAV_BAR_HEIGHT = "82px"
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
   # these myself...
@@ -10,14 +16,6 @@ module ApplicationHelper
     super(context, optionsHash, originController)
     @@log = LoggingUtil.getStdoutLogger(__FILE__)
   end
-
-  #? Could the app version name be automated?
-  APP_VERSION_NAME = "0.1"
-
-  # Dimension constants
-  MAX_WEBPAGE_WIDTH = "650px"
-  TOP_NAV_BAR_HEIGHT = "70px"
-  BOTTOM_NAV_BAR_HEIGHT = "82px"
 
   # @return [User] The stored user from the `session`, creating it if needed.
   def getUserFromSession()
@@ -27,7 +25,7 @@ module ApplicationHelper
       guestUser = User.createNewGuestUser()
       guestUser.save!()
       session[:guestUserId] = guestUser.id
-      @log.info("New guest User created: '#{guestUser.username}'")
+      @log.info("New guest User created '#{guestUser.username}', for host '#{request.host}'")
     else
       guestUser = User.find_by(id: guestUserId)
     end
@@ -37,12 +35,13 @@ module ApplicationHelper
 
   # @param requestParams [Hash]
   # @return [Boolean] Whether both navigation bars should be displayed depending on the request
-  # (e.g. on the current controller or webpage)
+  #   (e.g. on the current controller or webpage)
   def shouldNavBarsBeHidden(requestParams)
     return (requestParams[:controller] != "pages")
   end
 
   # Allows to set a button of the nav bar as highlighted based on the current request path.
+  #
   # @param buttonHref [String]
   # @return [String]
   def getClassForBottomNavButton(buttonHref)
@@ -60,6 +59,15 @@ module ApplicationHelper
       else
         raise ArgumentError.new("Unexpected value '#{buttonHref}', can't get CSS class")
       end
+  end
+
+  # References: https://stackoverflow.com/a/42119143/12684271
+  #
+  # @return [Boolean] Whether the server is running on localhost in the developer's machine, or not.
+  def isRequestLocal()
+    return [request.remote_addr, request.remote_ip].map { |host|
+      (host == "localhost") || host.start_with?("127.")
+    } == [true, true]
   end
 
   # Gets the background color for a [non-evaluation] event in the week schedule view.

@@ -10,6 +10,7 @@ class MainController < ApplicationController
   # @return [nil]
   def initLog()
     @log = LoggingUtil.getStdoutLogger(__FILE__)
+    @inDebugMode = helpers.isRequestLocal()
   end
 
   # @return [nil]
@@ -39,7 +40,7 @@ class MainController < ApplicationController
     if ((courses.nil?) || (courses.count() == 0))
       redirect_to(
         :courses,
-        notice: "Primero debe inscribir al menos un ramo"
+        alert: "Primero debe inscribir al menos un ramo"
       )
       return
     end
@@ -98,7 +99,6 @@ class MainController < ApplicationController
       :courses,
       notice: "#{count} cursos des-inscritos"
     )
-    return
   end
 
   # @return [nil]

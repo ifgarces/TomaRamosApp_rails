@@ -40,5 +40,6 @@ EXPOSE ${WEB_SERVER_PORT}
 # As Rails is not smart enough to properly load its own `database.yaml` for database connection
 ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
 COPY docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
 
-CMD [ "/bin/bash", "docker-entrypoint.sh" ]
+ENTRYPOINT [ "./docker-entrypoint.sh" ]

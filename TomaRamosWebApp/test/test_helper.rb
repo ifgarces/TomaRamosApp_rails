@@ -69,32 +69,32 @@ class ActiveSupport::TestCase
     assert_equal(leftCourse.lcruz, rightCourse.lcruz)
   end
 
-  # Compares two `CourseEvent`s without minding IDs nor db timestamps.
-  # @param leftEvent [CourseEvent]
-  # @param rightEvent [CourseEvent]
-  # def assertEqualCourseEvents(leftEvent, rightEvent)
-  #   puts(">>> Comparing events: \n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #! debug
-  #   assert_equal(leftEvent.location, rightEvent.location)
-  #   assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
-  #   assert_equal(leftEvent.start_time, rightEvent.start_time)
-  #   assert_equal(leftEvent.end_time, rightEvent.end_time)
-  #   assert_equal(leftEvent.date, rightEvent.date)
-  # end
+  Compares two `CourseEvent`s without minding IDs nor db timestamps.
+  @param leftEvent [CourseEvent]
+  @param rightEvent [CourseEvent]
+  def assertEqualCourseEvents(leftEvent, rightEvent)
+    puts(">>> Comparing events: \n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #! debug
+    assert_equal(leftEvent.location, rightEvent.location)
+    assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
+    assert_equal(leftEvent.start_time, rightEvent.start_time)
+    assert_equal(leftEvent.end_time, rightEvent.end_time)
+    assert_equal(leftEvent.date, rightEvent.date)
+  end
 
   # @param array [Array]
   # @param event [CourseEvent]
-  def isCourseEventInArray(array, event)
-    array.each do |item|
-      if (
-        (item.location == event.location) &&
-        (item.day_of_week == event.day_of_week) &&
-        (item.start_time == event.start_time) &&
-        (item.end_time == event.end_time) &&
-        (item.date == event.date)
-      )
-        return true
-      end
-    end
-    return false
-  end
+  # def isCourseEventInArray(array, event)
+  #   array.each do |item|
+  #     if (
+  #       (item.location == event.location) &&
+  #       (item.day_of_week == event.day_of_week) &&
+  #       (item.start_time == event.start_time) &&
+  #       (item.end_time == event.end_time) &&
+  #       (item.date == event.date)
+  #     )
+  #       return true
+  #     end
+  #   end
+  #   return false
+  # end
 end

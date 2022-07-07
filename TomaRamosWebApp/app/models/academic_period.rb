@@ -14,13 +14,13 @@ class AcademicPeriod < ApplicationRecord
 
   # @return [Array<CourseInstance>]
   def getCourses()
-    return CourseInstance.where(academic_period: self).order(title: :asc, section: :asc)
+    return self.course_instances.order(title: :asc, section: :asc)
   end
 
   # @return [Array<CourseEvent>]
   def getCourseEvents()
     return CourseEvent.all().order(course_instance_id: :asc).filter { |event|
-      (event.course_instance.academic_period == self)
+      event.course_instance.academic_period == self
     }
   end
 
@@ -31,6 +31,5 @@ class AcademicPeriod < ApplicationRecord
   # @return [AcademicPeriod | nil]
   def self.getLatest()
     return AcademicPeriod.find_by(name: @@LATEST_PERIOD_NAME)
-    #// return AcademicPeriod.all().order(created_at: :asc).last()
   end
 end
