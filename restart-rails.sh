@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # --------------------------------------------------------------------------------------------------
 # Builds and re-launches the Ruby on Rails web server container, leaving the Postgres container
 # untouched, preserving database.

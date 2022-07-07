@@ -19,6 +19,7 @@ rake data_importer:csv --trace
 
 # Starting web server, logs Rails stuff to the default `logs/development.log` instead of STDOUT
 if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
+    sleep 6 #? (strictly needed?) waiting until files are copied from `restart-rails.sh`
     rails server \
         --using=puma \
         --binding="ssl://${WEB_SERVER_HOST}:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app-bundle.crt" \
