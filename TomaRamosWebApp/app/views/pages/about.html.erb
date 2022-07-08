@@ -1,12 +1,34 @@
-<%= image_tag(
-      "app_pro_banner.jpg",
-      alt: "App banner",
-      class: "mx-auto d-block img-fluid",
-      style: "max-height:260px;"
-    ) %>
+<%=
+  image_tag(
+    "app_uandes_banner.png",
+    alt: "App banner",
+    class: "mx-auto d-block img-fluid",
+    style: "max-height:140px;"
+  )
+%>
 
-<%= renderMarkdownFile("markdown/about.md") %>
+<hr>
 
-<div class="text-center pb-1 pt-3">
-    <%= link_to("Volver", :back, class: "btn btn-secondary shadow-sm") %>
+<div class="mb-4 pb-4">
+  <%= renderMarkdownFile("markdown/about.md") %>
+</div>
+
+<div class="text-center mb-4" style="
+  position: fixed;
+  Z-index: 99;
+  bottom: 0;
+  width: 100%;
+">
+  <%=
+    link_to(
+      "Volver",
+      root_path,
+      class: "btn btn-secondary shadow-sm",
+    )
+  %>
+
+  <%
+    #TODO: form for reporting an error, or just the general feedback form
+    #link_to("Quejarse", :back, class: "btn btn-outline-secondary shadow-sm mb-1 mt-5")
+  %>
 </div>

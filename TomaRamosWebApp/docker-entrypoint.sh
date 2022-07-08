@@ -19,7 +19,7 @@ rake data_importer:csv --trace
 
 # Starting web server, logs Rails stuff to the default `logs/development.log` instead of STDOUT
 if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
-    #! temporal workaround, must properly use production environment instead!
+    #! UGLY temporal workaround, must properly use production environment instead!
     sed -i 's/config.consider_all_requests_local = true/config.consider_all_requests_local = false/' ./TomaRamosWebApp/config/environments/development.rb
     sed -i 's/# config.force_ssl = true/config.force_ssl = true/' ./TomaRamosWebApp/config/environments/development.rb
 

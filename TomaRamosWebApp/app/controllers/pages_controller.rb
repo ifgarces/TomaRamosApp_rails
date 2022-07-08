@@ -9,10 +9,6 @@ class PagesController < ApplicationController
     render :about
   end
 
-  def not_found()
-    render :not_found
-  end
-
   def awesome()
     render :awesome
   end

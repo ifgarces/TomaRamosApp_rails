@@ -9,8 +9,7 @@ include ../.secrets.env
 # correctly use the `datatabse.yml` for some reason
 DB_URL_DEVELOPMENT = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_development"
 DB_URL_TEST = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_test"
-
-RUNTIME_ENVIRONMENT = development
+DB_URL_PRODUCTION = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/tomaramosuandes_production"
 
 .PHONY: build web_server import_csv migrate seed packages assets clear_sessions test
 
@@ -62,7 +61,7 @@ packages:
 	bundle install
 	yarn install --check-files
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		rails db:environment:set RAILS_ENV=${RUNTIME_ENVIRONMENT}
+		./bin/rails db:environment:set RAILS_ENV=${RUNTIME_ENVIRONMENT}
 
 # Updates assets such as CSS styles
 assets:

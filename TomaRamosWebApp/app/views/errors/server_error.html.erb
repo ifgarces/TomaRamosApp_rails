@@ -1,0 +1,32 @@
+<div class="container bg-danger text-center text-white rounded-top py-3">
+  <h1>Error</h1>
+</div>
+
+<div class="container text-center border border-2 border-danger rounded-bottom shadow px-5 pb-5">
+  <p class="qwq mt-3 mb-5">
+    ಥ‿ಥ
+  </p>
+
+  <p>
+    Ocurrió un problema en la aplicación
+  </p>
+
+  <p class="text-monospace text-danger py-3">
+    <%= session.delete(:errorDataToUser) %>
+  </p>
+</div>
+
+<div class="text-center mb-4" style="
+  position: fixed;
+  Z-index: 99;
+  bottom: 0;
+  width: 100%;
+">
+  <%=
+    link_to(
+      "Volver al inicio",
+      root_path,
+      class: "btn btn-secondary shadow-sm px-4",
+    )
+  %>
+</div>
