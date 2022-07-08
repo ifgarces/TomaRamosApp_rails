@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <title>TomaRamosApp</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="google-signin-client_id" content="<%= ENV["OAUTH_CLIENT_ID"] %>">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="google-signin-client_id" content="<%= ENV["OAUTH_CLIENT_ID"] %>" />
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -14,17 +14,12 @@
 
     <%= favicon_link_tag(asset_path("app_icon.svg")) %>
 
-    <%
-      # Setting image as background. Ref: https://www.syedaslam.com/dynamic-full-page-background-images-in-rails/
-    %>
+    <%# Setting image as background. Ref: https://www.syedaslam.com/dynamic-full-page-background-images-in-rails/ %>
     <style>
         html {
-            /* Uh, this is not properly shown as the `CurrentViewContainer` does not have a constant height... must fix
+            /* This is not properly shown as the `CurrentViewContainer` does not have a constant height... must fix
                its dimensions. */
-            /*background: url(
-              <%=
-              # image_url("background-white-geometric.jpg")
-              %>) no-repeat center center fixed;
+            /*background: url(<%# image_url("background-white-geometric.jpg")%>) no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
@@ -37,7 +32,7 @@
     </style>
   </head>
 
-  <% displayNvBars = shouldNavBarsBeHidden(params) %>
+  <% displayNvBars = shouldDisplayNavBars(params) %>
 
   <body>
     <div id="BetterInMobileNotice" class="text-center text-uppercase px-4 py-3" style="
@@ -76,7 +71,7 @@
                   raw("<i class='bi bi-chevron-left'></i>"),
                   :back,
                   class: "btn btn-lg btn-light shadow-none me-1",
-                  style: "background-color: transparent;"
+                  style: "background-color: transparent; border-color: transparent;"
                 ) %>
 
             <%= link_to(
@@ -91,7 +86,6 @@
                 <%= link_to(
                       "Salir",
                       root_path,
-                      type: "button",
                       class: "nav-link"
                     ) %>
               </li>
@@ -121,19 +115,16 @@
           <%= link_to(
                 raw("<i class='bi bi-list-stars'></i><br/>") + "Ramos",
                 "/courses",
-                type: "button",
                 class: getClassForBottomNavButton("/courses")
               ) %>
           <%= link_to(
                 raw("<i class='bi bi-calendar-week-fill'></i><br/>") + "Horario",
                 "/schedule",
-                type: "button",
                 class: getClassForBottomNavButton("/schedule")
               ) %>
           <%= link_to(
                 raw("<i class='bi bi-clipboard-check'></i><br/>") + "Pruebas",
                 "/evaluations",
-                type: "button",
                 class: getClassForBottomNavButton("/evaluations")
               ) %>
         </div>

@@ -6,6 +6,11 @@
 
 set -exu
 
+# Default protocol is HTTP, only for now
+if [ -z ${SERVE_OVER_HTTPS} ]; then
+    SERVE_OVER_HTTPS=false
+fi
+
 export SERVE_OVER_HTTPS=${SERVE_OVER_HTTPS}
 
 docker-compose build tomaramos-rails

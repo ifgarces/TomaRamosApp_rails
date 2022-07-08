@@ -32,6 +32,9 @@ module Tomaramosuandes
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Default HTML webpage for errors
-    config.debug_exception_response_format = :default
+    #config.debug_exception_response_format = :default
+
+    #* Custom error pages with non-sensitive debugging information
+    config.exceptions_app = self.routes
   end
 end

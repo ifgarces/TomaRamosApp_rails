@@ -4,30 +4,34 @@ Rails.application.routes.draw do
   resources :course_events
   resources :academic_periods
 
-  post "/inscribe-course" => "main#inscribeCourse"
-  post "/uninscribe-all" => "main#uninscribeAllCourses"
-  post "/debug-clear-session" => "main#debugClearSession"
+  # Custom safe error pages
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#server_error", via: :all
 
-  # MainController
+  # ------------------------- MainController ------------------------- #
   get "/home" => "main#home"
   get "/courses" => "main#courses"
   get "/schedule" => "main#schedule"
   get "/evaluations" => "main#evaluations"
 
-  # SessionsController
-  get "sessions/new" => "sessions#new"
-  get "sessions/create" => "sessions#create"
+  # Button actions
+  post "/inscribe-course" => "main#inscribeCourse"
+  post "/uninscribe-all" => "main#uninscribeAllCourses"
+  post "/debug-clear-session" => "main#debugClearSession"
 
-  # PagesController
+  # ------------------------- PagesController ------------------------- #
   get "/" => "pages#home"
   get "/pages/about" => "pages#about"
-  get "/not-found" => "pages#not_found"
-  get "/qwq" => "pages#error"
+
   # Some legal stuff here required for Google Oauth
   get "/pages/privacy-policy" => "pages#privacy_policy"
   get "/pages/terms-of-service" => "pages#terms_of_service"
 
-  # OmniAuth
+  # ------------------------- SessionsController ------------------------- #
+  get "sessions/new" => "sessions#new"
+  get "sessions/create" => "sessions#create"
+
+  # ------------------------- OmniAuth ------------------------- #
   get "/auth/:provider/callback" => "sessions#create"
   get "/auth/google_oauth2/callback" => "sessions#create"
   get "/login" => "sessions#new"

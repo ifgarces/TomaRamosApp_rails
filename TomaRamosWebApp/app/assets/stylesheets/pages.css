@@ -1,4 +1,10 @@
-/* For testing */
-/* body {
-  background-color: rgb(156, 192, 201);
-} */
+.app-subtitle {
+    font-size: 18px;
+    font-style: italic;
+}
+
+.text-footer-custom {
+    font-family: "Source Code Pro", Monaco, monospace;
+    font-size: 12px;
+    color: dimgray;
+}

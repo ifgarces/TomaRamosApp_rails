@@ -10,3 +10,8 @@ $btn-border-radius-lg: 60px;
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
+
+.text-monospace {
+    font-family: "Ubuntu Mono", "Source Code Pro", "Courier New", monospace;
+    font-size: 13px;
+}

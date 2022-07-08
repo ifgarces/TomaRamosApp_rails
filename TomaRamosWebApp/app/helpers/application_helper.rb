@@ -36,8 +36,8 @@ module ApplicationHelper
   # @param requestParams [Hash]
   # @return [Boolean] Whether both navigation bars should be displayed depending on the request
   #   (e.g. on the current controller or webpage)
-  def shouldNavBarsBeHidden(requestParams)
-    return (requestParams[:controller] != "pages")
+  def shouldDisplayNavBars(requestParams)
+    return (requestParams[:controller] != "pages") && (requestParams[:controller] != "errors")
   end
 
   # Allows to set a button of the nav bar as highlighted based on the current request path.
