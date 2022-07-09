@@ -10,11 +10,12 @@ echo "[debug] DATABASE_URL=${DATABASE_URL}"
 echo "[debug] SERVE_OVER_HTTPS=${SERVE_OVER_HTTPS}"
 
 # Compiling assets and initializing database
-rails db:create
-rails db:migrate:reset db:seed
+#// rails db:create
+#// rails db:migrate:reset db:seed
+rails db:migrate db:seed
 rails assets:clobber assets:precompile
 
-# Filling database with data parsed from CSV
+# Filling/updating database with data parsed from CSV
 rake data_importer:csv --trace
 
 # Starting web server, logging to STDOUT/STDERR
