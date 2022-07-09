@@ -4,7 +4,7 @@ require "enums/event_type_enum"
 class EventTypeTest < ActiveSupport::TestCase
   test "insert success" do
     testCourse = EventType.new(name: EventTypeEnum::CLASS)
-    assert_equal(true, testCourse.save())
+    assert(testCourse.save())
   end
 
   # test "insert validation error" do

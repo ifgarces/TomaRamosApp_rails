@@ -75,4 +75,7 @@ clear_sessions:
 # Run all Rails tests
 test:
 	DATABASE_URL=${DB_URL_TEST} \
+	RAILS_ENV=test \
+	DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
 		rails test
+	#~~~~~~= [OK] everything is fine =~~~~~~#

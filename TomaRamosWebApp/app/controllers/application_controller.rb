@@ -8,7 +8,8 @@ class ApplicationController < ActionController::Base
 
     log.error("<<< Exception start >>>")
 
-    session[:errorDataToUser] = e.class
+    # Briefly using `session` for displaying minimal error information to the user
+    session[:displayableErrorInfo] = e.class
 
     log.error("Host: #{request.remote_addr}")
     log.error("Exception class: #{e.class}")

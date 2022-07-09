@@ -18,6 +18,9 @@ Rails.application.configure do
   #! Changed to its default value `true` as I had trouble running in the "production" environment
   config.consider_all_requests_local = false
 
+  #! Minimizing logging
+  config.log_level = :info
+
   # Enable server timing
   config.server_timing = true
 

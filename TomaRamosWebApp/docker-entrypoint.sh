@@ -17,7 +17,7 @@ rails assets:clobber assets:precompile
 # Filling database with data parsed from CSV
 rake data_importer:csv --trace
 
-# Starting web server, logs Rails stuff to the default `logs/development.log` instead of STDOUT
+# Starting web server, logging to STDOUT/STDERR
 if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
     #! UGLY temporal workaround, must properly use production environment instead!
     sed -i 's/config.consider_all_requests_local = true/config.consider_all_requests_local = false/' ./TomaRamosWebApp/config/environments/development.rb
@@ -27,13 +27,11 @@ if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
     rails server \
         --using=puma \
         --binding="ssl://${WEB_SERVER_HOST}:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app-bundle.crt&verify_mode=none" \
-        --environment=development \
-        --no-log-to-stdout
+        --environment=development
 elif [[ "${SERVE_OVER_HTTPS}" == "false" ]]; then
     rails server \
         --port=${WEB_SERVER_PORT} \
-        --binding=${WEB_SERVER_HOST} \
-        --no-log-to-stdout
+        --binding=${WEB_SERVER_HOST}
 else
     echo "Invalid value ${SERVE_OVER_HTTPS} for boolean-like value" >&2
     exit 1

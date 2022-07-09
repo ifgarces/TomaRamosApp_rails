@@ -10,6 +10,6 @@ class AcademicPeriodTest < ActiveSupport::TestCase
 
   test "insert success" do
     testPeriod = getFooAcademicPeriod()
-    assert_equal(true, testPeriod.save())
+    assert(testPeriod.save())
   end
 end
