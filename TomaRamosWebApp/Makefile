@@ -24,8 +24,7 @@ web_server:
 		rails server \
 			--port=${WEB_SERVER_PORT} \
 			--binding=${WEB_SERVER_HOST} \
-			--environment=${RUNTIME_ENVIRONMENT} \
-			--no-log-to-stdout
+			--environment=${RUNTIME_ENVIRONMENT}
 
 #! This rule is for debugging-only
 # This one is intended for the server only

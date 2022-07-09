@@ -69,9 +69,9 @@ class ActiveSupport::TestCase
     assert_equal(leftCourse.lcruz, rightCourse.lcruz)
   end
 
-  Compares two `CourseEvent`s without minding IDs nor db timestamps.
-  @param leftEvent [CourseEvent]
-  @param rightEvent [CourseEvent]
+  # Compares two `CourseEvent`s without minding IDs nor db timestamps.
+  # @param leftEvent [CourseEvent]
+  # @param rightEvent [CourseEvent]
   def assertEqualCourseEvents(leftEvent, rightEvent)
     puts(">>> Comparing events: \n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #! debug
     assert_equal(leftEvent.location, rightEvent.location)
