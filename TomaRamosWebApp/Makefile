@@ -24,7 +24,8 @@ web_server:
 		rails server \
 			--port=${WEB_SERVER_PORT} \
 			--binding=${WEB_SERVER_HOST} \
-			--environment=${RUNTIME_ENVIRONMENT}
+			--environment=${RUNTIME_ENVIRONMENT} \
+			--no-log-to-stdout
 
 #! This rule is for debugging-only
 # This one is intended for the server only
@@ -74,4 +75,7 @@ clear_sessions:
 # Run all Rails tests
 test:
 	DATABASE_URL=${DB_URL_TEST} \
+	RAILS_ENV=test \
+	DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
 		rails test
+	#~~~~~~= [OK] everything is fine =~~~~~~#

@@ -109,7 +109,7 @@ class MainController < ApplicationController
 
     # Refreshing current page for changes to be reflected immediately
     redirect_to(
-      request.path, #? <- is this a bad practice? should be fine for `href` (GET) buttons, right?
+      :courses,
       notice: "[debug] Session cleared"
     )
   end

@@ -12,20 +12,20 @@ class ActiveSupport::TestCase
   parallelize(workers: :number_of_processors)
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order
-  fixtures :all
-
-  # Ensuring two errors are equal by type and message.
-  # References (thanks): https://stackoverflow.com/a/3454953/12684271
-  # @param expectedError [Exception]
-  # @param gotError [Exception]
-  def assertExceptionsEqual(expectedError:, gotError:)
-    assert_equal(expectedError.class, gotError.class)
-    assert_equal(expectedError.message, gotError.message)
-  end
+  #// fixtures :all
 
   # @return [AcademicPeriod]
   def getFooAcademicPeriod()
     return AcademicPeriod.new(name: "2040-10")
+  end
+
+  # @return [User]
+  def getFooUser()
+    return User.new(
+      email: "deshka@foo.com",
+      username: "deshka347",
+      password: "qwerty"
+    )
   end
 
   # @param title [String]
@@ -44,18 +44,86 @@ class ActiveSupport::TestCase
     )
   end
 
-  # @return [User]
-  def getFooUser()
-    return User.new(
-      email: "deshka@foo.com",
-      username: "deshka347",
-      password: "qwerty"
-    )
+  # Ensuring two errors are equal by type and message.
+  #* Note: if the `message` contains an `inspect` string, this method will will fail with an error
+  #* somehow, arguing that there's "No visible difference"
+  # References (thanks): https://stackoverflow.com/a/3454953/12684271
+  #
+  # @param expectedError [Exception]
+  # @param gotError [Exception]
+  # @return [nil]
+  def assertEqualExceptions(expectedError:, gotError:)
+    assert(expectedError.is_a?(Exception))
+    assert(gotError.is_a?(Exception))
+    assert_equal(expectedError.class, gotError.class)
+    assert_equal(expectedError.message, gotError.message)
   end
+
+  # @param leftTime [Array<Time> | nil]
+  # @param rightTime [Array<Time> | nil]
+  # @return [nil]
+  def assertEqualTimeInterval(leftInterval, rightInterval)
+    if (leftInterval.nil?)
+      assert_nil(rightInterval)
+      return
+    end
+    assert_equal(2, leftInterval.count())
+    assert_equal(2, rightInterval.count())
+    self.assertEqualTimes(leftInterval.first(), rightInterval.first())
+    self.assertEqualTimes(leftInterval.last(), rightInterval.last())
+  end
+
+  # @param leftTime [Time]
+  # @param rightTime [Time]
+  # @return [nil]
+  def assertEqualTimes(leftTime, rightTime)
+    assert(leftTime.is_a?(Time))
+    assert(rightTime.is_a?(Time))
+    assert_equal(leftTime.hour, rightTime.hour)
+    assert_equal(leftTime.min, rightTime.min)
+  end
+
+  # @param leftDate [Date]
+  # @param rightDate [Date]
+  # @return [nil]
+  def assertEqualDates(leftDate, rightDate)
+    assert(leftDate.is_a?(Date))
+    assert(rightDate.is_a?(Date))
+    assert_equal(leftDate.year, rightDate.year)
+    assert_equal(leftDate.mon, rightDate.mon)
+    assert_equal(leftDate.day, rightDate.day)
+  end
+
+  # @param leftArr [Array<CourseInstance>]
+  # @param rightArr [Array<CourseInstance>]
+  # @return [nil]
+  def assertEqualCourseInstancesArray(leftArr, rightArr)
+    assert_equal(leftArr.count(), rightArr.count())
+    sortedLeftArr = leftArr.sort_by { |course| course.nrc }
+    sortedRightArr = rightArr.sort_by { |course| course.nrc }
+    sortedLeftArr.each_index do |k|
+      self.assertEqualCourseInstances(sortedLeftArr[k], sortedRightArr[k])
+    end
+  end
+
+  # @param leftArr [Array<CourseEvent>]
+  # @param rightArr [Array<CourseEvent>]
+  # @return [nil]
+  def assertEqualCourseEventsArray(leftArr, rightArr)
+    assert_equal(leftArr.count(), rightArr.count())
+    sortedLeftArr = leftArr.sort_by { |event| event.date }
+    sortedRightArr = rightArr.sort_by { |event| event.date }
+    sortedLeftArr.each_index do |k|
+      self.assertEqualCourseEvents(sortedLeftArr[k], sortedRightArr[k])
+    end
+  end
+
+  private
 
   # Compares two `CourseInstance`s without minding IDs nor db timestamps.
   # @param leftCourse [CourseInstance]
   # @param rightCourse [CourseInstance]
+  # @return [nil]
   def assertEqualCourseInstances(leftCourse, rightCourse)
     assert_equal(leftCourse.nrc, rightCourse.nrc)
     assert_equal(leftCourse.title, rightCourse.title)
@@ -67,34 +135,20 @@ class ActiveSupport::TestCase
     assert_equal(leftCourse.curriculum, rightCourse.curriculum)
     assert_equal(leftCourse.liga, rightCourse.liga)
     assert_equal(leftCourse.lcruz, rightCourse.lcruz)
+    assert_equal(leftCourse.academic_period, rightCourse.academic_period)
   end
 
   # Compares two `CourseEvent`s without minding IDs nor db timestamps.
   # @param leftEvent [CourseEvent]
   # @param rightEvent [CourseEvent]
+  # @return [nil]
   def assertEqualCourseEvents(leftEvent, rightEvent)
-    puts(">>> Comparing events: \n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #! debug
+    #//puts("[debug] Comparing events:\n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #!
     assert_equal(leftEvent.location, rightEvent.location)
     assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
-    assert_equal(leftEvent.start_time, rightEvent.start_time)
-    assert_equal(leftEvent.end_time, rightEvent.end_time)
-    assert_equal(leftEvent.date, rightEvent.date)
+    assertEqualTimes(leftEvent.start_time, rightEvent.start_time)
+    assertEqualTimes(leftEvent.end_time, rightEvent.end_time)
+    assertEqualDates(leftEvent.date, rightEvent.date)
+    assert_equal(leftEvent.event_type, rightEvent.event_type)
   end
-
-  # @param array [Array]
-  # @param event [CourseEvent]
-  # def isCourseEventInArray(array, event)
-  #   array.each do |item|
-  #     if (
-  #       (item.location == event.location) &&
-  #       (item.day_of_week == event.day_of_week) &&
-  #       (item.start_time == event.start_time) &&
-  #       (item.end_time == event.end_time) &&
-  #       (item.date == event.date)
-  #     )
-  #       return true
-  #     end
-  #   end
-  #   return false
-  # end
 end
