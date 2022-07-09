@@ -118,7 +118,7 @@ module CsvDataImporter
               day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
               start_time: Time.utc(2000, 1, 1, eventTimes.first().hour, eventTimes.first().min), #// eventTimes.first().utc,
               end_time: Time.utc(2000, 1, 1, eventTimes.last().hour, eventTimes.last().min), #// eventTimes.last().utc,
-              date: Date.new(parsedRow.fechaInicio.year, parsedRow.fechaInicio.mon, parsedRow.fechaInicio.day), #// parsedRow.fechaInicio,
+              date: (parsedRow.fechaInicio == nil) ? nil : Date.new(parsedRow.fechaInicio.year, parsedRow.fechaInicio.mon, parsedRow.fechaInicio.day), #// parsedRow.fechaInicio,
               course_instance: course,
               event_type: eventType
             )
