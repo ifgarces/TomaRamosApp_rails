@@ -108,8 +108,6 @@ module CsvDataImporter
             nrcEventsMapping[parsedRow.nrc] = []  
           end
 
-          puts("[debug] parsedRow=#{parsedRow.inspect()}") #!
-
           # Note: cannot directly save the dates/times as, apparently, the machine's timezone is
           # used instead of UTC, so we have to force it to be timezone-less (set all to UTC) by
           # explicitly creating a new `Date`/`Time` object. I lost quite a lot of time because

@@ -38,14 +38,14 @@ class CsvRow
 
   # @param rowCells [Array<String>]
   def initialize(rowCells)
-    @pe = rowCells[ColumnsMappings.planEstudios] # String | nil
+    @pe = rowCells[ColumnsMappings.planEstudios] # String
     @nrc = rowCells[ColumnsMappings.nrc].to_i() # Integer
     @conectorLiga = rowCells[ColumnsMappings.conectorLiga] # String | nil
     @listaCruzada = rowCells[ColumnsMappings.listaCruzada] # String | nil
-    @materia = rowCells[ColumnsMappings.materia] # String | nil
+    @materia = rowCells[ColumnsMappings.materia] # String
     @curso = rowCells[ColumnsMappings.númeroCurso].to_i() # Integer
-    @sección = rowCells[ColumnsMappings.sección] # String | nil
-    @nombre = rowCells[ColumnsMappings.nombre] # String | nil
+    @sección = rowCells[ColumnsMappings.sección] # String
+    @nombre = rowCells[ColumnsMappings.nombre] # String
     @créditos = rowCells[ColumnsMappings.créditos] # String | nil
     @lunes = CsvRow.parseTimeInterval(rowCells[ColumnsMappings.lunes]) # Array<Time, Time> | nil
     @martes = CsvRow.parseTimeInterval(rowCells[ColumnsMappings.martes])
@@ -56,7 +56,7 @@ class CsvRow
     @fechaFin = CsvRow.parseDate(rowCells[ColumnsMappings.fechaFin]) # Date | nil
     @sala = rowCells[ColumnsMappings.sala] # String | nil
     @tipoEvento = rowCells[ColumnsMappings.tipoEvento].tr("0-9", "").strip() # String, ignoring digits (e.g. "PRBA 1" => "PRBA")
-    @profesor = rowCells[ColumnsMappings.profesor] # String | nil
+    @profesor = rowCells[ColumnsMappings.profesor] # String
 
     # Ensuring mandatory fields are not null
     [@pe, @nrc, @materia, @sección, @nombre, @tipoEvento, @profesor].each do |field|

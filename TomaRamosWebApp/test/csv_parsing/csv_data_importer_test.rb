@@ -23,10 +23,16 @@ class CsvDataImporterTest < ActiveSupport::TestCase
   end
 
 
+  teardown do
+    AcademicPeriod.delete_all()
+    CourseEvent.delete_all()
+    CourseInstance.delete_all()
+  end
+
   # Note: this one references to the first test at `CsvRowTest`
   test "import success single line" do
-    period = AcademicPeriod.new(name: "whatever-period")
-    period.save!()
+    testPeriod = AcademicPeriod.new(name: "foo")
+    testPeriod.save!()
 
     csvTempFile = Tempfile.new("csv", encoding: "utf-8")
     csvTempFile.write("#{@CSV_HEADER}
@@ -34,7 +40,7 @@ PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/20
     csvTempFile.rewind()
 
     begin
-      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, period)
+      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, testPeriod)
     ensure
       csvTempFile.close()
       csvTempFile.unlink()
@@ -50,7 +56,7 @@ PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/20
         course_number: 1100,
         section: "1",
         curriculum: "PE2016",
-        academic_period: period
+        academic_period: testPeriod
       )
     ]
 
@@ -68,13 +74,10 @@ PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/20
       ]
     }
 
-    puts("Comparing courses...")
     assertEqualCourseInstancesArray(expectedCourses, gotCourses)
 
-    puts("Comparing events...")
     assert_equal(expectedEventsHash.keys().count(), gotEventsHash.keys().count())
     assert_equal(expectedEventsHash.keys(), gotEventsHash.keys())
-
     expectedEventsHash.each do |nrc, _|
       assertEqualCourseEventsArray(expectedEventsHash[nrc], gotEventsHash[nrc])
     end
@@ -82,8 +85,8 @@ PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/20
 
 
   test "import success small" do
-    period = AcademicPeriod.new(name: "whatever-period")
-    period.save!()
+    testPeriod = AcademicPeriod.new(name: "whatever")
+    testPeriod.save!()
 
     csvTempFile = Tempfile.new("csv", encoding: "utf-8")
     csvTempFile.write("#{@CSV_HEADER}
@@ -93,7 +96,7 @@ PE2016,666,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7/
     csvTempFile.rewind()
 
     begin
-      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, period)
+      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, testPeriod)
     ensure
       csvTempFile.close()
       csvTempFile.unlink()
@@ -109,7 +112,7 @@ PE2016,666,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7/
         course_number: 1100,
         section: "1",
         curriculum: "PE2016",
-        academic_period: period
+        academic_period: testPeriod
       ),
       CourseInstance.new(
         nrc: "666",
@@ -121,7 +124,7 @@ PE2016,666,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7/
         section: "1",
         curriculum: "PE2016",
         liga: "Foo",
-        academic_period: period
+        academic_period: testPeriod
       )
     ]
 
@@ -138,19 +141,19 @@ PE2016,666,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7/
         ),
         CourseEvent.new(
           event_type: @typeClass,
-          location: "CEN-101",
+          location: "R-14",
           day_of_week: DayOfWeekEnum::THURSDAY,
           start_time: Time.utc(2000, 1, 1, 8, 30),
           end_time: Time.utc(2000, 1, 1, 10, 20),
           date: Date.new(2022, 3, 2)
         ),
         CourseEvent.new(
-          event_type: @typeAyud,
-          location: nil,
-          day_of_week: DayOfWeekEnum::THURSDAY,
+          event_type: @typeAssist,
+          location: "CEN-101",
+          day_of_week: DayOfWeekEnum::MONDAY,
           start_time: Time.utc(2000, 1, 1, 14, 30),
           end_time: Time.utc(2000, 1, 1, 16, 20),
-          date: Date.new(2022, 3, 2)
+          date: Date.new(2022, 3, 7)
         )
       ],
       666 => [
@@ -165,31 +168,19 @@ PE2016,666,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7/
       ]
     }
 
-    puts("Comparing courses...")
     assertEqualCourseInstancesArray(expectedCourses, gotCourses)
 
-    puts("Comparing events...")
     assert_equal(expectedEventsHash.keys().count(), gotEventsHash.keys().count())
     assert_equal(expectedEventsHash.keys(), gotEventsHash.keys())
-
     expectedEventsHash.each do |nrc, _|
-      puts("--- #{nrc} ---")
-      puts(expectedEventsHash[nrc].map{ |it| it.inspect() }.join("\n"))
-      puts()
-      puts(gotEventsHash[nrc].map{ |it| it.inspect() }.join("\n"))
-      puts("---")
-
       assertEqualCourseEventsArray(expectedEventsHash[nrc], gotEventsHash[nrc])
     end
-    print("YES.")
   end
 
 
   test "import success large" do
-    period = AcademicPeriod.new(name: "2022-10")
-    period.save!()
-
-    return #!!!!!!
+    testPeriod = AcademicPeriod.new(name: "2022-10")
+    testPeriod.save!()
 
     csvTempFile = Tempfile.new("csv", encoding: "utf-8")
     csvTempFile.write("#{@CSV_HEADER}
@@ -228,8 +219,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
     csvTempFile.rewind()
 
     begin
-      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, period)
-      puts("gotCourses=%s, gotEventsHash=%s" % [gotCourses.inspect(), gotEventsHash.inspect()])
+      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, testPeriod)
     ensure
       csvTempFile.close()
       csvTempFile.unlink()
@@ -245,7 +235,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
         course_number: 1100,
         section: "1",
         curriculum: "PE2016",
-        academic_period: period
+        academic_period: testPeriod
       ),
       CourseInstance.new(
         nrc: "3790",
@@ -256,7 +246,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
         course_number: 1100,
         section: "2",
         curriculum: "PE2016",
-        academic_period: period
+        academic_period: testPeriod
       ),
       CourseInstance.new(
         nrc: "3794",
@@ -267,7 +257,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
         course_number: 1201,
         section: "1",
         curriculum: "PE2016",
-        academic_period: period
+        academic_period: testPeriod
       ),
       CourseInstance.new(
         nrc: "3795",
@@ -278,7 +268,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
         course_number: 1201,
         section: "2",
         curriculum: "PE2016",
-        academic_period: period
+        academic_period: testPeriod
       ),
       CourseInstance.new(
         nrc: "3797",
@@ -290,7 +280,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
         section: "1",
         curriculum: "PE2016",
         liga: "Foo",
-        academic_period: period
+        academic_period: testPeriod
       )
     ]
 
@@ -576,15 +566,7 @@ PE2016,3797,Foo,,ICC,4101,1,ALGORITHMS AND COMPETITIVE PRO,6,,,,15:30 -19:20,,,7
 
     assert_equal(expectedEventsHash.keys().count(), gotEventsHash.keys().count())
     assert_equal(expectedEventsHash.keys(), gotEventsHash.keys())
-
-    return #!!!!!!
-
     expectedEventsHash.each do |nrc, _|
-      puts("---")
-      puts(expectedEventsHash[nrc].map{ |it| it.inspect() }.join("\n"))
-      puts()
-      puts(gotEventsHash[nrc].map{ |it| it.inspect() }.join("\n"))
-      puts("---")
       assertEqualCourseEventsArray(expectedEventsHash[nrc], gotEventsHash[nrc])
     end
   end

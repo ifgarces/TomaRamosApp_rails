@@ -44,6 +44,23 @@ class ActiveSupport::TestCase
     )
   end
 
+  # Used to explicitly compare two objects that both could be `nil`. Suppresses the annoying
+  # depreciation warning explained here (could not figure out how to force suppress it):
+  # https://stackoverflow.com/questions/64551495/ruby-deprecated-use-assert-nil-if-expecting-nil-this-will-fail-in-minitest-6
+  #
+  # @param left [Object | nil]
+  # @param right [Object | nil]
+  # @return [nil]
+  def assertEqualOrNil(left, right)
+    if (left.nil?)
+      assert_nil(right)
+    elsif (right.nil?)
+      assert_nil(left)
+    else
+      assert_equal(left, right)
+    end
+  end
+
   # Ensuring two errors are equal by type and message.
   #* Note: if the `message` contains an `inspect` string, this method will will fail with an error
   #* somehow, arguing that there's "No visible difference"
@@ -99,10 +116,10 @@ class ActiveSupport::TestCase
   # @return [nil]
   def assertEqualCourseInstancesArray(leftArr, rightArr)
     assert_equal(leftArr.count(), rightArr.count())
-    sortedLeftArr = leftArr.sort_by { |course| course.nrc }
-    sortedRightArr = rightArr.sort_by { |course| course.nrc }
-    sortedLeftArr.each_index do |k|
-      self.assertEqualCourseInstances(sortedLeftArr[k], sortedRightArr[k])
+    #// leftArr = leftArr.sort_by { |course| course.nrc }
+    #// rightArr = rightArr.sort_by { |course| course.nrc }
+    leftArr.each_index do |k|
+      self.assertEqualCourseInstances(leftArr[k], rightArr[k])
     end
   end
 
@@ -111,10 +128,10 @@ class ActiveSupport::TestCase
   # @return [nil]
   def assertEqualCourseEventsArray(leftArr, rightArr)
     assert_equal(leftArr.count(), rightArr.count())
-    sortedLeftArr = leftArr.sort_by { |event| event.date }
-    sortedRightArr = rightArr.sort_by { |event| event.date }
-    sortedLeftArr.each_index do |k|
-      self.assertEqualCourseEvents(sortedLeftArr[k], sortedRightArr[k])
+    #// leftArr = leftArr.sort_by { |event| event.date }
+    #// rightArr = rightArr.sort_by { |event| event.date }
+    leftArr.each_index do |k|
+      self.assertEqualCourseEvents(leftArr[k], rightArr[k])
     end
   end
 
@@ -133,8 +150,8 @@ class ActiveSupport::TestCase
     assert_equal(leftCourse.course_number, rightCourse.course_number)
     assert_equal(leftCourse.section, rightCourse.section)
     assert_equal(leftCourse.curriculum, rightCourse.curriculum)
-    assert_equal(leftCourse.liga, rightCourse.liga)
-    assert_equal(leftCourse.lcruz, rightCourse.lcruz)
+    assertEqualOrNil(leftCourse.liga, rightCourse.liga)
+    assertEqualOrNil(leftCourse.lcruz, rightCourse.lcruz)
     assert_equal(leftCourse.academic_period, rightCourse.academic_period)
   end
 
@@ -143,12 +160,12 @@ class ActiveSupport::TestCase
   # @param rightEvent [CourseEvent]
   # @return [nil]
   def assertEqualCourseEvents(leftEvent, rightEvent)
-    #//puts("[debug] Comparing events:\n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #!
-    assert_equal(leftEvent.location, rightEvent.location)
+    #// puts("[debug] Comparing events:\n    #{leftEvent.inspect()}\n    #{rightEvent.inspect()}") #!
+    assertEqualOrNil(leftEvent.location, rightEvent.location)
     assert_equal(leftEvent.day_of_week, rightEvent.day_of_week)
     assertEqualTimes(leftEvent.start_time, rightEvent.start_time)
     assertEqualTimes(leftEvent.end_time, rightEvent.end_time)
-    assertEqualDates(leftEvent.date, rightEvent.date)
+    assertEqualOrNil(leftEvent.date, rightEvent.date)
     assert_equal(leftEvent.event_type, rightEvent.event_type)
   end
 end
