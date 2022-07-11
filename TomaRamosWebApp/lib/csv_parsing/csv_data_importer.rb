@@ -55,82 +55,91 @@ module CsvDataImporter
 
     allCoursesNRCs = [] # :Array<String>, for small optimization
     csvRows.each_with_index do |row, rowIndex|
-      # log.debug("Processing row %s" % [row]) #*
-      parsedRow = CsvRow.new(row)
+      begin
+        parsedRow = CsvRow.new(row)
 
-      if (!allCoursesNRCs.include?(parsedRow.nrc))
-        allCoursesNRCs.append(parsedRow.nrc)
+        if (!allCoursesNRCs.include?(parsedRow.nrc))
+          allCoursesNRCs.append(parsedRow.nrc)
 
-        # Updating CourseInstances in database, if needed (preserving existing relations with
-        # Inscriptions)
-        course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: academicPeriod)
-        mustAppend = false
-        if (course == nil)
-          course = CourseInstance.new(nrc: parsedRow.nrc)
-          mustAppend = true
-        end
-
-        course.title = parsedRow.nombre
-        course.teacher = parsedRow.profesor
-        course.credits = parsedRow.créditos
-        course.career = parsedRow.materia
-        course.course_number = parsedRow.curso
-        course.section = parsedRow.sección
-        course.curriculum = parsedRow.pe
-        course.liga = parsedRow.conectorLiga
-        course.lcruz = parsedRow.listaCruzada
-        course.academic_period = academicPeriod
-
-        if (mustAppend)
-          gotCourses.append(course)
-        end
-      end
-
-      eventTimeExists = false
-
-      { # :Hash<DayOfWeekEnum, Array<Time, Time> | nil>
-        DayOfWeekEnum::MONDAY => parsedRow.lunes,
-        DayOfWeekEnum::TUESDAY => parsedRow.martes,
-        DayOfWeekEnum::WEDNESDAY => parsedRow.miércoles,
-        DayOfWeekEnum::THURSDAY => parsedRow.jueves,
-        DayOfWeekEnum::FRIDAY => parsedRow.viernes
-      }.each do |dayOfWeek, eventTimes|
-        if (eventTimes != nil)
-          eventTimeExists = true
-          eventType = csvEventTypesMapping[parsedRow.tipoEvento]
-          raise RuntimeError.new(
-            "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
-              rowIndex + 2, parsedRow.tipoEvento, csvEventTypesMapping.values()
-            ]
-          ) unless (eventType != nil)
-
-          if (!nrcEventsMapping.keys().include?(parsedRow.nrc))
-            nrcEventsMapping[parsedRow.nrc] = []  
+          # Updating CourseInstances in database, if needed (preserving existing relations with
+          # Inscriptions)
+          course = CourseInstance.find_by(nrc: parsedRow.nrc, academic_period: academicPeriod)
+          mustAppend = false
+          if (course == nil)
+            course = CourseInstance.new(nrc: parsedRow.nrc)
+            mustAppend = true
           end
 
-          # Note: cannot directly save the dates/times as, apparently, the machine's timezone is
-          # used instead of UTC, so we have to force it to be timezone-less (set all to UTC) by
-          # explicitly creating a new `Date`/`Time` object. I lost quite a lot of time because
-          # thanks to it.
-          nrcEventsMapping[parsedRow.nrc].append(
-            CourseEvent.new(
-              location: parsedRow.sala,
-              day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
-              start_time: Time.utc(2000, 1, 1, eventTimes.first().hour, eventTimes.first().min), #// eventTimes.first().utc,
-              end_time: Time.utc(2000, 1, 1, eventTimes.last().hour, eventTimes.last().min), #// eventTimes.last().utc,
-              date: (parsedRow.fechaInicio == nil) ? nil : Date.new(parsedRow.fechaInicio.year, parsedRow.fechaInicio.mon, parsedRow.fechaInicio.day), #// parsedRow.fechaInicio,
-              course_instance: course,
-              event_type: eventType
+          course.title = parsedRow.nombre
+          course.teacher = parsedRow.profesor
+          course.credits = parsedRow.créditos
+          course.career = parsedRow.materia
+          course.course_number = parsedRow.curso
+          course.section = parsedRow.sección
+          course.curriculum = parsedRow.pe
+          course.liga = parsedRow.conectorLiga
+          course.lcruz = parsedRow.listaCruzada
+          course.academic_period = academicPeriod
+
+          if (mustAppend)
+            gotCourses.append(course)
+          end
+        end
+
+        eventTimeExists = false
+
+        { # :Hash<DayOfWeekEnum, Array<Time, Time> | nil>
+          DayOfWeekEnum::MONDAY => parsedRow.lunes,
+          DayOfWeekEnum::TUESDAY => parsedRow.martes,
+          DayOfWeekEnum::WEDNESDAY => parsedRow.miércoles,
+          DayOfWeekEnum::THURSDAY => parsedRow.jueves,
+          DayOfWeekEnum::FRIDAY => parsedRow.viernes
+        }.each do |dayOfWeek, eventTimes|
+          if (eventTimes != nil)
+            eventTimeExists = true
+            eventType = csvEventTypesMapping[parsedRow.tipoEvento]
+            raise RuntimeError.new(
+              "CSV parsing error at line %d: invalid event type value '%s', must be one of %s" % [
+                rowIndex + 2, parsedRow.tipoEvento, csvEventTypesMapping.keys()
+              ]
+            ) unless (eventType != nil)
+
+            if (!nrcEventsMapping.keys().include?(parsedRow.nrc))
+              nrcEventsMapping[parsedRow.nrc] = []  
+            end
+
+            # Note: cannot directly save the dates/times as, apparently, the machine's timezone is
+            # used instead of UTC, so we have to force it to be timezone-less (set all to UTC) by
+            # explicitly creating a new `Date`/`Time` object. I lost quite a lot of time because
+            # thanks to it.
+            nrcEventsMapping[parsedRow.nrc].append(
+              CourseEvent.new(
+                location: parsedRow.sala,
+                day_of_week: DayOfWeekEnum.parseStringDay(dayOfWeek),
+                start_time: Time.utc(2000, 1, 1, eventTimes.first().hour, eventTimes.first().min), #// eventTimes.first().utc,
+                end_time: Time.utc(2000, 1, 1, eventTimes.last().hour, eventTimes.last().min), #// eventTimes.last().utc,
+                date: (parsedRow.fechaInicio == nil) ? nil : Date.new(parsedRow.fechaInicio.year, parsedRow.fechaInicio.mon, parsedRow.fechaInicio.day), #// parsedRow.fechaInicio,
+                course_instance: course,
+                event_type: eventType
+              )
             )
+          end
+        end
+
+        if (!eventTimeExists)
+          # Just warning, as some cases are valid, like practices
+          log.warn(
+            "CSV row #%d: no time interval given for this event >> %s" % [rowIndex + 2, row]
           )
         end
-      end
-
-      if (!eventTimeExists)
-        # Just warning, as some cases are valid, like practices
-        log.warn(
-          "CSV row #%d: no time interval given for this event >> %s" % [rowIndex + 2, row]
-        )
+      rescue Exception => e
+        log.fatal("Exception ocurred while parsing line #{rowIndex + 2}: #{row}")
+        log.error("<<< Exception begin >>>")
+        log.error("Error type: #{e.class}")
+        log.error("Error message: #{e.message}")
+        log.error("Backtrace:\n#{e.backtrace.join("\n")}")
+        log.error("<<< Exception end >>>")
+        raise e
       end
     end
 

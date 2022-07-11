@@ -32,7 +32,7 @@ class CsvRowTest < ActiveSupport::TestCase
 
 
   test "CsvRow success 01" do
-    testRawRow = "PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,7/3/2022,22/06/2022,,AYUD,tata Sánchez la leyenda"
+    testRawRow = "202110,PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,7/3/2022,22/06/2022,,AYUD,tata Sánchez la leyenda"
 
     expectedRow = OpenStruct.new(
       pe: "PE2016",
@@ -63,7 +63,7 @@ class CsvRowTest < ActiveSupport::TestCase
 
 
   test "CsvRow success 02" do
-    testRawRow = "PE2016,3972,BA,,ICC,4103,BB,WEB TECHNOLOGIES,6,13:30 -15:20,,,,,,07/03/2022,22/06/2022,R-27,CLAS,ALVAREZ/GOMEZ CLAUDIO JAVIER"
+    testRawRow = "202110,PE2016,3972,BA,,ICC,4103,BB,WEB TECHNOLOGIES,6,13:30 -15:20,,,,,,07/03/2022,22/06/2022,R-27,CLAS,ALVAREZ/GOMEZ CLAUDIO JAVIER"
 
     expectedRow = OpenStruct.new(
       pe: "PE2016",
@@ -94,7 +94,7 @@ class CsvRowTest < ActiveSupport::TestCase
 
 
   test "CsvRow success 03" do
-    testRawRow = "PE2016,3972,BA,qwerty,ICC,4103,99,WEB TECHNOLOGIES,6,,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER"
+    testRawRow = "202110,PE2016,3972,BA,qwerty,ICC,4103,99,WEB TECHNOLOGIES,6,,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER"
 
     expectedRow = OpenStruct.new(
       pe: "PE2016",
@@ -125,7 +125,7 @@ class CsvRowTest < ActiveSupport::TestCase
 
 
   test "CsvRow success 04" do
-    testRawRow = "PE2016,3972,,,ICC,4103,BB,WEB TECHNOLOGIES,1,,08:30-09:20,,,,,07/03/2040,22/06/2040,qwerty,LABT,ALVAREZ/GOMEZ CLAUDIO JAVIER"
+    testRawRow = "202110,PE2016,3972,,,ICC,4103,BB,WEB TECHNOLOGIES,1,,08:30-09:20,,,,,07/03/2040,22/06/2040,qwerty,LABT,ALVAREZ/GOMEZ CLAUDIO JAVIER"
 
     expectedRow = OpenStruct.new(
       pe: "PE2016",
@@ -156,7 +156,7 @@ class CsvRowTest < ActiveSupport::TestCase
 
 
   test "CsvRow failure blank title" do
-    testRawRow = "PE2016,    3972  ,BA,qwerty,ICC,4103,99,,6,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER  "
+    testRawRow = "202110,PE2016,    3972  ,BA,qwerty,ICC,4103,99,,6,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER  "
     gotError = assert_raise(Exception) do
       CsvRow.new(
         CSV.parse(testRawRow, col_sep: ",").first()

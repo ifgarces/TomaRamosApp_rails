@@ -9,25 +9,25 @@ class CsvRow
 
   # Mapping each column of the CSV file
   ColumnsMappings = OpenStruct.new(
-    planEstudios: 0,
-    nrc: 1,
-    conectorLiga: 2,
-    listaCruzada: 3,
-    materia: 4,
-    númeroCurso: 5,
-    sección: 6,
-    nombre: 7,
-    créditos: 8,
-    lunes: 9,
-    martes: 10,
-    miércoles: 11,
-    jueves: 12,
-    viernes: 13,
-    fechaInicio: 15,
-    fechaFin: 16,
-    sala: 17,
-    tipoEvento: 18,
-    profesor: 19
+    planEstudios: 1,
+    nrc: 2,
+    conectorLiga: 3,
+    listaCruzada: 4,
+    materia: 5,
+    númeroCurso: 6,
+    sección: 7,
+    nombre: 8,
+    créditos: 9,
+    lunes: 10,
+    martes: 11,
+    miércoles: 12,
+    jueves: 13,
+    viernes: 14,
+    fechaInicio: 16,
+    fechaFin: 17,
+    sala: 18,
+    tipoEvento: 19,
+    profesor: 20
   )
 
   public

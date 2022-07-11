@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   rescue_from Exception do |e|
     log = LoggingUtil.getStdoutLogger(__FILE__)
 
-    log.error("<<< Exception start >>>")
+    log.error("<<< Exception begin >>>")
 
     # Briefly using `session` for displaying minimal error information to the user
     session[:displayableErrorInfo] = e.class
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     log.error("Exception class: #{e.class}")
     log.error("Exception summary: #{e}")
     log.error("Backtrace:\n#{e.backtrace.join("\n")}")
-    log.error("<<< End of exception >>>")
+    log.error("<<< Exception end >>>")
     render status: 500
   end
 end
