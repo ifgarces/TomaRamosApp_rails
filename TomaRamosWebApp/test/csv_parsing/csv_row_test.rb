@@ -156,7 +156,7 @@ class CsvRowTest < ActiveSupport::TestCase
 
 
   test "CsvRow failure blank title" do
-    testRawRow = "PE2016,    3972  ,BA,qwerty,ICC,4103,99,      ,6,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,           ALVAREZ/GOMEZ CLAUDIO JAVIER  "
+    testRawRow = "PE2016,    3972  ,BA,qwerty,ICC,4103,99,,6,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER  "
     gotError = assert_raise(Exception) do
       CsvRow.new(
         CSV.parse(testRawRow, col_sep: ",").first()
@@ -165,7 +165,7 @@ class CsvRowTest < ActiveSupport::TestCase
     assertEqualExceptions( # causes dumb "No visible difference in the String#inspect output." error
       gotError: gotError,
       expectedError: RuntimeError.new(
-        'One of the mandatory fields is nil for CsvRow: {"pe":"PE2016","nrc":3972,"conectorLiga":"BA","listaCruzada":"qwerty","materia":"ICC","curso":4103,"sección":"99","nombre":"      ","créditos":"6","lunes":null,"martes":null,"miércoles":["2022-07-09T19:30:00.000-04:00","2022-07-09T22:00:00.000-04:00"],"jueves":null,"viernes":null,"fechaInicio":"2022-06-22","fechaFin":"2022-07-27","sala":"AYUD","tipoEvento":"ALVAREZ/GOMEZ CLAUDIO JAVIER","profesor":null}'
+        'One of the mandatory fields is nil for CsvRow: {"pe":"PE2016","nrc":3972,"conectorLiga":"BA","listaCruzada":"qwerty","materia":"ICC","curso":4103,"sección":"99","nombre":null,"créditos":"6","lunes":null,"martes":null,"miércoles":["2022-07-10T19:30:00.000-04:00","2022-07-10T22:00:00.000-04:00"],"jueves":null,"viernes":null,"fechaInicio":"2022-06-22","fechaFin":"2022-07-27","sala":"AYUD","tipoEvento":"ALVAREZ/GOMEZ CLAUDIO JAVIER","profesor":null}'
       ),
     )
   end

@@ -105,3 +105,6 @@ gem "omniauth-rails_csrf_protection" #? needed?
 # Pagination in views
 #// gem "kaminari"
 #// gem "will_paginate", "~> 3.3"
+
+# IMGKit for converting HTML to image (for the user to download their week schedule)
+gem "imgkit"

@@ -60,20 +60,25 @@ class WeekScheduleTest < ActiveSupport::TestCase
       course.save!()
     end
 
-    expectedScheduleRowClass = WeekScheduleRow.new()
-    expectedScheduleRowClass.addEvent(
-      testCourses.first().course_events.first()
-    )
+    firstTestEvent = testCourses.first().course_events.first()
+    secondTestEvent = testCourses.first().course_events.second()
 
-    expectedScheduleRowAssist = WeekScheduleRow.new()
-    expectedScheduleRowAssist.addEvent(
-      testCourses.first().course_events.second()
-    )
+    expectedSchedule = []
+    13.times do
+      expectedSchedule.append(WeekScheduleRow.new())
+    end
 
-    expectedSchedule = [expectedScheduleRowClass, expectedScheduleRowClass]
+    expectedSchedule[0].addEvent(firstTestEvent)
+    expectedSchedule[1].addEvent(firstTestEvent)
+
+    expectedSchedule[6].addEvent(secondTestEvent)
+    expectedSchedule[7].addEvent(secondTestEvent)
 
     gotSchedule = WeekSchedule.computeWeekScheduleBlocks(testCourses)
 
+    assert_equal(
+      expectedSchedule.count(), WeekSchedule::LAST_BLOCK_HOUR - WeekSchedule::FIRST_BLOCK_HOUR
+    )
     assert_equal(expectedSchedule, gotSchedule)
   end
 

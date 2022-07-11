@@ -10,7 +10,8 @@ module WeekSchedule
   BLOCK_END_MINUTES = 20
 
   # @param courseInstances [Array<CourseInstance>]
-  # @return [Array<WeekScheduleRow>]
+  # @return [Array<WeekScheduleRow>] Fixed-size array with one `WeekScheduleRow` for each valid week
+  #   block.
   def self.computeWeekScheduleBlocks(courseInstances)
     raise ArgumentError.new(
       "Argument is not an iterable of CourseInstance, or is empty: #{courseInstances}"
@@ -66,7 +67,7 @@ module WeekSchedule
   # @param startTime [Time]
   # @param endTime [Time]
   # @return [Array<Integer, Integer>] Or `nil` in case the provided time interval is not in a
-  # supported schedule range.
+  #   supported schedule range.
   def self.timeIntervalToBlockIndexInterval(startTime, endTime)
     startIndex = self.timeToBlockIndex(startTime.hour, startTime.min)
     endIndex = self.timeToBlockIndex(endTime.hour, endTime.min)
