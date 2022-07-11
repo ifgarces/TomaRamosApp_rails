@@ -29,7 +29,6 @@ namespace :data_importer do
     eventsMapping.each do |nrc, events|
       events.each do |courseEvent|
         courseEvent.course_instance = CourseInstance.find_by(nrc: nrc)
-        raise "Huh?" unless (courseEvent.course_instance != nil)
         courseEvent.save!()
       end
     end

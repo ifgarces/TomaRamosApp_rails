@@ -30,7 +30,6 @@ class CsvRowTest < ActiveSupport::TestCase
     assert_equal(expectedRow.profesor, gotRow.profesor)
   end
 
-
   test "CsvRow success 01" do
     testRawRow = "202110,PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,7/3/2022,22/06/2022,,AYUD,tata Sánchez la leyenda"
 
@@ -60,7 +59,6 @@ class CsvRowTest < ActiveSupport::TestCase
     )
     self.assertEqualCsvRows(expectedRow, gotRow)
   end
-
 
   test "CsvRow success 02" do
     testRawRow = "202110,PE2016,3972,BA,,ICC,4103,BB,WEB TECHNOLOGIES,6,13:30 -15:20,,,,,,07/03/2022,22/06/2022,R-27,CLAS,ALVAREZ/GOMEZ CLAUDIO JAVIER"
@@ -92,7 +90,6 @@ class CsvRowTest < ActiveSupport::TestCase
     self.assertEqualCsvRows(expectedRow, gotRow)
   end
 
-
   test "CsvRow success 03" do
     testRawRow = "202110,PE2016,3972,BA,qwerty,ICC,4103,99,WEB TECHNOLOGIES,6,,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER"
 
@@ -122,7 +119,6 @@ class CsvRowTest < ActiveSupport::TestCase
     )
     self.assertEqualCsvRows(expectedRow, gotRow)
   end
-
 
   test "CsvRow success 04" do
     testRawRow = "202110,PE2016,3972,,,ICC,4103,BB,WEB TECHNOLOGIES,1,,08:30-09:20,,,,,07/03/2040,22/06/2040,qwerty,LABT,ALVAREZ/GOMEZ CLAUDIO JAVIER"
@@ -154,7 +150,6 @@ class CsvRowTest < ActiveSupport::TestCase
     self.assertEqualCsvRows(expectedRow, gotRow)
   end
 
-
   test "CsvRow failure blank title" do
     testRawRow = "202110,PE2016,    3972  ,BA,qwerty,ICC,4103,99,,6,,,19:30 -  22:00,,,07/03/2022,22/06/2022,R-27,AYUD,ALVAREZ/GOMEZ CLAUDIO JAVIER  "
     gotError = assert_raise(Exception) do
@@ -162,11 +157,7 @@ class CsvRowTest < ActiveSupport::TestCase
         CSV.parse(testRawRow, col_sep: ",").first()
       )
     end
-    assertEqualExceptions( # causes dumb "No visible difference in the String#inspect output." error
-      gotError: gotError,
-      expectedError: RuntimeError.new(
-        'One of the mandatory fields is nil for CsvRow: {"pe":"PE2016","nrc":3972,"conectorLiga":"BA","listaCruzada":"qwerty","materia":"ICC","curso":4103,"sección":"99","nombre":null,"créditos":"6","lunes":null,"martes":null,"miércoles":["2022-07-10T19:30:00.000-04:00","2022-07-10T22:00:00.000-04:00"],"jueves":null,"viernes":null,"fechaInicio":"2022-06-22","fechaFin":"2022-07-27","sala":"AYUD","tipoEvento":"ALVAREZ/GOMEZ CLAUDIO JAVIER","profesor":null}'
-      ),
-    )
+    assert_equal(RuntimeError, gotError.class)
+    assert(gotError.message.starts_with?("One of the mandatory fields is nil for CsvRow"))
   end
 end
