@@ -78,7 +78,7 @@ test:
 	RAILS_ENV=test \
 	DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
 		rails test
-	#~~~~~~= [OK] everything is fine =~~~~~~#
+	#~~~~~~= [OK] Tests went fine =~~~~~~#
 
 _debug_clear_database:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \

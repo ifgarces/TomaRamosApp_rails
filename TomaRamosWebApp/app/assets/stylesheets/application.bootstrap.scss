@@ -11,7 +11,75 @@ $btn-border-radius-lg: 60px;
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
 
+// Maximum width for any view
+$MAX-WEBPAGE-WIDTH: 650px;
+
+// Dimensions for navigation bars
+$TOP-NAV-BAR-HEIGHT: 70px;
+$BOTTOM-NAV-BAR-HEIGHT: 82px;
+
 .text-monospace {
     font-family: "Ubuntu Mono", "Source Code Pro", "Courier New", monospace;
     font-size: 13px;
+}
+
+.floating-button-inscribe {
+    Z-index: 99;
+    position: fixed;
+    top: $TOP-NAV-BAR-HEIGHT;
+    right: 0;
+}
+
+.better-in-mobile-notice {
+    position: fixed;
+    Z-index: -2;
+    top: $TOP-NAV-BAR-HEIGHT;
+    right: 0;
+    color: gray;
+    width: 200px;
+}
+
+.top-nav-bar {
+    height: $TOP-NAV-BAR-HEIGHT;
+    background-color: white;
+    position: fixed;
+    Z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: $MAX-WEBPAGE-WIDTH;
+}
+
+.bottom-nav-bar {
+    height: $BOTTOM-NAV-BAR-HEIGHT;
+    background-color: rgba(238, 238, 238, 1);
+    position: fixed;
+    Z-index: 1000;
+    bottom: 0;
+    width: 100%;
+    padding: 10px 4px 10px 4px;
+    max-width: $MAX-WEBPAGE-WIDTH;
+}
+
+.main-current-view-container {
+    height: 100%;
+    padding: 8px 10px 8px 10px;
+    background: transparent;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.margin-vertical-for-nav-bars {
+    margin-top: $TOP-NAV-BAR-HEIGHT;
+    margin-bottom: $BOTTOM-NAV-BAR-HEIGHT;
+}
+
+.no-margin-vertical {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.main-page-content-wrapper {
+    background-color: rgba(255, 255, 255, 1);
+    max-width: $MAX-WEBPAGE-WIDTH;
 }

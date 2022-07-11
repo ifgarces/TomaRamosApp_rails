@@ -6,16 +6,31 @@ module ApplicationHelper
   APP_VERSION_NAME = "0.1"
   FEEDBACK_FORM_URL = "https://forms.gle/cm4YeuNtS9PrDutc8"
 
-  # Dimension constants
-  MAX_WEBPAGE_WIDTH = "650px"
-  TOP_NAV_BAR_HEIGHT = "70px"
-  BOTTOM_NAV_BAR_HEIGHT = "82px"
-
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
   # the arguments myself... Anyway, this is for initializing logging
   def initialize(context, optionsHash, originController)
     super(context, optionsHash, originController)
     @log = LoggingUtil.getStdoutLogger(__FILE__)
+  end
+
+  # Gets the background color for a [non-evaluation] event in the week schedule view.
+  # @param event [CourseEvent]
+  # @return [String]
+  def self.getScheduleColorForEvent(event)
+    return case (event.event_type.name)
+      when EventTypeEnum::CLASS
+        "white"
+      when EventTypeEnum::ASSISTANTSHIP
+        "#cafccd"
+      when EventTypeEnum::LABORATORY
+        "#cadefc"
+      else
+        raise RuntimeError.new(
+          "Unexpected type name '%s' for event %s: should be non-evaluation type" % [
+            event.event_type.name, event
+          ]
+        )
+    end
   end
 
   # @return [User] The stored user from the `session`, creating it if needed.
@@ -69,26 +84,6 @@ module ApplicationHelper
     return [request.remote_addr, request.remote_ip].map { |host|
       (host == "localhost") || host.start_with?("127.")
     } == [true, true]
-  end
-
-  # Gets the background color for a [non-evaluation] event in the week schedule view.
-  # @param event [CourseEvent]
-  # @return [String]
-  def self.getScheduleColorForEvent(event)
-    return case (event.event_type.name)
-      when EventTypeEnum::CLASS
-        "white"
-      when EventTypeEnum::ASSISTANTSHIP
-        "#cafccd"
-      when EventTypeEnum::LABORATORY
-        "#cadefc"
-      else
-        raise RuntimeError.new(
-          "Unexpected type name '%s' for event %s: should be non-evaluation type" % [
-            event.event_type.name, event
-          ]
-        )
-    end
   end
 
   # Renders a Markdown from a file name.

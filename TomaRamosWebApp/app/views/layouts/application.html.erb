@@ -35,14 +35,7 @@
   <% displayNvBars = shouldDisplayNavBars(params) %>
 
   <body>
-    <div id="BetterInMobileNotice" class="text-center text-uppercase px-4 py-3" style="
-      position: fixed;
-      Z-index: -2;
-      top: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
-      right: 0;
-      color: gray;
-      width: 200px;
-    ">
+    <div id="BetterInMobileNotice" class="text-center text-uppercase px-4 py-3 better-in-mobile-notice">
       <i class="bi bi-phone" style="font-size: 60px;"></i>
       <br/>
       <small style='font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'>
@@ -50,21 +43,9 @@
       </small>
     </div>
 
-    <div id="MainDivWhiteLayer" style="
-      background-color: rgba(255, 255, 255, 1);
-      max-width: <%= ApplicationHelper::MAX_WEBPAGE_WIDTH %>;
-    ">
+    <div id="MainDivWhiteLayer" class="main-page-content-wrapper">
       <% if (displayNvBars) %>
-        <nav id="TopNavBar" class="navbar navbar-light shadow-sm border-bottom" style="
-          height: <%= ApplicationHelper::TOP_NAV_BAR_HEIGHT %>;
-          background-color: white;
-          position: fixed;
-          Z-index: 1000;
-          top: 0;
-          left: 0;
-          width: 100%;
-          max-width: <%= ApplicationHelper::MAX_WEBPAGE_WIDTH %>;
-        ">
+        <nav id="TopNavBar" class="navbar navbar-light shadow-sm border-bottom top-nav-bar">
           <div id="TopNavBarContentDiv" class="container-fluid">
 
             <%= link_to(
@@ -94,16 +75,7 @@
           </div>
         </nav>
 
-        <div id="BottomNavBar" class="btn-group d-flex border-top" role="group" aria-label="bottom mobile navigation bar" style="
-          height: <%= ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT %>;
-          background-color: rgba(238, 238, 238, 1);
-          position: fixed;
-          Z-index: 1000;
-          bottom: 0;
-          width: 100%;
-          padding: 10px 4px 10px 4px;
-          max-width: <%= ApplicationHelper::MAX_WEBPAGE_WIDTH %>;
-        ">
+        <div id="BottomNavBar" class="btn-group d-flex border-top bottom-nav-bar" role="group" aria-label="bottom mobile navigation bar">
           <%
               # link_to(
               #   raw("<i class='bi bi-house-door-fill'></i><br/>") + "Inicio",
@@ -130,18 +102,10 @@
         </div>
       <% end %>
 
-      <div id="CurrentViewContainer" class="overflow-auto mx-1" style="
-        height: 100%;
-        padding: 8px 10px 8px 10px;
-        margin-top: <%= displayNvBars ? ApplicationHelper::TOP_NAV_BAR_HEIGHT : "0" %>;
-        margin-bottom: <%= displayNvBars ? ApplicationHelper::BOTTOM_NAV_BAR_HEIGHT : "0" %>;
-        background: transparent;
-        overflow-x: hidden;
-        overflow-y: auto;
+      <div id="CurrentViewContainer" class="overflow-auto mx-1 main-current-view-container
+        <%= displayNvBars ? "margin-vertical-for-nav-bars" : "no-margin-vertical" %>
       ">
-        <%
-          # Setting placeholders for flash messages
-        %>
+        <%# Setting placeholders for flash messages %>
         <% if (notice != nil) %>
           <div class="container alert alert-success alert-dismissible fade show" role="alert">
             <%= notice %>
