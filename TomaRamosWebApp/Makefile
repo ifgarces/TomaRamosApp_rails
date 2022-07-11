@@ -79,3 +79,7 @@ test:
 	DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
 		rails test
 	#~~~~~~= [OK] everything is fine =~~~~~~#
+
+_debug_clear_database:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+		rails db:migrate:reset --trace

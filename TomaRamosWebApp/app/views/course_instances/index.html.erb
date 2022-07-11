@@ -1,13 +1,15 @@
-<h1>Catálogo <%= @targetAcademicPeriod.name %></h1>
+<h1>Catálogo de ramos <%= @targetAcademicPeriod.name %></h1>
 
-<div id="SearchBarContainer" class="input-group mx-3 my-4">
+<p>Actualizado el <%= AcademicPeriod.getLatest().getLastUpdatedDate() %></p>
+
+<!--<div id="SearchBarContainer" class="input-group mx-3 my-4">
   <form class="d-flex">
     <input class="form-control me-2" type="search" placeholder="Buscar por NRC o nombre..." aria-label="Búsqueda">
     <button class="btn btn-primary px-4" type="submit">
       <i class="bi bi-search"></i>
     </button>
   </form>
-</div>
+</div>-->
 
 <%= render(
       partial: "course_instances/course_instance_collection",

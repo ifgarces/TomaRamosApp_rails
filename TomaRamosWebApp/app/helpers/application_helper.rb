@@ -4,6 +4,7 @@ require "enums/event_type_enum"
 
 module ApplicationHelper
   APP_VERSION_NAME = "0.1"
+  FEEDBACK_FORM_URL = "https://forms.gle/cm4YeuNtS9PrDutc8"
 
   # Dimension constants
   MAX_WEBPAGE_WIDTH = "650px"
@@ -11,10 +12,10 @@ module ApplicationHelper
   BOTTOM_NAV_BAR_HEIGHT = "82px"
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
-  # these myself...
+  # the arguments myself... Anyway, this is for initializing logging
   def initialize(context, optionsHash, originController)
     super(context, optionsHash, originController)
-    @@log = LoggingUtil.getStdoutLogger(__FILE__)
+    @log = LoggingUtil.getStdoutLogger(__FILE__)
   end
 
   # @return [User] The stored user from the `session`, creating it if needed.
@@ -82,8 +83,10 @@ module ApplicationHelper
       when EventTypeEnum::LABORATORY
         "#cadefc"
       else
-        raise RuntimeError.new("Unexpected type name '%s' for event %s: should be non-evaluation type" % [
-          event.event_type.name, event]
+        raise RuntimeError.new(
+          "Unexpected type name '%s' for event %s: should be non-evaluation type" % [
+            event.event_type.name, event
+          ]
         )
     end
   end
@@ -98,10 +101,10 @@ module ApplicationHelper
   def renderMarkdownFile(filename)
     filename = "%s/%s" % [Rails.root, filename]
     
-    @@log.debug("Rendering Markdown file '#{filename}'")
+    @log.debug("Rendering Markdown file '%s'" % [filename])
 
     raise ArgumentError.new(
-      "Markdown file '#{filename}' not found"
+      "Markdown file '%s' not found" % [filename]
     ) unless File.exist?(filename)
 
     renderer = Redcarpet::Render::HTML.new({

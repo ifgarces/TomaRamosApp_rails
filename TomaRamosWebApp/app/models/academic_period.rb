@@ -8,7 +8,7 @@ class AcademicPeriod < ApplicationRecord
 
   private
 
-  @@LATEST_PERIOD_NAME = "2022-10"
+  @@LATEST_PERIOD_NAME = "2022-20"
 
   public
 
@@ -24,6 +24,7 @@ class AcademicPeriod < ApplicationRecord
     }
   end
 
+  # @return [String]
   def self.getLatestPeriodName()
     return @@LATEST_PERIOD_NAME
   end
@@ -31,5 +32,19 @@ class AcademicPeriod < ApplicationRecord
   # @return [AcademicPeriod | nil]
   def self.getLatest()
     return AcademicPeriod.find_by(name: @@LATEST_PERIOD_NAME)
+  end
+
+  # Computes the latest date in which a course belonging to this period was updated for the last
+  # time.
+  # References: https://stackoverflow.com/a/53840477/12684271
+  #
+  # @return [Date] With timezone at Santiago/CL, not UTC
+  def getLastUpdatedDate()
+    lastUpdateTimestamp = self.getCourses().map { |course|
+      course.updated_at
+    }.sort_by { |timestamp|
+      timestamp
+    }.last()
+    return lastUpdateTimestamp.in_time_zone("America/Santiago").to_date()
   end
 end

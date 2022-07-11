@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   resources :event_types
   resources :course_events
 
+  # User-friendly alias
+  get "/catalog" => "course_instances#index"
+
   # Custom safe error pages
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#server_error", via: :all

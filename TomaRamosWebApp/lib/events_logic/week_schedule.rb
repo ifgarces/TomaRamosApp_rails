@@ -10,7 +10,8 @@ module WeekSchedule
   BLOCK_END_MINUTES = 20
 
   # @param courseInstances [Array<CourseInstance>]
-  # @return [Array<WeekScheduleRow>]
+  # @return [Array<WeekScheduleRow>] Fixed-size array with one `WeekScheduleRow` for each valid week
+  #   block.
   def self.computeWeekScheduleBlocks(courseInstances)
     raise ArgumentError.new(
       "Argument is not an iterable of CourseInstance, or is empty: #{courseInstances}"
@@ -18,20 +19,22 @@ module WeekSchedule
 
     # Initializing array of fixed size
     result = []
-    (LAST_BLOCK_HOUR - FIRST_BLOCK_HOUR).times { result.append(WeekScheduleRow.new()) }
+    (LAST_BLOCK_HOUR - FIRST_BLOCK_HOUR).times do
+      result.append(WeekScheduleRow.new())
+    end
 
     # Filling array
     courseInstances.each do |course|
-      course.getEventsClasses().to_a().concat(
-        course.getEventsAssistantshipsAndLabs().to_a()
-      ).each do |event|
+      course.course_events.filter{ |ev|
+        !ev.event_type.isEvaluation()
+      }.each do |event|
         # Adding event for each block it occupies
-        blockStart, blockEnd = self.timeIntervalToBlockIndexInterval(event.start_time, event.end_time)
+        blockStart, blockEnd = self.timeIntervalToBlockIndexInterval(
+          event.start_time, event.end_time
+        )
 
         (blockStart..blockEnd).each do |blockIdx|
-          result[blockIdx].addEvent(
-            dayOfWeek: event.day_of_week, courseEvent: event
-          )
+          result[blockIdx].addEvent(event)
         end
       end
     end
@@ -64,7 +67,7 @@ module WeekSchedule
   # @param startTime [Time]
   # @param endTime [Time]
   # @return [Array<Integer, Integer>] Or `nil` in case the provided time interval is not in a
-  # supported schedule range.
+  #   supported schedule range.
   def self.timeIntervalToBlockIndexInterval(startTime, endTime)
     startIndex = self.timeToBlockIndex(startTime.hour, startTime.min)
     endIndex = self.timeToBlockIndex(endTime.hour, endTime.min)

@@ -35,7 +35,7 @@ namespace :data_importer do
     end
 
     @log.info("✔️ CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
-      CourseInstance.count(), CourseEvent.count()
+      targetPeriod.getCourses().count(), targetPeriod.getCourseEvents().count()
     ])
   end
 end
