@@ -23,12 +23,16 @@
     link_to(
       "Volver",
       root_path,
-      class: "btn btn-secondary shadow-sm",
+      class: "btn btn-secondary shadow-sm px-4 mx-2",
     )
   %>
 
-  <%
-    #TODO: form for reporting an error, or just the general feedback form
-    #link_to("Quejarse", :back, class: "btn btn-outline-secondary shadow-sm mb-1 mt-5")
+  <%=
+    link_to(
+      "Dar feedback",
+      ApplicationHelper::FEEDBACK_FORM_URL,
+      class: "btn btn-outline-secondary shadow-sm px-4 mx-2",
+      "target" => "_blank"
+    )
   %>
 </div>

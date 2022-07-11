@@ -12,7 +12,7 @@ module ApplicationHelper
   BOTTOM_NAV_BAR_HEIGHT = "82px"
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
-  # these myself...
+  # the arguments myself... Anyway, this is for initializing logging
   def initialize(context, optionsHash, originController)
     super(context, optionsHash, originController)
     @log = LoggingUtil.getStdoutLogger(__FILE__)
@@ -83,8 +83,10 @@ module ApplicationHelper
       when EventTypeEnum::LABORATORY
         "#cadefc"
       else
-        raise RuntimeError.new("Unexpected type name '%s' for event %s: should be non-evaluation type" % [
-          event.event_type.name, event]
+        raise RuntimeError.new(
+          "Unexpected type name '%s' for event %s: should be non-evaluation type" % [
+            event.event_type.name, event
+          ]
         )
     end
   end
