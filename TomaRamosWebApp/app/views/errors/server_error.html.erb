@@ -26,7 +26,14 @@
     link_to(
       "Volver al inicio",
       root_path,
-      class: "btn btn-secondary shadow-sm px-4",
+      class: "btn btn-secondary shadow-sm px-4 mx-2"
+    )
+  %>
+  <%=
+    link_to(
+      "Quejarse",
+      ApplicationHelper::FEEDBACK_FORM_URL,
+      class: "btn btn-outline-secondary shadow-sm px-4 mx-2"
     )
   %>
 </div>
