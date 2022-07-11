@@ -1,13 +1,16 @@
 #!/bin/bash
 # --------------------------------------------------------------------------------------------------
 # Intended to be executed on the deployment server for pulling the main branch and refreshing Rails.
+#
+# Note: `TOMARAMOSAPP_RAILS` has to be defined (e.g. "/home/ifgarces/TomaRamosUandes_rails")
 # --------------------------------------------------------------------------------------------------
 
 set -exu
 
-git fetch
+cd ${TOMARAMOSAPP_RAILS}
+
 git pull origin main
-./restart-rails.sh
 git fetch && git status
 
-sleep 5 && docker-compose ps
+./restart-rails.sh
+docker-compose logs -f tomaramos-rails

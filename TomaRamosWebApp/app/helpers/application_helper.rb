@@ -3,7 +3,7 @@ require "utils/logging_util"
 require "enums/event_type_enum"
 
 module ApplicationHelper
-  APP_VERSION_NAME = "0.1"
+  # APP_VERSION_NAME = "0.1" #? automate this somehow
   FEEDBACK_FORM_URL = "https://forms.gle/cm4YeuNtS9PrDutc8"
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
