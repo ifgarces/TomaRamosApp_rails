@@ -11,12 +11,27 @@ require "enums/day_of_week_enum"
 require "enums/event_type_enum"
 
 module CsvDataImporter
-  # @param csvFilePath [String]
-  # @param academicPeriod AcademicPeriod
-  # @return [Array<Object>] A pair with courses `Array<CourseInstance>` and mapping of events
-  #   `Hash<Integer, Array<CourseEvent>>`
-  def self.import(csvFilePath, academicPeriod)
+
+  # @param csvPath [String]
+  # @param csvHeaderSize [Integer] Amount of rows to ignore at first (sheet headers)
+  # @param academicPeriod [AcademicPeriod]
+  # @return [Array] A pair with courses `Array<CourseInstance>` and mapping of events
+  #   `Hash<Integer, Array<CourseEvent>>` where the hash key is the NRC of the course the events
+  #   (value) belong to
+  def self.import(csvPath:, csvHeaderSize:, academicPeriod:)
     log = LoggingUtil.getStdoutLogger(__FILE__)
+
+    raise TypeError.new(
+      "csvPath is of type #{csvPath.class}, not String"
+    ) unless (csvPath.is_a?(String))
+
+    raise TypeError.new(
+      "csvHeaderSize is of type #{csvHeaderSize.class}, not Integer"
+    ) unless (csvHeaderSize.is_a?(Integer))
+
+    raise TypeError.new(
+      "academicPeriod is of type #{academicPeriod.class}, not AcademicPeriod"
+    ) unless (academicPeriod.is_a?(AcademicPeriod))
 
     # Mapping CSV cell values for actual indexed event type in database
     csvEventTypesMapping = {
@@ -34,16 +49,21 @@ module CsvDataImporter
 
     # Now parsing the CSV and populating database tables `CourseInstance` and `CourseEvent`
     log.info("Reading courses from CSV '%s' for current AcademicPeriod '%s'..." % [
-      csvFilePath, academicPeriod.name
+      csvPath, academicPeriod.name
     ])
 
-    if (!File.exist?(csvFilePath))
-      log.error("CSV file '%s' does not exist" % [csvFilePath])
+    if (!File.exist?(csvPath))
+      log.error("CSV file '%s' does not exist" % [csvPath])
       exit(1)
     end
 
-    csvRows = CSV.read(csvFilePath, encoding: "utf-8")
-    csvRows.delete_at(0) # ignoring CSV headers
+    csvRows = CSV.read(csvPath, encoding: "utf-8")
+
+    # Ignoring CSV headers
+    csvHeaderSize.times do
+      csvRows.delete_at(0)
+    end
+
     csvRows = csvRows.map { |row|
       row.map { |item|
         (item == nil) ? nil : item.strip()
@@ -105,7 +125,7 @@ module CsvDataImporter
             ) unless (eventType != nil)
 
             if (!nrcEventsMapping.keys().include?(parsedRow.nrc))
-              nrcEventsMapping[parsedRow.nrc] = []  
+              nrcEventsMapping[parsedRow.nrc] = []
             end
 
             # Note: cannot directly save the dates/times as, apparently, the machine's timezone is

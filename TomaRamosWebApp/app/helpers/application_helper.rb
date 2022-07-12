@@ -3,7 +3,6 @@ require "utils/logging_util"
 require "enums/event_type_enum"
 
 module ApplicationHelper
-  # APP_VERSION_NAME = "0.1" #? automate this somehow
   FEEDBACK_FORM_URL = "https://forms.gle/cm4YeuNtS9PrDutc8"
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
@@ -14,6 +13,7 @@ module ApplicationHelper
   end
 
   # Gets the background color for a [non-evaluation] event in the week schedule view.
+  #
   # @param event [CourseEvent]
   # @return [String]
   def self.getScheduleColorForEvent(event)
@@ -79,7 +79,7 @@ module ApplicationHelper
 
   # References: https://stackoverflow.com/a/42119143/12684271
   #
-  # @return [Boolean] Whether the server is running on localhost in the developer's machine, or not.
+  # @return [Boolean] Whether the server is running on localhost in the developer's machine, or not
   def isRequestLocal()
     return [request.remote_addr, request.remote_ip].map { |host|
       (host == "localhost") || host.start_with?("127.")

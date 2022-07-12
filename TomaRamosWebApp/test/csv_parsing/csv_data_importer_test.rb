@@ -22,7 +22,6 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     @CSV_HEADER = "PERIODO,PLAN DE ESTUDIOS,NRC,CONECTOR LIGA,LISTA CRUZADA,MATERIA,CURSO,SECC.,TITULO,CREDITO,LUNES,MARTES,MIERCOLES,JUEVES,VIERNES,SABADO,INICIO,FIN,SALA,TIPO,PROFESOR"
   end
 
-
   teardown do
     AcademicPeriod.delete_all()
     CourseEvent.delete_all()
@@ -40,7 +39,11 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     csvTempFile.rewind()
 
     begin
-      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, testPeriod)
+      gotCourses, gotEventsHash = CsvDataImporter.import(
+        csvPath: csvTempFile.path,
+        csvHeaderSize: 1,
+        academicPeriod: testPeriod
+      )
     ensure
       csvTempFile.close()
       csvTempFile.unlink()
@@ -83,7 +86,6 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     end
   end
 
-
   test "import success small" do
     testPeriod = AcademicPeriod.new(name: "whatever")
     testPeriod.save!()
@@ -96,7 +98,11 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     csvTempFile.rewind()
 
     begin
-      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, testPeriod)
+      gotCourses, gotEventsHash = CsvDataImporter.import(
+        csvPath: csvTempFile.path,
+        csvHeaderSize: 1,
+        academicPeriod: testPeriod
+      )
     ensure
       csvTempFile.close()
       csvTempFile.unlink()
@@ -177,7 +183,6 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     end
   end
 
-
   test "import success large" do
     testPeriod = AcademicPeriod.new(name: "2022-10")
     testPeriod.save!()
@@ -219,7 +224,11 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     csvTempFile.rewind()
 
     begin
-      gotCourses, gotEventsHash = CsvDataImporter.import(csvTempFile.path, testPeriod)
+      gotCourses, gotEventsHash = CsvDataImporter.import(
+        csvPath: csvTempFile.path,
+        csvHeaderSize: 1,
+        academicPeriod: testPeriod
+      )
     ensure
       csvTempFile.close()
       csvTempFile.unlink()
@@ -558,6 +567,132 @@ class CsvDataImporterTest < ActiveSupport::TestCase
           start_time: Time.utc(2000, 1, 1, 15, 30),
           end_time: Time.utc(2000, 1, 1, 19, 20),
           date: Date.new(2022, 3, 7)
+        )
+      ]
+    }
+
+    assertEqualCourseInstancesArray(expectedCourses, gotCourses)
+
+    assert_equal(expectedEventsHash.keys().count(), gotEventsHash.keys().count())
+    assert_equal(expectedEventsHash.keys(), gotEventsHash.keys())
+    expectedEventsHash.each do |nrc, _|
+      assertEqualCourseEventsArray(expectedEventsHash[nrc], gotEventsHash[nrc])
+    end
+  end
+
+  test "import extra headers" do
+    testPeriod = AcademicPeriod.new(name: "foo")
+    testPeriod.save!()
+
+    csvTempFile = Tempfile.new("csv", encoding: "utf-8")
+    csvTempFile.write(",Evaluaciones en las tardes o sábados,,,,,,,,,,,,,,,,,,,
+,Evaluaciones en horario de Clase/Ayudantía,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+TIPO HORARIO,DESCRIPCION,,,,,,,,,,,,,,,,,,,
+CLAS,CLASES,,,,,,,,,,,,,,,,,,,
+AYUD,AYUDANTIA,,,,,,,,,,,,,,,,,,,
+LABT,LABORATORIO,,,,,,,,,,,,,,,,,,,
+EXAM,EXAMEN,,,,,,,,,,,,,,,,,,,
+PRBA ,\"PRUEBA (1, 2, 3...)\",,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,
+PERIODO,PLAN DE ESTUDIOS,NRC,CONECTOR  LIGA,LISTA CRUZADA,MATERIA,CURSO,SECC.,TITULO,CREDITO,LUNES,MARTES,MIERCOLES,JUEVES,VIERNES,SABADO,INICIO,FIN,SALA,TIPO,PROFESOR
+202110,PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/2022,22/06/2022,,AYUD,tata Sánchez la leyenda")
+    csvTempFile.rewind()
+
+    begin
+      gotCourses, gotEventsHash = CsvDataImporter.import(
+        csvPath: csvTempFile.path,
+        csvHeaderSize: 12,
+        academicPeriod: testPeriod
+      )
+    ensure
+      csvTempFile.close()
+      csvTempFile.unlink()
+    end
+
+    expectedCourses = [
+      CourseInstance.new(
+        nrc: "4444",
+        title: "ALGEBRA E INTR. AL CALCULO",
+        teacher: "tata Sánchez la leyenda",
+        credits: 10,
+        career: "ING",
+        course_number: 1100,
+        section: "1",
+        curriculum: "PE2016",
+        academic_period: testPeriod
+      )
+    ]
+
+    # :Hash<Integer, Array<CourseEvent>> This workaround is needed as we don't want to save the expected stuff in database
+    expectedEventsHash = {
+      4444 => [
+        CourseEvent.new(
+          event_type: @typeAssist,
+          location: nil,
+          day_of_week: DayOfWeekEnum::FRIDAY,
+          start_time: Time.utc(2000, 1, 1, 14, 30),
+          end_time: Time.utc(2000, 1, 1, 16, 20),
+          date: Date.new(2022, 3, 20)
+        )
+      ]
+    }
+
+    assertEqualCourseInstancesArray(expectedCourses, gotCourses)
+
+    assert_equal(expectedEventsHash.keys().count(), gotEventsHash.keys().count())
+    assert_equal(expectedEventsHash.keys(), gotEventsHash.keys())
+    expectedEventsHash.each do |nrc, _|
+      assertEqualCourseEventsArray(expectedEventsHash[nrc], gotEventsHash[nrc])
+    end
+  end
+
+  test "import no headers" do
+    testPeriod = AcademicPeriod.new(name: "foo")
+    testPeriod.save!()
+
+    csvTempFile = Tempfile.new("csv", encoding: "utf-8")
+    csvTempFile.write(
+      "202110,PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/2022,22/06/2022,,AYUD,tata Sánchez la leyenda"
+    )
+    csvTempFile.rewind()
+
+    begin
+      gotCourses, gotEventsHash = CsvDataImporter.import(
+        csvPath: csvTempFile.path,
+        csvHeaderSize: 0,
+        academicPeriod: testPeriod
+      )
+    ensure
+      csvTempFile.close()
+      csvTempFile.unlink()
+    end
+
+    expectedCourses = [
+      CourseInstance.new(
+        nrc: "4444",
+        title: "ALGEBRA E INTR. AL CALCULO",
+        teacher: "tata Sánchez la leyenda",
+        credits: 10,
+        career: "ING",
+        course_number: 1100,
+        section: "1",
+        curriculum: "PE2016",
+        academic_period: testPeriod
+      )
+    ]
+
+    # :Hash<Integer, Array<CourseEvent>> This workaround is needed as we don't want to save the expected stuff in database
+    expectedEventsHash = {
+      4444 => [
+        CourseEvent.new(
+          event_type: @typeAssist,
+          location: nil,
+          day_of_week: DayOfWeekEnum::FRIDAY,
+          start_time: Time.utc(2000, 1, 1, 14, 30),
+          end_time: Time.utc(2000, 1, 1, 16, 20),
+          date: Date.new(2022, 3, 20)
         )
       ]
     }

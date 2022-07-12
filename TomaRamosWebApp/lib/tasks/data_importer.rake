@@ -4,9 +4,9 @@ require "csv_parsing/csv_data_importer"
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
 CSV_FILE_PATH = "db/catalog-ing.csv"
+CSV_HEADER_ROWS_COUNT = 1
 
 namespace :data_importer do
-
   task csv: :environment do
     desc "
     Imports course data from a CSV sheet file, in the format provided from the faculty, at Canvas,
@@ -20,7 +20,11 @@ namespace :data_importer do
       event.destroy!()
     end
 
-    courses, eventsMapping = CsvDataImporter.import(CSV_FILE_PATH, targetPeriod)
+    courses, eventsMapping = CsvDataImporter.import(
+      csvPath: CSV_FILE_PATH,
+      csvHeaderSize: CSV_HEADER_ROWS_COUNT,
+      academicPeriod: targetPeriod
+    )
 
     courses.each do |courseInstance|
       courseInstance.save!()

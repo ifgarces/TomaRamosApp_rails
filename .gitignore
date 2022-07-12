@@ -1,3 +1,5 @@
+drafts.sh
+
 # Ignoring ENV file with stuff related to Google Cloud for Oauth
 .secrets.env
 .~lock*
