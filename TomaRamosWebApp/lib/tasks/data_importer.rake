@@ -4,7 +4,7 @@ require "csv_parsing/csv_data_importer"
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
 CSV_FILE_PATH = "db/catalog-ing.csv"
-CSV_HEADER_ROWS_COUNT = 1
+CSV_HEADER_ROWS_COUNT = 12
 
 namespace :data_importer do
   task csv: :environment do
