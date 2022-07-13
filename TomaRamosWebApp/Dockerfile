@@ -29,6 +29,8 @@ COPY markdown/ markdown/
 COPY public/ public/
 COPY test/ test/
 
+COPY tmp/development_secret.txt ./tmp/development_secret.txt
+
 # Installing application packages
 RUN mkdir storage \
     && bundle install \
