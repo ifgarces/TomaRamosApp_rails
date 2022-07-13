@@ -21,7 +21,8 @@ class CourseInstancesController < ApplicationController
   # GET /course_instances or /course_instances.json
   def index()
     @targetAcademicPeriod = AcademicPeriod.getLatest()
-    @course_instances = @targetAcademicPeriod.getCourses()
+    #@course_instances = @targetAcademicPeriod.getCourses()
+    @course_instances = CourseInstance.search(@targetAcademicPeriod, params[:search])
     render :index
   end
 
@@ -95,7 +96,7 @@ class CourseInstancesController < ApplicationController
   def course_instance_params()
     params.require(:course_instance).permit(
       :nrc, :title, :teacher, :credits, :career, :course_number, :section, :curriculum, :liga,
-      :lcruz
+      :lcruz, :hello
     )
   end
 end

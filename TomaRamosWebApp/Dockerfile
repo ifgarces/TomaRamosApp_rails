@@ -15,7 +15,6 @@ RUN apt-get update --quiet && apt-get install -y \
     && apt-get update --quiet && apt-get install -y \
         nodejs yarn
 
-# Could not properly mount volume, so I will just copy everything.
 COPY config.ru .
 COPY Gemfile .
 COPY package.json .
@@ -41,6 +40,7 @@ EXPOSE ${WEB_SERVER_PORT}
 
 # As Rails is not smart enough to properly load its own `database.yaml` for database connection
 ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
+
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 

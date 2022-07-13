@@ -1,5 +1,5 @@
-# Not ignoring the encryption file for cookies, so cookies are always preserved over deployments
-# (this is a workaround since the `development` environment is used right now, see issue #18
+# Not ignoring the encryption file for cookies, so cookies are always preserved over deployments.
+# This is a workaround since the `development` environment is used right now, see issue #18.
 !tmp/development_secret.txt
 
 # Database schema

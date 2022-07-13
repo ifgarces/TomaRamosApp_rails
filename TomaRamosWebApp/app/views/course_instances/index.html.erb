@@ -2,18 +2,28 @@
 
 <p>Actualizado el <%= AcademicPeriod.getLatest().getLastUpdatedDate() %></p>
 
-<!--<div id="SearchBarContainer" class="input-group mx-3 my-4">
-  <form class="d-flex">
-    <input class="form-control me-2" type="search" placeholder="Buscar por NRC o nombre..." aria-label="Búsqueda">
-    <button class="btn btn-primary px-4" type="submit">
-      <i class="bi bi-search"></i>
-    </button>
-  </form>
-</div>-->
+<%= form_tag("/catalog", method: :get) do %>
+  <%=
+    text_field_tag(
+      :search,
+      params[:search],
+      class: "rounded px-2 py-2",
+      "aria-label" => "Búsqueda",
+      "placeholder" => "Buscar por NRC o nombre..."
+    )
+  %>
+  <%= button_tag(type: "submit", name: "search-submit-button", class: "btn btn-primary px-4 ms-2") do %>
+    Hi <i class="bi bi-search"></i>
+  <% end %>
+<% end %>
 
-<%= render(
-      partial: "course_instances/course_instance_collection",
-      locals: {
-        courseInstances: @course_instances
-      }
-    ) %>
+<hr>
+
+<%=
+  render(
+    partial: "course_instances/course_instance_collection",
+    locals: {
+      courseInstances: @course_instances
+    }
+  )
+%>

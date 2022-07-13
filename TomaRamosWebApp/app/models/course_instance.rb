@@ -46,6 +46,22 @@ class CourseInstance < ApplicationRecord
 
   validates :nrc, numericality: true
 
+  # @param academicPeriod [AcademicPeriod]
+  # @param searchText [String] Or `nil` if no search was performed.
+  # @return [Array<CourseInstance>] Partially or fully matching `CourseInstance`s by their `nrc` or
+  # `title`.
+  def self.search(academicPeriod, searchText)
+    courses = academicPeriod.getCourses()
+    if (searchText == nil)
+      return courses
+    end
+    #searchText.downcase!()
+    searchText = searchText.parameterize(separator: " ")
+    return courses.filter { |course|
+      course.title.downcase().include?(searchText) || course.nrc.include?(searchText)
+    }
+  end
+
   # @param leftCourse [CourseInstance]
   # @param rightCourse [CourseInstance]
   # @return [Array<EventConflict>] Whether the given courses have events that collide with each
