@@ -96,7 +96,7 @@ class CourseInstancesController < ApplicationController
   def course_instance_params()
     params.require(:course_instance).permit(
       :nrc, :title, :teacher, :credits, :career, :course_number, :section, :curriculum, :liga,
-      :lcruz, :hello
+      :lcruz
     )
   end
 end
