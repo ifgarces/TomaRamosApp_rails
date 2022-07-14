@@ -117,4 +117,12 @@ class User < ApplicationRecord
       end
     end
   end
+
+  # @return lastActiveDay [Integer] Amount of days in the past there was last activity to filter
+  #   users.
+  # def self.getActiveUsers(lastActiveDay)
+  #   return User.all().filter { |user|
+  #     ...
+  #   }
+  # end
 end
