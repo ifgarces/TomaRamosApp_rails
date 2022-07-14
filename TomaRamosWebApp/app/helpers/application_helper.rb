@@ -66,7 +66,7 @@ module ApplicationHelper
         (request.path == "/home") ? "btn-secondary" : "btn-outline-secondary"
       when "/courses"
         (
-          (request.path == "/courses") || request.path.match(/catalog*/)
+          (request.path == "/courses") || request.path.match(/catalog*/) || request.path.match(/course_instance*/)
         ) ? "btn-secondary" : "btn-outline-secondary"
       when "/schedule"
         (request.path == "/schedule") ? "btn-secondary" : "btn-outline-secondary"
