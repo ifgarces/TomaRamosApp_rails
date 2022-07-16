@@ -40,11 +40,22 @@ class AcademicPeriod < ApplicationRecord
   #
   # @return [Date] With timezone at Santiago/CL, not UTC
   def getLastUpdatedDate()
-    lastUpdateTimestamp = self.getCourses().map { |course|
+    eventsLastUpdateTimestamp = self.getCourseEvents().map { |course|
       course.updated_at
     }.sort_by { |timestamp|
       timestamp
     }.last()
-    return lastUpdateTimestamp.in_time_zone("America/Santiago").to_date()
+
+    coursesLastUpdateTimestamp = self.getCourses().map { |course|
+      course.updated_at
+    }.sort_by { |timestamp|
+      timestamp
+    }.last()
+
+    latestChange = [
+      eventsLastUpdateTimestamp, coursesLastUpdateTimestamp
+    ].sort().last()
+
+    return latestChange.in_time_zone("America/Santiago").to_date()
   end
 end
