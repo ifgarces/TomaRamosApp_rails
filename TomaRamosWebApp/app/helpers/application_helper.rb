@@ -62,28 +62,28 @@ module ApplicationHelper
   # @return [String]
   def getClassForBottomNavButton(buttonHref)
     return "btn " + case (buttonHref)
-      when "/home"
-        (request.path == "/home") ? "btn-secondary" : "btn-outline-secondary"
       when "/courses"
-        (
-          (request.path == "/courses") || request.path.match(/catalog*/) || request.path.match(/course_instance*/)
-        ) ? "btn-secondary" : "btn-outline-secondary"
+        [/\/courses/, /\/catalog*/, /\/course_instance*/].any? { |pathRegex|
+          request.path.match(pathRegex)
+        } ? "btn-secondary" : "btn-outline-secondary"
       when "/schedule"
-        (request.path == "/schedule") ? "btn-secondary" : "btn-outline-secondary"
+        request.path.match(/\/schedule/) ? "btn-secondary" : "btn-outline-secondary"
       when "/evaluations"
-        (request.path == "/evaluations") ? "btn-secondary" : "btn-outline-secondary"
+        request.path.match(/\/evaluations/) ? "btn-secondary" : "btn-outline-secondary"
       else
-        raise ArgumentError.new("Unexpected value '#{buttonHref}', can't get CSS class")
+        errMsg = "Unexpected value '#{buttonHref}', can't get CSS class"
+        @log.fatal(errMsg)
+        raise ArgumentError.new(errMsg)
       end
   end
 
   # References: https://stackoverflow.com/a/42119143/12684271
   #
-  # @return [Boolean] Whether the server is running on localhost in the developer's machine, or not
+  # @return [Boolean] Whether the current request is from the local network (development) or not.
   def isRequestLocal()
-    return [request.remote_addr, request.remote_ip].map { |host|
+    return [request.remote_addr, request.remote_ip].all? { |host|
       (host == "localhost") || host.start_with?("127.")
-    } == [true, true]
+    }
   end
 
   # Renders a Markdown from a file name.

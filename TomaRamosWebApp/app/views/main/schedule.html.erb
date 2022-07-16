@@ -1,14 +1,22 @@
 <div id="ScheduleControlsContainer" class="mb-3">
-  <a class="btn btn-lg btn-outline-warning" data-bs-toggle="collapse" href="#SymbologyContainer" role="button"
+  <a class="btn btn-outline-danger" data-bs-toggle="collapse" href="#SymbologyContainer" role="button"
      aria-expanded="false" aria-controls="collapseExample">
     <i class="bi bi-question-lg"></i>
   </a>
 
-  <%#TODO: button for exporting the week schedule as image %>
+  <%=
+    button_tag(
+      raw("<i class='bi bi-file-earmark-arrow-down-fill me-2'></i>") + "Guardar horario",
+      class: "btn btn-outline-secondary shadow-sm px-4 mx-2",
+      :type => "button",
+      "data-bs-toggle" => "modal",
+      "data-bs-target" => "#ScheduleDownloadWIP"
+    )
+  %>
 </div>
 
-<div id="SymbologyContainer" class="collapse card border-warning mb-3">
-  <div class="card-header bg-transparent border-warning">
+<div id="SymbologyContainer" class="collapse card border-danger mb-3">
+  <div class="card-header bg-transparent border-danger">
     Colores de bloques de horario
   </div>
   <div class="card-body">
@@ -100,4 +108,12 @@
       </div>
     </div>
   <% end %>
+</div>
+
+<div id="ScheduleDownloadWIP" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <%= render(partial: "main/wip_card") %>
+    </div>
+  </div>
 </div>
