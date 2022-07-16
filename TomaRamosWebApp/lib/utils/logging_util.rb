@@ -3,23 +3,9 @@ require "logger"
 # Simple interface for initializing loggers with a custom format for this application.
 
 module LoggingUtil
-  public
-
-  # @param output [String | IO] A filename or stream to log to.
-  # @param label [String] Label for tracing logging scope. Can be the file path in which the method
-  # is called from.
-  # @param level [Integer] Log level.
-  # @return [Logger]
-  def self.getStdoutLogger(label, level = Logger::DEBUG)
-    if (@@logsHash.keys.include?(label))
-      return @@logsHash[label]
-    end
-    newLogger = self.createNewLogger(output: STDOUT, label: label, level: level)
-    @@logsHash[label] = newLogger
-    return newLogger
-  end
-
   private
+
+  GLOBAL_ERROR_LOG_FILE_PATH = "log/errors.log"
 
   # Mapping labels with loggers to avoid creating a new one every time `getStdoutLogger` is called.
   @@logsHash = {} # :Hash<String, Logger>
@@ -40,5 +26,40 @@ module LoggingUtil
       ]
     end
     return logger
+  end
+
+  public
+
+  # Default logger for custom output.
+  #
+  # @param output [String | IO] A filename or stream to log to.
+  # @param label [String] Label for tracing logging scope. Can be the file path in which the method
+  # is called from.
+  # @param level [Integer] Log level.
+  # @return [Logger]
+  def self.getStdoutLogger(label, level = Logger::DEBUG)
+    if (@@logsHash.keys.include?(label))
+      return @@logsHash[label]
+    end
+    newLogger = self.createNewLogger(output: STDOUT, label: label, level: level)
+    @@logsHash[label] = newLogger
+    return newLogger
+  end
+
+
+  # Logger for when exceptions are rescued globally.
+  #
+  # @param label [String] Label for tracing logging scope. Can be the file path in which the method
+  # is called from.
+  # @return [Logger]
+  def self.getErrorLogger(label)
+    if (@@logsHash.keys.include?(label))
+      return @@logsHash[label]
+    end
+    newLogger = self.createNewLogger(
+      output: GLOBAL_ERROR_LOG_FILE_PATH, label: label, level: Logger::DEBUG
+    )
+    @@logsHash[label] = newLogger
+    return newLogger
   end
 end
