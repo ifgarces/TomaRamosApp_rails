@@ -5,10 +5,12 @@
   </a>
 
   <%=
-    link_to(
+    button_tag(
       raw("<i class='bi bi-file-earmark-arrow-down-fill me-2'></i>") + "Guardar horario",
-      "#",
-      class: "btn btn-outline-secondary shadow-sm px-4 mx-2"
+      class: "btn btn-outline-secondary shadow-sm px-4 mx-2",
+      :type => "button",
+      "data-bs-toggle" => "modal",
+      "data-bs-target" => "#ScheduleDownloadWIP"
     )
   %>
 </div>
@@ -106,4 +108,12 @@
       </div>
     </div>
   <% end %>
+</div>
+
+<div id="ScheduleDownloadWIP" class="modal fade">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <%= render(partial: "main/wip_card") %>
+    </div>
+  </div>
 </div>
