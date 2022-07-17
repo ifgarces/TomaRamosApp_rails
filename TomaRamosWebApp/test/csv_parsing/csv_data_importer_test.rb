@@ -33,7 +33,7 @@ class CsvDataImporterTest < ActiveSupport::TestCase
     testPeriod = AcademicPeriod.new(name: "foo")
     testPeriod.save!()
 
-    csvTempFile = Tempfile.new("csv", encoding: "utf-8")
+    csvTempFile = Tempfile.new("csv", encoding: "utf-8", binmode: false)
     csvTempFile.write("#{@CSV_HEADER}
 202110,PE2016,4444,,,ING,1100,1,ALGEBRA E INTR. AL CALCULO,10,,,,,14:30 -16:20,,20/3/2022,22/06/2022,,AYUD,tata Sánchez la leyenda")
     csvTempFile.rewind()

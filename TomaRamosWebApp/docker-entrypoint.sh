@@ -34,6 +34,6 @@ elif [[ "${SERVE_OVER_HTTPS}" == "false" ]]; then
         --port=${WEB_SERVER_PORT} \
         --binding=${WEB_SERVER_HOST}
 else
-    echo "Invalid value ${SERVE_OVER_HTTPS} for boolean-like value" >&2
+    echo "SERVE_OVER_HTTPS: Invalid non-boolean value \"${SERVE_OVER_HTTPS}\"" >&2
     exit 1
 fi

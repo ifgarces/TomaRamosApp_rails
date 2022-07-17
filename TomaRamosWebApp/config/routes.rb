@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get "/courses" => "main#courses"
   get "/schedule" => "main#schedule"
   get "/evaluations" => "main#evaluations"
+  get "/downloadSchedule" => "main#downloadSchedule"
 
   # Button actions
   post "/inscribe-course" => "main#inscribeCourse"
