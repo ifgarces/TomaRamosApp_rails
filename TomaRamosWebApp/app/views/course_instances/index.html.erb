@@ -2,28 +2,42 @@
 
 <p>Actualizado el <%= AcademicPeriod.getLatest().getLastUpdatedDate() %></p>
 
-<%= form_tag("/catalog", method: :get) do %>
-  <%=
-    text_field_tag(
-      :search,
-      params[:search],
-      class: "rounded px-2 py-2",
-      "aria-label" => "Búsqueda",
-      "placeholder" => "Buscar por NRC o título"
-    )
-  %>
-  <%= button_tag(type: "submit", name: "search-submit-button", class: "btn btn-primary px-4 ms-2") do %>
-    <i class="bi bi-search"></i>
+<div class="input-group justify-content-center align-items-center">
+  <%= form_tag("/catalog", method: :get, class: "form-inline") do %>
+    <%=
+      text_field_tag(
+        :search,
+        params[:search],
+        class: "d-inline form-control rounded w-auto px-2 py-2",
+        "aria-label" => "Búsqueda",
+        "placeholder" => "Buscar por NRC o título"
+      )
+    %>
+    <%=
+      button_tag(
+        type: "submit",
+        name: "search-submit-button",
+        class: "btn btn-lg btn-outline-secondary transparent-button mx-1 px-2 py-1"
+      ) do
+    %>
+      <i class="bi bi-search"></i>
+    <% end %>
   <% end %>
-<% end %>
+</div>
 
 <hr>
 
-<%=
-  render(
-    partial: "course_instances/course_instance_collection",
-    locals: {
-      courseInstances: @course_instances
-    }
-  )
-%>
+<% if (@course_instances.count() == 0) %>
+  <div class="text-center">
+    <small>Sin resultados</small>
+  </div>
+<% else %>
+  <%=
+    render(
+      partial: "course_instances/course_instance_collection",
+      locals: {
+        courseInstances: @course_instances
+      }
+    )
+  %>
+<% end %>

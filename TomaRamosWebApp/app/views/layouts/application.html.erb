@@ -35,7 +35,7 @@
   <% displayNvBars = shouldDisplayNavBars(params) %>
 
   <body>
-    <div id="BetterInMobileNotice" class="text-center text-uppercase px-4 py-3 better-in-mobile-notice">
+    <div id="BetterInMobileNotice" class="text-center text-uppercase ps-0 ms-0 pe-4 py-3 better-in-mobile-notice">
       <i class="bi bi-phone" style="font-size: 60px;"></i>
       <br/>
       <small style='font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'>
@@ -51,8 +51,7 @@
             <%= link_to(
                   raw("<i class='bi bi-chevron-left'></i>"),
                   :back,
-                  class: "btn btn-lg btn-light shadow-none me-1",
-                  style: "background-color: transparent; border-color: transparent;"
+                  class: "btn btn-lg btn-light shadow-none transparent-button me-1",
                 ) %>
 
             <%= link_to(
