@@ -1,4 +1,3 @@
-require "logger"
 require "utils/logging_util"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)
@@ -12,12 +11,25 @@ namespace :data_cleaner do
     Deletes old guest users that are no longer active, given a configurable threshold.
     "
 
-    today = Time.now().utc.to_date()
-    usersToDelete = User.where(is_admin: false).order(last_activity: :desc).filter { |user|
-      (today - user.last_activity.utc.to_date()) / 1.hour() >= INACTIVE_DAYS_THRESHOLD
-    }
-    @log.debug("Will delete #{usersToDelete.count()} users, starting with #{usersToDelete.first().inspect()}")
+    now = Time.now()
+    usersToDelete = User.where(is_admin: false).filter { |user|
+      (now.utc - user.last_activity.utc) / 1.hour() >= INACTIVE_DAYS_THRESHOLD * 24
+    }.sort_by { |user|
+      user.last_activity.utc
+    }.reverse()
 
-    raise NotImplementedError.new()
+    userCount = usersToDelete.count()
+
+    @log.debug(
+      "Will delete %d users, starting with %s and ending with %s" % [
+        userCount, usersToDelete.first().inspect(), usersToDelete.last().inspect()
+      ]
+    )
+
+    usersToDelete.each do |user|
+      user.destroy!()
+    end
+
+    @log.info("Task complete, #{userCount} Users deleted.")
   end
 end

@@ -134,8 +134,10 @@ class User < ApplicationRecord
     ) unless (pastHoursCount.is_a?(Integer))
 
     now = Time.now()
-    return User.where(is_admin: false).order(last_activity: :desc).filter { |user|
+    return User.where(is_admin: false).filter { |user|
       (now.utc - user.last_activity.utc) / 1.hour() <= pastHoursCount
-    }
+    }.sort_by { |user|
+      user.last_activity.utc
+    }.reverse()
   end
 end
