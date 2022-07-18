@@ -125,17 +125,21 @@ class User < ApplicationRecord
 
   # Allows to retrieve simple usage statistics. Unfortunately, this won't filter bots.
   #
-  # @param pastHoursCount [Integer] Amount of hours in the past there was last activity to filter
+  # @param pastHours [Integer] Amount of hours in the past there was last activity to filter
   #   users.
   # @return [Array<User>]
-  def self.getRecentlyActiveUsers(pastHoursCount = 24)
+  def self.getRecentlyActiveUsers(pastHours: 24)
     raise TypeError.new(
-      "Argument 'pastHoursCount' is of type #{pastHoursCount.class}, not Integer"
-    ) unless (pastHoursCount.is_a?(Integer))
+      "Argument 'pastHours' is of type #{pastHours.class}, not Integer"
+    ) unless (pastHours.is_a?(Integer))
+
+    raise ArgumentError.new(
+      "Expected positive number"
+    ) unless (pastHours > 0)
 
     now = Time.now()
     return User.where(is_admin: false).filter { |user|
-      (now.utc - user.last_activity.utc) / 1.hour() <= pastHoursCount
+      (now.utc - user.last_activity.utc) / 1.hour() <= pastHours
     }.sort_by { |user|
       user.last_activity.utc
     }.reverse()

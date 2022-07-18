@@ -30,6 +30,6 @@ namespace :data_cleaner do
       user.destroy!()
     end
 
-    @log.info("Task complete, #{userCount} Users deleted.")
+    @log.info("[OK] Cleaning complete: #{userCount} Users deleted")
   end
 end
