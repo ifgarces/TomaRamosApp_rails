@@ -31,7 +31,7 @@ class CourseInstancesController < ApplicationController
     @readableCareer = StringUtil.getReadableCareer(@course_instance.career)
 
     currentUser = helpers.getUserFromSession()
-    isInscribed = currentUser.isCourseAlreadyInscribed(@course_instance)
+    isInscribed = currentUser.hasInscribedCourse(@course_instance)
     @conflicts = isInscribed ? nil : currentUser.getConflictsForNewCourse(@course_instance)
     @displayConflictReport = (@conflicts != nil) && (@conflicts.count() > 0)
     render :show

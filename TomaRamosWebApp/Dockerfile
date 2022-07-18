@@ -44,4 +44,9 @@ ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgre
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
+# For the IMGkit ruby gem
+# RUN add-apt-repository -y ppa:linuxuprising/libpng12 \
+#     && apt-get update --quiet && apt-get install -y \
+#         libpng12-0
+
 ENTRYPOINT [ "./docker-entrypoint.sh" ]

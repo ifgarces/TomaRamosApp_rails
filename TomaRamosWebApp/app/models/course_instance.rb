@@ -1,5 +1,7 @@
+require "utils/logging_util"
 require "enums/event_type_enum"
 require "events_logic/conflict"
+require "utils/string_util"
 
 # Inscribe-able course instance.
 #

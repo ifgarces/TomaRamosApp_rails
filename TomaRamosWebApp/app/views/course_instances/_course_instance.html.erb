@@ -1,36 +1,50 @@
 <div id="<%= dom_id(course_instance) %>" class="card shadow-sm text-dark bg-light mb-3">
   <div class="card-body">
 
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <strong>
-            <%= link_to(course_instance.title, course_instance, class: "text-decoration-none link-dark") %>
-          </strong>
-        </div>
-        <div class="col">
-          <small><%= course_instance.curriculum %></small>
-        </div>
+    <div class="row">
+      <div class="col-8">
+        <strong>
+          <%= link_to(course_instance.title, course_instance, class: "text-decoration-none link-dark") %>
+        </strong>
       </div>
 
-      <div class="row">
-        <div class="col-8">
-          <span class="badge rounded-pill bg-info" style='
-            font-family: "Verdana", sans-serif;
-          '>
-            <%= course_instance.career %>
-          </span>
+      <%# User will be null when not in MainController %>
+      <% if ((!@currentUser.nil?) && @currentUser.hasInscribedCourse(course_instance)) %>
+        <div class="col-2 d-flex justify-content-end align-content-end">
+        <%=
+          button_to(
+            raw("<i class='bi bi-x-lg'></i>"),
+            "/uninscribe",
+            class: "d-inline btn btn-sm btn-outline-danger",
+            method: :post,
+            params: {
+              courseId: course_instance.id
+            }
+          )
+        %>
+        </div>
+      <% end %>
+    </div>
 
-          <span class="badge rounded-pill bg-secondary" style='
-            font-family: "Verdana", sans-serif;
-          '>
-            <%= link_to("NRC %s" % [course_instance.nrc], course_instance, class: "text-decoration-none link-light") %>
-          </span>
-        </div>
-        <div class="col">
-          Sección <%= course_instance.section %>
-        </div>
+    <div class="row">
+      <div class="col-8">
+        <span class="badge rounded-pill bg-white text-body">
+          <%= course_instance.career %>
+        </span>
+        <span class="badge rounded-pill bg-secondary">
+          <%= link_to("NRC %s" % [course_instance.nrc], course_instance, class: "text-decoration-none link-light") %>
+        </span>
+        <span class="badge rounded-pill bg-white text-body
+          <%= ApplicationHelper.getDecorationClassForCurriculum(course_instance.curriculum) %>
+        ">
+          <%= StringUtil.getReadableCurriculum(course_instance.curriculum) %>
+        </span>
+      </div>
+
+      <div class="col">
+        Sección <%= course_instance.section %>
       </div>
     </div>
+
   </div>
 </div>

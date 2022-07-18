@@ -13,6 +13,14 @@
       "data-bs-target" => "#ScheduleDownloadWIP"
     )
   %>
+
+  <%
+    # link_to(
+    #   raw("<i class='bi bi-file-earmark-arrow-down-fill me-2'></i>") + "Guardar horario",
+    #   "downloadSchedule",
+    #   class: "btn btn-outline-secondary shadow-sm px-4 mx-2"
+    # )
+  %>
 </div>
 
 <div id="SymbologyContainer" class="collapse card border-danger mb-3">
@@ -32,83 +40,14 @@
   </div>
 </div>
 
-<div id="WeekScheduleLandscape" class="container-xxl" style="min-width: 500px; overflow-x: auto;">
-  <div id="WeekScheduleHeader" class="row row-6 text-center">
-    <div class="col-1 text-white cell-day-darker-gray">Hora</div>
-    <% [
-         DayOfWeekEnum::MONDAY,
-         DayOfWeekEnum::TUESDAY,
-         DayOfWeekEnum::WEDNESDAY,
-         DayOfWeekEnum::THURSDAY,
-         DayOfWeekEnum::FRIDAY
-      ].each do |dayOfWeek| %>
-      <div class="col text-white cell-day-dark-gray text-uppercase"><%= dayOfWeek %></div>
-    <% end %>
-  </div>
-
-  <% @weekScheduleData.each_with_index do |weekScheduleRow, rowIndex| %>
-    <div class="row row-6 py-1 <%= (rowIndex % 2 == 0) ? "row-lighter-gray" : "row-light-gray" %>">
-      <div class="col-1 cell-time">
-        <small><%= "%d:30" % [WeekSchedule::FIRST_BLOCK_HOUR + rowIndex] %></small>
-      </div>
-
-      <div class="col">
-        <% weekScheduleRow.monday.each do |event| %>
-          <%= render(
-                partial: "course_events/event_compact_week_schedule",
-                locals: {
-                  courseEvent: event
-                }
-              ) %>
-        <% end %>
-      </div>
-
-      <div class="col">
-        <% weekScheduleRow.tuesday.each do |event| %>
-          <%= render(
-                partial: "course_events/event_compact_week_schedule",
-                locals: {
-                  courseEvent: event
-                }
-              ) %>
-        <% end %>
-      </div>
-
-      <div class="col">
-        <% weekScheduleRow.wednesday.each do |event| %>
-          <%= render(
-                partial: "course_events/event_compact_week_schedule",
-                locals: {
-                  courseEvent: event
-                }
-              ) %>
-        <% end %>
-      </div>
-
-      <div class="col">
-        <% weekScheduleRow.thursday.each do |event| %>
-          <%= render(
-                partial: "course_events/event_compact_week_schedule",
-                locals: {
-                  courseEvent: event
-                }
-              ) %>
-        <% end %>
-      </div>
-
-      <div class="col">
-        <% weekScheduleRow.friday.each do |event| %>
-          <%= render(
-                partial: "course_events/event_compact_week_schedule",
-                locals: {
-                  courseEvent: event
-                }
-              ) %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-</div>
+<%=
+  render(
+    partial: "main/week_schedule_table",
+    locals: {
+      weekScheduleData: @weekScheduleData
+    }
+  )
+%>
 
 <div id="ScheduleDownloadWIP" class="modal fade">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">

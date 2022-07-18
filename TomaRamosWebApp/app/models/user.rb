@@ -33,7 +33,7 @@ class User < ApplicationRecord
 
   # @param course [Course]
   # @return [Boolean]
-  def isCourseAlreadyInscribed(course)
+  def hasInscribedCourse(course)
     return self.getInscribedCourses().map { |it| it.id } .include?(course.id)
   end
 
@@ -58,7 +58,12 @@ class User < ApplicationRecord
   # @param course [CourseInstance]
   # @return [nil]
   def uninscribeCourse(course)
-    self.inscriptions.first().course_instances = []
+    auxArr = self.inscriptions.first().course_instances.delete(course)
+    self.save!()
+  end
+
+  def clearCoursesInscriptions()
+    self.inscriptions.first().course_instances.clear()
     self.save!()
   end
 
@@ -121,6 +126,7 @@ class User < ApplicationRecord
   # @return lastActiveDay [Integer] Amount of days in the past there was last activity to filter
   #   users.
   # def self.getActiveUsers(lastActiveDay)
+  #   raise NotImplementedError.new()
   #   return User.all().filter { |user|
   #     ...
   #   }
