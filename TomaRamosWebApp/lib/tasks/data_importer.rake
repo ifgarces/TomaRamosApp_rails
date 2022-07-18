@@ -1,4 +1,5 @@
 require "logger"
+require "utils/logging_util"
 require "csv_parsing/csv_data_importer"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)

@@ -133,9 +133,9 @@ class User < ApplicationRecord
       "Argument 'pastHoursCount' is of type #{pastHoursCount.class}, not Integer"
     ) unless (pastHoursCount.is_a?(Integer))
 
-    now = Time.now().utc
+    now = Time.now()
     return User.where(is_admin: false).order(last_activity: :desc).filter { |user|
-      (now - user.last_activity) / 1.hour() <= pastHoursCount
+      (now.utc - user.last_activity.utc) / 1.hour() <= pastHoursCount
     }
   end
 end
