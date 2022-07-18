@@ -15,12 +15,13 @@ Rails.application.routes.draw do
   get "/courses" => "main#courses"
   get "/schedule" => "main#schedule"
   get "/evaluations" => "main#evaluations"
-  get "/downloadSchedule" => "main#downloadSchedule"
 
   # Button actions
   post "/inscribe-course" => "main#inscribeCourse"
   post "/uninscribe-all" => "main#uninscribeAllCourses"
+  post "/uninscribe" => "main#uninscribeCourse"
   post "/debug-clear-session" => "main#debugClearSession"
+  get "/downloadSchedule" => "main#downloadSchedule" # has to be a GET since a file should be downloaded
 
   # ------------------------- PagesController ------------------------- #
   get "/" => "pages#home"

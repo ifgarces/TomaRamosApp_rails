@@ -1,5 +1,6 @@
 require "tempfile"
 require "utils/logging_util"
+require "utils/string_util"
 require "enums/day_of_week_enum"
 require "events_logic/week_schedule"
 
@@ -57,6 +58,7 @@ class MainController < ApplicationController
 
   # Inscribes a course in `session` given a `courseId`. Assumes the user was properly noticed of
   # possible conflicts with their currently inscribed courses.
+  #
   # @return [nil]
   def inscribeCourse()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
@@ -64,16 +66,12 @@ class MainController < ApplicationController
       @log.error("Cannot inscribe course ID '#{params[:courseId]}': invalid ID")
       redirect_to(
         course_instances_url,
-        alert: "Error: ramo inválido"
+        alert: "Error: ramo inválido, intente de nuevo"
       )
       return
     end
 
-    isAlreadyInscribed = @currentUser.getInscribedCourses().map { |course|
-      course.id
-    }.include?(targetCourse.id)
-
-    if (@currentUser.isCourseAlreadyInscribed(targetCourse))
+    if (@currentUser.hasInscribedCourse(targetCourse))
       redirect_to(
         :courses,
         alert: "El ramo NRC #{targetCourse.nrc} ya está inscrito"
@@ -90,12 +88,31 @@ class MainController < ApplicationController
   end
 
   # @return [nil]
+  def uninscribeCourse()
+    targetCourse = CourseInstance.find_by(id: params[:courseId])
+    if (targetCourse.nil?)
+      @log.error("Cannot un-inscribe course ID '#{params[:courseId]}': invalid ID")
+      redirect_to(
+        course_instances_url,
+        alert: "Error: ramo inválido, intente de nuevo"
+      )
+      return
+    end
+
+    targetCourseTitle = targetCourse.title
+    targetCourseNrc = targetCourse.nrc
+    @currentUser.uninscribeCourse(targetCourse)
+    redirect_to(
+      :courses,
+      notice: "%s (NRC %s) des-inscrito" % [targetCourseTitle, targetCourseNrc]
+    )
+  end
+
+  # @return [nil]
   def uninscribeAllCourses()
     userCourses = @currentUser.getInscribedCourses()
     count = userCourses.count()
-    userCourses.each do |course|
-      @currentUser.uninscribeCourse(course)
-    end
+    @currentUser.clearCoursesInscriptions()
 
     redirect_to(
       :courses,
@@ -103,8 +120,9 @@ class MainController < ApplicationController
     )
   end
 
+  # @return [nil]
   def downloadSchedule()
-    raise NotImplementedError.new()
+    raise NotImplementedError.new() #!
 
     scheduleTableRawHTML = render_to_string(
       partial: "main/week_schedule_table",
@@ -116,7 +134,7 @@ class MainController < ApplicationController
       height: 700
     )
 
-    imgKit = IMGKit.new(scheduleTableRawHTML)#, quality: 50, width: 1000)
+    imgKit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
     imgKit.stylesheets.append("#{Rails.root}/app/assets/stylesheets/application.bootstrap.scss")
 
     #send_data(imgKit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271

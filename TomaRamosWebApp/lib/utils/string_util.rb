@@ -53,4 +53,17 @@ module StringUtil
         )
       end
   end
+
+  # @param curriculum [String]
+  # @return [String]
+  def self.getReadableCurriculum(curriculum)
+    return case (curriculum)
+    when "2022", "2016"
+      "PE %s" % [curriculum]
+    when "2016/2022", "2022/2016"
+      "PE 2016/2022"
+    else
+      curriculum
+    end
+  end
 end

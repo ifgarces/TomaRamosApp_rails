@@ -15,7 +15,7 @@ module ApplicationHelper
   # Gets the background color for a [non-evaluation] event in the week schedule view.
   #
   # @param event [CourseEvent]
-  # @return [String]
+  # @return [String] Color HEX
   def self.getScheduleColorForEvent(event)
     return case (event.event_type.name)
       when EventTypeEnum::CLASS
@@ -75,6 +75,21 @@ module ApplicationHelper
         @log.fatal(errMsg)
         raise ArgumentError.new(errMsg)
       end
+  end
+
+  # @param curriculum [String]
+  # @return [String] Color HEX
+  def self.getDecorationClassForCurriculum(curriculum)
+    return "border " + case (curriculum)
+    when "2022"
+      "border-success"
+    when "2016"
+      "border-info"
+    when "2016/2022", "2022/2016"
+      "border-white"
+    else
+      "border-2 border-warning"
+    end
   end
 
   # References: https://stackoverflow.com/a/42119143/12684271
