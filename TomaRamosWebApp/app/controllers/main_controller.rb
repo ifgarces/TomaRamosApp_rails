@@ -39,7 +39,7 @@ class MainController < ApplicationController
   # @return [nil]
   def schedule()
     courses = @currentUser.getInscribedCourses()
-    if ((courses.nil?) || (courses.count() == 0))
+    if (courses.nil? || (courses.count() == 0))
       redirect_to(
         :courses,
         alert: "Primero debe inscribir al menos un ramo"
@@ -53,6 +53,17 @@ class MainController < ApplicationController
 
   # @return [nil]
   def evaluations()
+    courses = @currentUser.getInscribedCourses()
+    if (courses.nil? || (courses.count() == 0))
+      redirect_to(
+        :courses,
+        alert: "Primero debe inscribir al menos un ramo"
+      )
+      return
+    end
+
+    @course_instances = courses
+
     render :evaluations
   end
 
