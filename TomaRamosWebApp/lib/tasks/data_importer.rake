@@ -1,4 +1,5 @@
 require "logger"
+require "utils/logging_util"
 require "csv_parsing/csv_data_importer"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)
@@ -37,7 +38,7 @@ namespace :data_importer do
       end
     end
 
-    @log.info("✔️ CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
+    @log.info("[OK] CSV parsing complete: loaded %d CourseInstances and %d CourseEvents" % [
       targetPeriod.getCourses().count(), targetPeriod.getCourseEvents().count()
     ])
   end

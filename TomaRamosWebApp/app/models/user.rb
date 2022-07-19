@@ -1,4 +1,4 @@
-require "date"
+require "time"
 require "faker"
 require "utils/logging_util"
 require "events_logic/conflict"
@@ -125,17 +125,23 @@ class User < ApplicationRecord
 
   # Allows to retrieve simple usage statistics. Unfortunately, this won't filter bots.
   #
-  # @param pastHoursCount [Integer] Amount of hours in the past there was last activity to filter
+  # @param hours [Integer] Amount of hours in the past there was last activity to filter
   #   users.
   # @return [Array<User>]
-  def self.getRecentlyActiveUsers(pastHoursCount = 24)
+  def self.getRecentlyActiveUsers(hours: 24)
     raise TypeError.new(
-      "Argument 'pastHoursCount' is of type #{pastHoursCount.class}, not Integer"
-    ) unless (pastHoursCount.is_a?(Integer))
+      "Argument 'hours' is of type #{hours.class}, not Integer"
+    ) unless (hours.is_a?(Integer))
 
-    now = Time.now().utc
-    return User.where(is_admin: false).order(last_activity: :desc).filter { |user|
-      (now - user.last_activity) / 1.hour() <= pastHoursCount
-    }
+    raise ArgumentError.new(
+      "Expected positive number"
+    ) unless (hours > 0)
+
+    now = Time.now()
+    return User.where(is_admin: false).filter { |user|
+      (now.utc - user.last_activity.utc) / 1.hour() <= hours
+    }.sort_by { |user|
+      user.last_activity.utc
+    }.reverse()
   end
 end

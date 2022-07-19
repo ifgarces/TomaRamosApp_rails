@@ -72,6 +72,10 @@ clear_sessions:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rake tmp:clear
 
+clear_old_guest_users:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+		rake data_cleaner:guest_users --trace
+
 # Run all Rails tests
 test:
 	DATABASE_URL=${DB_URL_TEST} \

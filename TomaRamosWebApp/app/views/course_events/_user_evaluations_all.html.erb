@@ -1,0 +1,27 @@
+<div class="accordion-item mt-2">
+  <h2 class="accordion-header" id="AllEvalsHeader">
+    <button class="accordion-button shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#AllEvalsContainer"
+      aria-expanded="true" aria-controls="AllEvalsContainer">
+      Todas
+    </button>
+  </h2>
+  <div id="AllEvalsContainer" class="accordion-collapse collapse show" aria-labelledby="AllEvalsHeader" data-bs-parent="#EvaluationsAccordionContainer">
+    <div class="accordion-body border-light border-start border-end border-bottom shadow-sm">
+      <% @course_instances.each do |course| %>
+        <div class="container-lg">
+          <%=
+            render(
+              partial: "course_events/course_events_collection_card",
+              locals: {
+                cardTitle: "%s (NRC %s)" % [course.title, course.nrc],
+                cardEvents: course.getEventsEvaluations(),
+                titleBackgroundColor: "#edf1f3",
+                bodyBackgroundColor: "transparent"
+              }
+            )
+          %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

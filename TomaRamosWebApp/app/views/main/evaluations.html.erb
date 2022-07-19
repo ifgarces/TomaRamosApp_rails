@@ -1,3 +1,4 @@
-<h1>Mis evaluaciones</h1>
-
-<%= render(partial: "main/wip_card") %>
+<div id="EvaluationsAccordionContainer" class="accordion accordion-flush">
+  <%= render(partial: "course_events/user_evaluations_incoming", locals: {incomingDays: 7}) %>
+  <%= render(partial: "course_events/user_evaluations_all") %>
+</div>

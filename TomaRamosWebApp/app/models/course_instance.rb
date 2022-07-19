@@ -1,3 +1,4 @@
+require "date"
 require "utils/logging_util"
 require "enums/event_type_enum"
 require "events_logic/conflict"
@@ -95,21 +96,39 @@ class CourseInstance < ApplicationRecord
 
   # @return [Array<CourseEvent>]
   def getEventsClasses()
-    classType = EventType.find_by(name: EventTypeEnum::CLASS)
-    return self.course_events.where(event_type: classType)
+    return self.course_events.where(
+      event_type: EventType.find_by(name: EventTypeEnum::CLASS)
+    )
   end
 
   # @return [Array<CourseEvent>]
   def getEventsAssistantshipsAndLabs()
-    assistType = EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP)
-    labType = EventType.find_by(name: EventTypeEnum::LABORATORY)
-    return self.course_events.where(event_type: [assistType, labType])
+    return self.course_events.where(
+      event_type: [
+        EventType.find_by(name: EventTypeEnum::ASSISTANTSHIP),
+        EventType.find_by(name: EventTypeEnum::LABORATORY)
+      ]
+    )
   end
 
   # @return [Array<CourseEvent>]
   def getEventsEvaluations()
-    testType = EventType.find_by(name: EventTypeEnum::TEST)
-    examType = EventType.find_by(name: EventTypeEnum::EXAM)
-    return self.course_events.where(event_type: [testType, examType]).order(date: :asc)
+    return self.course_events.where(
+      event_type: [
+        EventType.find_by(name: EventTypeEnum::TEST),
+        EventType.find_by(name: EventTypeEnum::EXAM)
+      ]
+    ).order(date: :asc)
+  end
+
+  # @return [Array<CourseEvent>]
+  def getEventsEvaluationsIncoming(days: 7)
+    today = Date.today()
+    return self.getEventsEvaluations().filter { |event|
+      ((event.date.to_datetime.utc - today.to_datetime.utc) / 1.day() <= days) &&
+      ((event.date.to_datetime.utc - today.to_datetime.utc) / 1.day() >= 0)
+    }.sort_by { |event|
+      event.date.to_datetime.utc
+    }.reverse()
   end
 end
