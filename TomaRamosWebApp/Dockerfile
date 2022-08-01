@@ -49,4 +49,12 @@ RUN chmod +x docker-entrypoint.sh
 #     && apt-get update --quiet && apt-get install -y \
 #         libpng12-0
 
+# RUN wget -q -O /tmp/libpng12.deb http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb \
+#     && dpkg -i /tmp/libpng12.deb \
+#     && rm /tmp/libpng12.deb
+RUN gem install imgkit wkhtmltoimage-binary
+RUN wget -O /tmp/wkhtml.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
+    && apt-get install -y /tmp/wkhtml.deb \
+RUN ARCHITECTURE=amd64 imgkit --install-wkhtmltoimage
+
 ENTRYPOINT [ "./docker-entrypoint.sh" ]

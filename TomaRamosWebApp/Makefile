@@ -68,10 +68,6 @@ assets:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails assets:clobber assets:precompile
 
-clear_sessions:
-	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		rake tmp:clear
-
 clear_old_guest_users:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rake data_cleaner:guest_users --trace
@@ -84,6 +80,10 @@ test:
 		rails test
 	#~~~~~~= [OK] Tests went fine =~~~~~~#
 
-_debug_clear_database:
+__clear_sessions:
+	DATABASE_URL=${DB_URL_DEVELOPMENT} \
+		rake tmp:clear
+
+__debug_clear_database:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails db:migrate:reset --trace
