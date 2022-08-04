@@ -1,6 +1,8 @@
 ARG RUBY_VERSION
 FROM ruby:${RUBY_VERSION}
 
+ARG WEB_SERVER_PORT
+
 WORKDIR /home/tomaramos/webapp
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -30,13 +32,13 @@ COPY test/ test/
 
 COPY tmp/development_secret.txt ./tmp/development_secret.txt
 
+# Just for debugging
+COPY Makefile .
+
 # Installing application packages
 RUN mkdir storage \
     && bundle install \
 	&& yarn install --check-files
-
-ARG WEB_SERVER_PORT
-EXPOSE ${WEB_SERVER_PORT}
 
 # As Rails is not smart enough to properly load its own `database.yaml` for database connection
 ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
@@ -56,5 +58,7 @@ RUN chmod +x docker-entrypoint.sh
 # RUN wget -O /tmp/wkhtml.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
 #     && apt-get install -y /tmp/wkhtml.deb \
 # RUN ARCHITECTURE=amd64 imgkit --install-wkhtmltoimage
+
+EXPOSE ${WEB_SERVER_PORT}
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
