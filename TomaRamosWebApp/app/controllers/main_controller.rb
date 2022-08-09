@@ -133,7 +133,7 @@ class MainController < ApplicationController
 
   # @return [nil]
   def downloadSchedule()
-    raise NotImplementedError.new() #!
+    #raise NotImplementedError.new() #!
 
     scheduleTableRawHTML = render_to_string(
       partial: "main/week_schedule_table",
@@ -145,20 +145,22 @@ class MainController < ApplicationController
       height: 700
     )
 
-    imgKit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
-    imgKit.stylesheets.append("#{Rails.root}/app/assets/stylesheets/application.bootstrap.scss")
+    #//kit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
+    kit = PDFKit.new(scheduleTableRawHTML, page_size: "Letter")
+    kit.stylesheets.append("#{Rails.root}/app/assets/stylesheets/application.bootstrap.scss")
 
-    #send_data(imgKit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
+    #send_data(kit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
 
-    #resultImage = imgKit.to_img(:jpg)
-    resultImage = imgKit.to_png()
+    #//resultImage = kit.to_png()
+    result = kit.to_pdf()
 
-    imgTempOutput = Tempfile.new("jpg", encoding: "utf-8", binmode: false)
-    resultImage.to_file(imgTempOutput.path)
+    #imgTempOutput = Tempfile.new("jpg", encoding: "utf-8", binmode: false)
+    #resultImage.to_file(imgTempOutput.path)
     #imgTempOutput.rewind()
-    imgTempOutput.flush()
+    #imgTempOutput.flush()
 
-    send_file(imgTempOutput.path) # if trouble, place in the `public` directory instead of whatever `TempFile` uses (`/tmp`?)
+    #send_file(imgTempOutput.path) # if trouble, place in the `public` directory instead of whatever `TempFile` uses (`/tmp`?)
+    send_file(result)
   end
 
   # @return [nil]
