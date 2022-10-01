@@ -5,6 +5,7 @@
         "editor.insertSpaces": true,
         // "editor.formatOnSave": true
     },
+    // Adding recurrent words that should be included in the workspace dictionary (spell check)
     "cSpell.words": [
         "assistantships",
         "datetime",
