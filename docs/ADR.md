@@ -1,6 +1,3 @@
----
-output: pdf_document
----
 # SoftwareArchitecture — Assignment 3: Architecture Decision Records
 
 > Ignacio F. Garcés
