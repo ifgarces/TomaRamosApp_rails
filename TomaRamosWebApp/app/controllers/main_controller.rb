@@ -145,22 +145,22 @@ class MainController < ApplicationController
       height: 700
     )
 
-    #//kit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
-    kit = PDFKit.new(scheduleTableRawHTML, page_size: "Letter")
+    kit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
+    #//kit = PDFKit.new(scheduleTableRawHTML, page_size: "Letter")
     kit.stylesheets.append("#{Rails.root}/app/assets/stylesheets/application.bootstrap.scss")
 
-    #send_data(kit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
+    send_data(kit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
 
     #//resultImage = kit.to_png()
-    result = kit.to_pdf()
+    #//result = kit.to_pdf()
 
     #imgTempOutput = Tempfile.new("jpg", encoding: "utf-8", binmode: false)
     #resultImage.to_file(imgTempOutput.path)
     #imgTempOutput.rewind()
     #imgTempOutput.flush()
 
-    #send_file(imgTempOutput.path) # if trouble, place in the `public` directory instead of whatever `TempFile` uses (`/tmp`?)
-    send_file(result)
+    #//send_file(imgTempOutput.path) # if trouble, place in the `public` directory instead of whatever `TempFile` uses (`/tmp`?)
+    
   end
 
   # @return [nil]

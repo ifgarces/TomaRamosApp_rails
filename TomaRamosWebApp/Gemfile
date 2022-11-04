@@ -107,7 +107,7 @@ gem "omniauth-rails_csrf_protection" #? needed?
 #// gem "will_paginate", "~> 3.3"
 
 # IMGKit for converting HTML to image (for the user to download their week schedule)
-# gem "imgkit", "~> 1.6.2"
-# gem "wkhtmltoimage-binary"
-gem "pdfkit"
-gem "wkhtmltopdf-binary"
+gem "imgkit", "~> 1.6.2"
+gem "wkhtmltoimage-binary"
+#gem "pdfkit"
+#gem "wkhtmltopdf-binary"
