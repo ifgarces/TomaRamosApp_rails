@@ -11,6 +11,7 @@ from flask import Flask, request, send_file
 import html2image, json, tempfile
 
 app = Flask(__name__)
+app.debug = True
 
 PNG_TMP_FILE_NAME = "screenshot.png"
 
@@ -22,7 +23,6 @@ def convert():
     """
     try:
         htmlString = request.json["html"]
-        cssString = request.json["css"]
     except KeyError as e:
         return (
             json.dumps(dict(
@@ -32,8 +32,12 @@ def convert():
             400
         )
 
-    converter = html2image.Html2Image(size=(1920, 1080))
-    converter.screenshot(html_str=htmlString, css_str=cssString, save_as=PNG_TMP_FILE_NAME)
+    converter = html2image.Html2Image(size=(1280, 720))
+    if ("css" in request.json):
+        converter.screenshot(html_str=htmlString, css_str=request.json["css"], save_as=PNG_TMP_FILE_NAME)
+    else:
+        converter.screenshot(html_str=htmlString, save_as=PNG_TMP_FILE_NAME)
+
     return send_file(PNG_TMP_FILE_NAME, mimetype="image/png")
 
 

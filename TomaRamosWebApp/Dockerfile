@@ -17,6 +17,9 @@ RUN apt-get update --quiet && apt-get install -y \
     && apt-get update --quiet && apt-get install -y \
         nodejs yarn
 
+# Stylizing PS1, for when opening an interactive shell
+RUN echo 'PS1="\[\033[1;33m\]tomaramos-rails-container::\[\033[0m\]${PWD} $ "' >> /root/.bashrc
+
 COPY config.ru .
 COPY Gemfile .
 COPY package.json .
@@ -45,9 +48,6 @@ ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgre
 
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
-
-# Stylizing PS1 for when interacting with the container for debugging
-RUN echo 'PS1="\[\033[1;33m\]tomaramos-rails-container::\[\033[0m\]${PWD} $ "' >> /root/.bashrc
 
 EXPOSE ${WEB_SERVER_PORT}
 

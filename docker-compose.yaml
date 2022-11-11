@@ -67,4 +67,4 @@ services:
       ifgarces-net:
         ipv4_address: 10.12.0.4
     ports:
-      - "${HTML_TO_IMG_PORT}:${HTML_TO_IMG_PORT}"
+      - "${HTML_TO_IMG_PORT}:${HTML_TO_IMG_PORT}" #! port exposed only for debugging

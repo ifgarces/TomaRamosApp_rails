@@ -1,4 +1,5 @@
-require "tempfile"
+require "figaro"
+require "rest_client"
 require "utils/logging_util"
 require "utils/string_util"
 require "enums/day_of_week_enum"
@@ -133,10 +134,11 @@ class MainController < ApplicationController
 
   # @return [nil]
   def downloadSchedule()
-    #raise NotImplementedError.new() #!
-
     scheduleTableRawHTML = render_to_string(
-      partial: "main/week_schedule_table",
+      #partial: "main/week_schedule_table", #! this does not seem work!
+      partial: "main/_week_schedule_table",
+      :formats => [:html],
+      :layout => false,
       locals: {
         #weekScheduleData: @weekScheduleData
         weekScheduleData: WeekSchedule.computeWeekScheduleBlocks(@currentUser.getInscribedCourses())
@@ -145,22 +147,24 @@ class MainController < ApplicationController
       height: 700
     )
 
-    kit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
-    #//kit = PDFKit.new(scheduleTableRawHTML, page_size: "Letter")
-    kit.stylesheets.append("#{Rails.root}/app/assets/stylesheets/application.bootstrap.scss")
+    image = RestClient::Request.execute(
+      method: :get,
+      url: "http://html-to-image:%s/" % [ENV["HTML_TO_IMG_PORT"]],
+      payload: {
+        html: scheduleTableRawHTML
+        #css: nil #TODO: include CSS styles, somehow
+      },
+      headers: {
+        content_type: :json,
+        accept: "image/jpg"
+      }
+    )
 
-    send_data(kit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
+    @log.debug("I did receive something from the HTML to image microservice: [%s] %s" % [
+      image.class, image
+    ])
 
-    #//resultImage = kit.to_png()
-    #//result = kit.to_pdf()
-
-    #imgTempOutput = Tempfile.new("jpg", encoding: "utf-8", binmode: false)
-    #resultImage.to_file(imgTempOutput.path)
-    #imgTempOutput.rewind()
-    #imgTempOutput.flush()
-
-    #//send_file(imgTempOutput.path) # if trouble, place in the `public` directory instead of whatever `TempFile` uses (`/tmp`?)
-    
+    send_data(image, type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
   end
 
   # @return [nil]
