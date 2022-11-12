@@ -102,9 +102,9 @@ gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection" #? needed?
 
-# Pagination in views
-#// gem "kaminari"
-#// gem "will_paginate", "~> 3.3"
+# Pagination in views #TODO
+# gem "kaminari"
+# gem "will_paginate", "~> 3.3"
 
 # REST client for consuming APIs (for HTML to image microservice)
 gem "rest-client", "~> 2.1"

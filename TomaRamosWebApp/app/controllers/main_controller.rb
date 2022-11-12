@@ -1,5 +1,6 @@
 require "figaro"
 require "rest_client"
+require "json"
 require "utils/logging_util"
 require "utils/string_util"
 require "enums/day_of_week_enum"
@@ -135,10 +136,9 @@ class MainController < ApplicationController
   # @return [nil]
   def downloadSchedule()
     scheduleTableRawHTML = render_to_string(
-      #partial: "main/week_schedule_table", #! this does not seem work!
-      partial: "main/_week_schedule_table",
-      :formats => [:html],
-      :layout => false,
+      partial: "main/week_schedule_table",
+      formats: [:html],
+      layout: false,
       locals: {
         #weekScheduleData: @weekScheduleData
         weekScheduleData: WeekSchedule.computeWeekScheduleBlocks(@currentUser.getInscribedCourses())
@@ -149,22 +149,17 @@ class MainController < ApplicationController
 
     image = RestClient::Request.execute(
       method: :get,
-      url: "http://html-to-image:%s/" % [ENV["HTML_TO_IMG_PORT"]],
-      payload: {
-        html: scheduleTableRawHTML
-        #css: nil #TODO: include CSS styles, somehow
-      },
+      url: "http://html-to-image:%s" % [ENV["HTML_TO_IMG_PORT"]],
+      payload: JSON.dump({
+          html: scheduleTableRawHTML
+          #css: nil #TODO: include CSS styles, somehow
+      }),
       headers: {
         content_type: :json,
-        accept: "image/jpg"
+        accept: "image/png"
       }
     )
-
-    @log.debug("I did receive something from the HTML to image microservice: [%s] %s" % [
-      image.class, image
-    ])
-
-    send_data(image, type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
+    send_data(image, type: "image/png", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
   end
 
   # @return [nil]

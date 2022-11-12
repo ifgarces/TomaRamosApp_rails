@@ -36,7 +36,5 @@ module Tomaramosuandes
 
     #* Custom error pages with non-sensitive debugging information
     config.exceptions_app = self.routes
-
-    #config.middleware.use(PDFKit::Middleware, print_media_type: true) #!
   end
 end
