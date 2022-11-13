@@ -135,6 +135,14 @@ class MainController < ApplicationController
 
   # @return [nil]
   def downloadSchedule()
+    if (@currentUser.getInscribedCourses().empty?)
+      redirect_to(
+        :home,
+        alert: "Primero debe inscribir al menos un ramo"
+      )
+      return
+    end
+
     scheduleTableRawHTML = render_to_string(
       partial: "main/week_schedule_table",
       formats: [:html],
