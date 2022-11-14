@@ -102,10 +102,9 @@ gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection" #? needed?
 
-# Pagination in views
-#// gem "kaminari"
-#// gem "will_paginate", "~> 3.3"
+# Pagination in views #TODO
+# gem "kaminari"
+# gem "will_paginate", "~> 3.3"
 
-# IMGKit for converting HTML to image (for the user to download their week schedule)
-gem "imgkit", "~> 1.6.2"
-gem "wkhtmltoimage-binary"
+# REST client for consuming APIs (for HTML to image microservice)
+gem "rest-client", "~> 2.1"

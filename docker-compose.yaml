@@ -36,14 +36,15 @@ services:
     build:
       context: TomaRamosWebApp
       args:
-        RUBY_VERSION: ${RUBY_VERSION}
+        RUBY_VERSION: 3.1.1
         WEB_SERVER_PORT: ${WEB_SERVER_PORT}
     environment:
       POSTGRES_PORT: ${POSTGRES_PORT}
       ADMIN_USER_PASSWORD: "qwerty"
       WEB_SERVER_PORT: ${WEB_SERVER_PORT}
       WEB_SERVER_HOST: ${WEB_SERVER_HOST}
-      SERVE_OVER_HTTPS: ${SERVE_OVER_HTTPS} #! has to be defined on the fly... TODO: make documentation of this!
+      SERVE_OVER_HTTPS: ${SERVE_OVER_HTTPS}
+      HTML_TO_IMG_PORT: ${HTML_TO_IMG_PORT}
     networks:
       ifgarces-net:
         ipv4_address: 10.12.0.3
@@ -53,3 +54,17 @@ services:
       tomaramos-postgres:
         condition: service_healthy
     restart: "no"
+
+  # ---------------------- HTML to Image microservice ---------------------- #
+  html-to-image:
+    container_name: html-to-image-container
+    build:
+      context: HTMLToImage
+      args:
+        PYTHON_VERSION: "3.10"
+        API_PORT: ${HTML_TO_IMG_PORT}
+    networks:
+      ifgarces-net:
+        ipv4_address: 10.12.0.4
+    ports:
+      - "${HTML_TO_IMG_PORT}:${HTML_TO_IMG_PORT}" #! port exposed only for debugging

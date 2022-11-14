@@ -17,6 +17,9 @@ RUN apt-get update --quiet && apt-get install -y \
     && apt-get update --quiet && apt-get install -y \
         nodejs yarn
 
+# Stylizing PS1, for when opening an interactive shell
+RUN echo 'PS1="\[\033[1;33m\]tomaramos-rails-container::\[\033[0m\]${PWD} $ "' >> /root/.bashrc
+
 COPY config.ru .
 COPY Gemfile .
 COPY package.json .
@@ -45,19 +48,6 @@ ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgre
 
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
-
-# For the IMGkit ruby gem
-# RUN add-apt-repository -y ppa:linuxuprising/libpng12 \
-#     && apt-get update --quiet && apt-get install -y \
-#         libpng12-0
-
-# RUN wget -q -O /tmp/libpng12.deb http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb \
-#     && dpkg -i /tmp/libpng12.deb \
-#     && rm /tmp/libpng12.deb
-# RUN gem install imgkit wkhtmltoimage-binary
-# RUN wget -O /tmp/wkhtml.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
-#     && apt-get install -y /tmp/wkhtml.deb \
-# RUN ARCHITECTURE=amd64 imgkit --install-wkhtmltoimage
 
 EXPOSE ${WEB_SERVER_PORT}
 
