@@ -5,6 +5,8 @@
 # container will be preserved.
 # --------------------------------------------------------------------------------------------------
 
+PRODUCTION_SERVER_CERTS_DIR=/etc/ssl/tomaramosapp
+
 set -ex
 
 # Default protocol is HTTP, only for now
@@ -23,6 +25,6 @@ docker-compose up --detach tomaramos-rails
 
 # Copying HTTPS certificates accordingly (production server only)
 if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
-    docker cp /etc/ssl/certs/tomaramos.app-bundle.crt tomaramos-rails-container:/etc/ssl/certs/
-    docker cp /etc/ssl/certs/tomaramos.app.key        tomaramos-rails-container:/etc/ssl/certs/
+    docker cp ${PRODUCTION_SERVER_CERTS_DIR}/tomaramos_app.crt tomaramos-rails-container:/etc/ssl/certs/
+    docker cp ${PRODUCTION_SERVER_CERTS_DIR}/tomaramos_app.app.key        tomaramos-rails-container:/etc/ssl/certs/
 fi
