@@ -8,8 +8,7 @@ This is used instead of `wkhtml*` ruby gems, as both wkhtmltopdf and wkhtmltoima
 ----------------------------------------------------------------------------------------------------
 """
 
-import flask, requests
-import html2image, json
+import flask, html2image, json
 
 app = flask.Flask(__name__)
 # app.debug = True # this will provide more verbosity
@@ -41,7 +40,7 @@ def convert():
     Get with parameters into body as JSON (not possible via standard GET query args). Returns the
     generated PNG file.
     """
-    debugPrintRequest(flask.request)  #!
+    debugPrintRequest(flask.request)  # * DEBUGGING - TEMPORAL
     try:
         htmlString = flask.request.json["html"]
     except KeyError as e:
