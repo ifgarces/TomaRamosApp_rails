@@ -1,4 +1,6 @@
-require "tempfile"
+require "figaro"
+require "rest_client"
+require "json"
 require "utils/logging_util"
 require "utils/string_util"
 require "enums/day_of_week_enum"
@@ -133,32 +135,45 @@ class MainController < ApplicationController
 
   # @return [nil]
   def downloadSchedule()
-    raise NotImplementedError.new() #!
+    courses = @currentUser.getInscribedCourses()
+    if (courses.empty?)
+      redirect_to(
+        :home,
+        alert: "Primero debe inscribir al menos un ramo"
+      )
+      return
+    end
+
+    # Configurable setting for render size with a preset aspect ratio
+    aspectRatio = { width: 4, height: 3 }
+    scale = 160
 
     scheduleTableRawHTML = render_to_string(
       partial: "main/week_schedule_table",
+      formats: [:html],
+      layout: false,
       locals: {
         #weekScheduleData: @weekScheduleData
-        weekScheduleData: WeekSchedule.computeWeekScheduleBlocks(@currentUser.getInscribedCourses())
+        weekScheduleData: WeekSchedule.computeWeekScheduleBlocks(courses)
       },
-      width: 1000,
-      height: 700
+      width: aspectRatio[:width] * scale,
+      height: aspectRatio[:height] * scale
     )
 
-    imgKit = IMGKit.new(scheduleTableRawHTML) #, quality: 50, width: 1000)
-    imgKit.stylesheets.append("#{Rails.root}/app/assets/stylesheets/application.bootstrap.scss")
-
-    #send_data(imgKit.to_jpg(), type: "image/jpeg", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
-
-    #resultImage = imgKit.to_img(:jpg)
-    resultImage = imgKit.to_png()
-
-    imgTempOutput = Tempfile.new("jpg", encoding: "utf-8", binmode: false)
-    resultImage.to_file(imgTempOutput.path)
-    #imgTempOutput.rewind()
-    imgTempOutput.flush()
-
-    send_file(imgTempOutput.path) # if trouble, place in the `public` directory instead of whatever `TempFile` uses (`/tmp`?)
+    # Consuming html-to-image microservice and sending result to web client
+    image = RestClient::Request.execute(
+      method: :get,
+      url: "http://html-to-image:%s" % [ENV["HTML_TO_IMG_PORT"]],
+      payload: JSON.dump({
+        html: scheduleTableRawHTML
+        #css: nil #TODO: include CSS styles, somehow
+      }),
+      headers: {
+        content_type: :json,
+        accept: "image/png"
+      }
+    )
+    send_data(image, type: "image/png", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
   end
 
   # @return [nil]
