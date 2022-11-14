@@ -15,6 +15,8 @@ app = flask.Flask(__name__)
 # app.debug = True # this will provide more verbosity
 
 PNG_TMP_FILE_NAME = "screenshot.png"
+OUTPUT_WIDTH = 720
+OUTPUT_HEIGHT = 1080
 
 
 def debugPrintRequest(req: flask.Request) -> None:
@@ -47,7 +49,7 @@ def convert():
 
     bootstrapCSS = open(file="bootstrap.min.css", mode="rt").read()
 
-    converter = html2image.Html2Image(size=(1280, 720))
+    converter = html2image.Html2Image(size=(OUTPUT_WIDTH, OUTPUT_HEIGHT))
     if "css" in flask.request.json:
         converter.screenshot(
             html_str=htmlString,

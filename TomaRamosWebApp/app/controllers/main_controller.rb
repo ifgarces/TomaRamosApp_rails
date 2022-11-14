@@ -135,7 +135,8 @@ class MainController < ApplicationController
 
   # @return [nil]
   def downloadSchedule()
-    if (@currentUser.getInscribedCourses().empty?)
+    courses = @currentUser.getInscribedCourses()
+    if (courses.empty?)
       redirect_to(
         :home,
         alert: "Primero debe inscribir al menos un ramo"
@@ -143,24 +144,29 @@ class MainController < ApplicationController
       return
     end
 
+    # Configurable setting for render size with a preset aspect ratio
+    aspectRatio = { width: 4, height: 3 }
+    scale = 160
+
     scheduleTableRawHTML = render_to_string(
       partial: "main/week_schedule_table",
       formats: [:html],
       layout: false,
       locals: {
         #weekScheduleData: @weekScheduleData
-        weekScheduleData: WeekSchedule.computeWeekScheduleBlocks(@currentUser.getInscribedCourses())
+        weekScheduleData: WeekSchedule.computeWeekScheduleBlocks(courses)
       },
-      width: 1000,
-      height: 700
+      width: aspectRatio[:width] * scale,
+      height: aspectRatio[:height] * scale
     )
 
+    # Consuming html-to-image microservice and sending result to web client
     image = RestClient::Request.execute(
       method: :get,
       url: "http://html-to-image:%s" % [ENV["HTML_TO_IMG_PORT"]],
       payload: JSON.dump({
-          html: scheduleTableRawHTML
-          #css: nil #TODO: include CSS styles, somehow
+        html: scheduleTableRawHTML
+        #css: nil #TODO: include CSS styles, somehow
       }),
       headers: {
         content_type: :json,
