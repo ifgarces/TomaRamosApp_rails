@@ -15,14 +15,11 @@ git fetch && git status
 
 # Launching postgres server if not running
 # References: https://serverfault.com/a/935674
-if [ -z `docker ps -q --no-trunc | grep $(docker-compose ps -q tomaramosapp-postgres)` ]; then
-    echo "No, postgres container ain't running"
+if [ -z `docker ps -q --no-trunc | grep $(docker-compose ps -q tomaramos-postgres)` ]; then
     docker-compose up --build --detach tomaramos-postgres
-else
-    echo "Yes, postgres container running."
 fi
 
 ./restart-rails.sh
-./restart-http-to-image.sh
+./restart-html-to-image.sh
 
 docker-compose logs -f tomaramos-rails
