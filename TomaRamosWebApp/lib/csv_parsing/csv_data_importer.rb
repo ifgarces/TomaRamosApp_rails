@@ -43,9 +43,9 @@ module CsvDataImporter
       "EXAM" => EventType.find_by(name: EventTypeEnum::EXAM)
     }
 
-    raise RuntimeError.new(
-      "Huh? CourseEvent table should be cleared before processing CSV for events..."
-    ) unless (academicPeriod.getCourseEvents().count() == 0)
+    # raise RuntimeError.new(
+    #   "Huh? CourseEvent table should be cleared before processing CSV for events..."
+    # ) unless (academicPeriod.getCourseEvents().count() == 0)
 
     # Now parsing the CSV and populating database tables `CourseInstance` and `CourseEvent`
     log.info("Reading courses from CSV '%s' for current AcademicPeriod '%s'..." % [

@@ -42,7 +42,7 @@ https_web_server:
 # Runs the task for importing course data
 import_csv:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		rake data_importer:csv --trace
+		rake data_importer:csv[2022-20] --trace
 
 #// rails db:migrate:reset --trace
 migrate:

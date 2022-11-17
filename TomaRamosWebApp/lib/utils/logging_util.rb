@@ -1,7 +1,8 @@
 require "logger"
 
 # Simple interface for initializing loggers with a custom format for this application.
-
+# 
+# Author: Ignacio F. Garcés
 module LoggingUtil
   private
 
