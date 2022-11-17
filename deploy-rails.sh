@@ -10,7 +10,7 @@ set -exu
 
 cd ${TOMARAMOSAPP_RAILS}
 
-git pull origin main
+git pull origin master
 git fetch && git status
 
 # Launching postgres server if not running
