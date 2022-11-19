@@ -4,7 +4,6 @@ require "csv_parsing/csv_data_importer"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
-#CSV_FILE_PATH = "db/catalog-ing.csv"
 CSV_ROOT_PATH = "db/catalog"
 
 ING_FILE_NAMES = [
