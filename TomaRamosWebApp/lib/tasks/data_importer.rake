@@ -4,10 +4,10 @@ require "csv_parsing/csv_data_importer"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
-CSV_ROOT_PATH = "db/catalog"
+CSV_ROOT_PATH = File.join("db", "catalog")
 
 ING_FILE_NAMES = [
-  CatalogCsvFile.new(name: "base.csv", headerRows: 12), # own courses from the curriculum of the career
+  CatalogCsvFile.new(name: "base.csv", headerRows: 12), # courses from the "core "curriculum of the career
   CatalogCsvFile.new(name: "electives.csv", headerRows: 0) # PEGs, electives, etc.
 ]
 
