@@ -12,9 +12,11 @@ RUN apt-get update --quiet && apt-get install -y chromium \
 
 WORKDIR /code/
 
-# Getting Bootstrap CSS for default styles
-RUN wget -O bootstrap.min.css https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css
+# Style file(s)
+COPY main.css .
+COPY bootstrap.css .
 
+# Source code file(s)
 COPY main.py .
 
 ARG API_PORT
@@ -23,4 +25,4 @@ EXPOSE ${API_PORT}
 ENV API_PORT=${API_PORT}
 ENV FLASK_APP="main.py"
 
-CMD [ "sh", "-c", "flask run --host 0.0.0.0 --port ${API_PORT}" ]
+CMD [ "python3", "main.py" ]
