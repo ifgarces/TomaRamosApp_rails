@@ -160,10 +160,10 @@ class MainController < ApplicationController
       height: aspectRatio[:height] * scale
     )
 
-    # Consuming html-to-image microservice and sending result to web client
+    # Consuming html-to-image microservice and sending result to web client (docker-compose)
     image = RestClient::Request.execute(
       method: :get,
-      url: "http://html-to-image:%s" % [ENV["HTML_TO_IMG_PORT"]],
+      url: "http://html-to-image:#{ENV["HTML_TO_IMG_PORT"]}",
       payload: JSON.dump({
         html: scheduleTableRawHTML
         #css: nil #TODO: include CSS styles, somehow
@@ -173,7 +173,7 @@ class MainController < ApplicationController
         accept: "image/png"
       }
     )
-    send_data(image, type: "image/png", disposition: "inline") # https://stackoverflow.com/a/8295499/12684271
+    send_data(image, filename: "horario.png", type: "image/png") # https://stackoverflow.com/a/8295499/12684271
   end
 
   # @return [nil]

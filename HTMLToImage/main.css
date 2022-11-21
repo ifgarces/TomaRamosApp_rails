@@ -1,0 +1,26 @@
+/* Header */
+
+.cell-day-dark-gray {
+    background-color: #444444;
+    padding: 4px;
+}
+
+.cell-day-darker-gray {
+    background-color: #333333;
+    padding: 4px;
+}
+
+/* Body */
+
+.row-light-gray {
+    background-color: #cecece;
+}
+
+.row-lighter-gray {
+    background-color: #ececec;
+}
+
+.cell-time {
+    font-size: 15px;
+    min-height: 66px;
+}

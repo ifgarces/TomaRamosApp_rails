@@ -1,15 +1,15 @@
 """
 ----------------------------------------------------------------------------------------------------
-Simple HTTP endpoint for converting an HTML+CSS into an image. Intended to be used as microservice
-for the TomaRamosApp RoR web application, for converting a given HTML+CSS into an image.
+Simple HTTP endpoint for converting an HTML+CSS_STRING into an image. Intended to be used as microservice
+for the TomaRamosApp RoR web application, for converting a given HTML+CSS_STRING into an image.
 
 This is used instead of `wkhtml*` ruby gems, as both wkhtmltopdf and wkhtmltoimage have a serous bug
 (see issue #19).
 ----------------------------------------------------------------------------------------------------
 """
 
-import flask, requests
-import html2image, json
+import flask, html2image, json
+from os import environ
 
 app = flask.Flask(__name__)
 # app.debug = True # this will provide more verbosity
@@ -17,6 +17,7 @@ app = flask.Flask(__name__)
 PNG_TMP_FILE_NAME = "screenshot.png"
 OUTPUT_WIDTH = 720
 OUTPUT_HEIGHT = 1080
+CSS_STRING = None # :str
 
 
 def debugPrintRequest(req: flask.Request) -> None:
@@ -34,6 +35,9 @@ HOST: {req.remote_addr}
     """.strip()
     )
 
+def create_app(testConfig=None):
+    print("Hello, I was initialized.")
+
 
 @app.route("/", methods=["GET"])
 def convert():
@@ -41,26 +45,35 @@ def convert():
     Get with parameters into body as JSON (not possible via standard GET query args). Returns the
     generated PNG file.
     """
-    debugPrintRequest(flask.request)  #!
+    # debugPrintRequest(flask.request)  # * DEBUGGING - TEMPORAL
     try:
         htmlString = flask.request.json["html"]
     except KeyError as e:
         return (json.dumps(dict(msg="Body parameter '%s' missing" % e, error=str(type(e)))), 400)
 
-    bootstrapCSS = open(file="bootstrap.min.css", mode="rt").read()
+    assert (CSS_STRING is not None) and (len(CSS_STRING) > 0)
 
     converter = html2image.Html2Image(size=(OUTPUT_WIDTH, OUTPUT_HEIGHT))
     if "css" in flask.request.json:
         converter.screenshot(
             html_str=htmlString,
-            css_str=[bootstrapCSS, flask.request.json["css"]],
+            css_str=[CSS_STRING, flask.request.json["css"]],
             save_as=PNG_TMP_FILE_NAME,
         )
     else:
-        converter.screenshot(html_str=htmlString, css_str=bootstrapCSS, save_as=PNG_TMP_FILE_NAME)
+        converter.screenshot(html_str=htmlString, css_str=CSS_STRING, save_as=PNG_TMP_FILE_NAME)
 
     return flask.send_file(PNG_TMP_FILE_NAME, mimetype="image/png")
 
 
 if __name__ == "__main__":
     print(__doc__)
+
+    # Reading CSS from files
+    CSS_STRING = ""
+    for fileName in ["bootstrap.css", "main.css"]:
+        with open(file=fileName, mode="rt") as bootstrapFile:
+            CSS_STRING += bootstrapFile.read()
+
+    # Running API
+    app.run(host="0.0.0.0", port=environ["API_PORT"], debug=False)
