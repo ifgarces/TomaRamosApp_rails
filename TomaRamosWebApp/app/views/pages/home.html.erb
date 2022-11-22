@@ -40,13 +40,22 @@
     )
   %>
 
-  <div id="HomeFooter" class="text-center px-1 py-2" style="
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-  ">
-    <p class="text-monospace text-footer-custom">
-      &copy; ifgarces' solutions
-    </p>
-  </div>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cookieConsent">
+    (Launch cookie modal)
+  </button>
 </div>
+
+<div id="HomeFooter" class="text-center px-1 py-2 fixed-bottom">
+  <p class="text-monospace text-footer-custom">
+    &copy; ifgarces' solutions
+  </p>
+</div>
+
+<%=
+  render(
+    partial: "pages/cookie_consent_dialog",
+    locals: {
+      diagId: "cookieConsent"
+    }
+  )
+%>
