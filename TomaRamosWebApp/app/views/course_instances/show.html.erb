@@ -1,5 +1,3 @@
-<% debug @displayConflictReport %>
-
 <%
   floatingButtonOptions = {
     :class => "btn btn-lg btn-primary shadow mt-5 me-4 floating-button-inscribe",
@@ -87,7 +85,7 @@
       <% end %>
     </dl>
 
-    <!-- Class events -->
+    <%# Class events %>
     <%= render(
           partial: "course_events/course_events_collection_card",
           locals: {
@@ -98,7 +96,7 @@
           }
         ) %>
 
-    <!-- Assistantships and laboratory events -->
+    <%# Assistantships and laboratory events %>
     <%= render(
           partial: "course_events/course_events_collection_card",
           locals: {
@@ -109,7 +107,7 @@
           }
         ) %>
 
-    <!-- Evaluation events -->
+    <%# Evaluation events %>
     <%= render(
           partial: "course_events/course_events_collection_card",
           locals: {
