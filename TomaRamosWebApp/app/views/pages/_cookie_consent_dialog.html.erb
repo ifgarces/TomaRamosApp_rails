@@ -1,20 +1,24 @@
-<div class="modal fade" id="<%= diagId %>" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+<div id="<%= diagId %>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog fixed-bottom modal-sm">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Uso de cookies</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Aviso de uso de <i>cookies</i>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
-      <p>
-        TomaRamosApp usa cookies para guardar sus cursos inscritos.
-      </p>
+      <div class="modal-body">
+        <p>
+          TomaRamosApp usa <i>cookies</i> 🍪 para guardar sus cursos inscritos.
+        </p>
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-          Sí, como sea
+        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">
+          Aceptar
         </button>
-        <!--<a class="btn btn-secondary" href="https://www.kaspersky.es/resource-center/definitions/cookies">
-          ¿Qué son los cookies?
-        </a>-->
+        <a class="btn btn-sm btn-outline-secondary" href="https://www.kaspersky.es/resource-center/definitions/cookies" target="_blank">
+          ¿Qué son las <i>cookies</i>?
+        </a>
       </div>
     </div>
   </div>

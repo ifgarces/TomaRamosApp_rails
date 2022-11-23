@@ -9,8 +9,15 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag("application", "data-turbo-track": "reload") %>
-    <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
     <%= stylesheet_link_tag(params[:controller]) %>
+
+    <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
+    <%= javascript_include_tag(params[:controller]) %>
+
+    <%# Displaying cookie dialog on page load if an new user enters the application, on any page %>
+    <% if (!isUserInSession()) %>
+      <%= javascript_include_tag("show_cookie_modal") %>
+    <% end %>
 
     <%= favicon_link_tag(asset_path("favicon.png")) %>
 
@@ -119,9 +126,25 @@
           </div>
         <% end %>
 
+
+
         <%= yield %>
       </div>
 
     </div>
+
+    <%# Loading cookie dialog if needed %>
+    <% if (!isUserInSession()) %>
+      <button id="cookieButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cookieConsent" hidden="true">
+      </button>
+      <%=
+        render(
+          partial: "pages/cookie_consent_dialog",
+          locals: {
+            diagId: "cookieConsent"
+          }
+        )
+      %>
+    <% end %>
   </body>
 </html>

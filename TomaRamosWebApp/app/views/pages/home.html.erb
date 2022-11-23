@@ -40,9 +40,6 @@
     )
   %>
 
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cookieConsent">
-    (Launch cookie modal)
-  </button>
 </div>
 
 <div id="HomeFooter" class="text-center px-1 py-2 fixed-bottom">
@@ -50,12 +47,3 @@
     &copy; ifgarces' solutions
   </p>
 </div>
-
-<%=
-  render(
-    partial: "pages/cookie_consent_dialog",
-    locals: {
-      diagId: "cookieConsent"
-    }
-  )
-%>

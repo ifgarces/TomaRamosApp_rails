@@ -37,7 +37,7 @@ module ApplicationHelper
   def getUserFromSession()
     guestUserId = session[:guestUserId]
 
-    if ((guestUserId == nil) || (User.find_by(id: guestUserId) == nil))
+    if (!isUserInSession())
       guestUser = User.createNewGuestUser()
       guestUser.save!()
       session[:guestUserId] = guestUser.id
@@ -49,11 +49,19 @@ module ApplicationHelper
     return guestUser
   end
 
+  # @return [Boolean] Whether there is user data stored in session (cookies) or not. Also ensures
+  #   the data is consistent (user exists in database).
+  def isUserInSession()
+    guestUserId = session[:guestUserId]
+    return (guestUserId != nil) && (User.find_by(id: guestUserId) != nil)
+  end
+
   # @param requestParams [Hash]
   # @return [Boolean] Whether both navigation bars should be displayed depending on the request
   #   (e.g. on the current controller or webpage)
   def shouldDisplayNavBars(requestParams)
-    return (requestParams[:controller] != "pages") && (requestParams[:controller] != "errors")
+    # Checking if the current controller is excluded from displaying navigation bars
+    return ["pages", "errors"].exclude?(requestParams[:controller])
   end
 
   # Allows to set a button of the nav bar as highlighted based on the current request path.
