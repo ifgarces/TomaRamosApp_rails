@@ -9,8 +9,15 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag("application", "data-turbo-track": "reload") %>
-    <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
     <%= stylesheet_link_tag(params[:controller]) %>
+
+    <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
+    <%= javascript_include_tag(params[:controller]) %>
+
+    <%# Displaying cookie dialog on page load if an new user enters the application, on any page %>
+    <% if (!isUserInSession()) %>
+      <%= javascript_include_tag("cookie_modal_auto_show") %>
+    <% end %>
 
     <%= favicon_link_tag(asset_path("favicon.png")) %>
 
@@ -75,13 +82,13 @@
         </nav>
 
         <div id="BottomNavBar" class="btn-group d-flex border-top bottom-nav-bar" role="group" aria-label="bottom mobile navigation bar">
-          <%
-              # link_to(
-              #   raw("<i class='bi bi-house-door-fill'></i><br/>") + "Inicio",
-              #   "/home",
-              #   type: "button",
-              #   class: getClassForBottomNavButton("/home")
-              # )
+          <%#
+              link_to(
+                raw("<i class='bi bi-house-door-fill'></i><br/>") + "Inicio",
+                "/home",
+                type: "button",
+                class: getClassForBottomNavButton("/home")
+              )
           %>
           <%= link_to(
                 raw("<i class='bi bi-list-stars'></i><br/>") + "Ramos",
@@ -123,5 +130,26 @@
       </div>
 
     </div>
+
+    <% if (!isUserInSession()) %>
+      <%#
+        Creating session user data so that the cookie dialog won't appear on the next page load. I don't like creating
+        the user here from the view, but it's the only reasonable way I figured out for properly handling the cookie
+        consent notice thing.
+      %>
+      <% createNewSessionUser() %>
+
+      <%# Adding hidden button for displaying via JS, as it is the easier way and avoids importing Bootstrap there (https://stackoverflow.com/a/69534725/12684271) %>
+      <button id="cookieButton" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cookieConsent" hidden="true">
+      </button>
+      <%=
+        render(
+          partial: "pages/cookie_consent_dialog",
+          locals: {
+            diagId: "cookieConsent"
+          }
+        )
+      %>
+    <% end %>
   </body>
 </html>
