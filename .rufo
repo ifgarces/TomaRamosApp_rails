@@ -1,5 +1,5 @@
 quote_style :double
 trailing_commas false
 parens_in_def :yes
-align_case_when true
+align_case_when false
 align_chained_calls false
