@@ -14,10 +14,17 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">
+          <i class="bi bi-check-lg me-1"></i>
           Aceptar
         </button>
-        <a class="btn btn-sm btn-outline-secondary" href="https://www.kaspersky.es/resource-center/definitions/cookies" target="_blank">
-          ¿Qué son las <i>cookies</i>?
+          <%=
+            link_to(
+              raw("¿Qué son las <i>cookies</i>?"),
+              ApplicationHelper::COOKIE_INFORMATION_URL,
+              class: "btn btn-sm btn-outline-secondary",
+              "target" => "_blank"
+            )
+          %>
         </a>
       </div>
     </div>

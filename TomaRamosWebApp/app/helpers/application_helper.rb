@@ -4,9 +4,11 @@ require "enums/event_type_enum"
 
 module ApplicationHelper
   FEEDBACK_FORM_URL = "https://forms.gle/cm4YeuNtS9PrDutc8"
+  COOKIE_INFORMATION_URL = "https://www.kaspersky.es/resource-center/definitions/cookies"
+  CONTROLLERS_WITH_NAV_BARS = ["main", "course_instances", "course_events", "event_types"]
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
-  # the arguments myself... Anyway, this is for initializing logging
+  # the arguments myself... Anyway, this is for initializing logging on this module.
   def initialize(context, optionsHash, originController)
     super(context, optionsHash, originController)
     @log = LoggingUtil.getStdoutLogger(__FILE__)
@@ -35,33 +37,41 @@ module ApplicationHelper
 
   # @return [User] The stored user from the `session`, creating it if needed.
   def getUserFromSession()
-    guestUserId = session[:guestUserId]
-
-    if (!isUserInSession())
-      guestUser = User.createNewGuestUser()
-      guestUser.save!()
-      session[:guestUserId] = guestUser.id
-      @log.info("New guest User created '#{guestUser.username}', for host '#{request.host}'")
-    else
-      guestUser = User.find_by(id: guestUserId)
+    user = User.find_by(id: session[:guestUserId])
+    if (session[:guestUserId].nil? || user.nil?)
+      user = createNewSessionUser()
     end
-
-    return guestUser
+    return user
   end
 
+  # Used to check whether a host entered the application for the first time (or the session expired).
+  # For synchronization reasons, creates the user if missing, so on the next page load this method
+  # will return `false` in such case.
+  #
   # @return [Boolean] Whether there is user data stored in session (cookies) or not. Also ensures
   #   the data is consistent (user exists in database).
   def isUserInSession()
-    guestUserId = session[:guestUserId]
-    return (guestUserId != nil) && (User.find_by(id: guestUserId) != nil)
+    if (session[:guestUserId].nil? || User.find_by(id: session[:guestUserId]).nil?)
+      #createNewSessionUser()
+      return false
+    end
+    return true
+  end
+
+  # @return [User]
+  def createNewSessionUser()
+    guestUser = User.createNewGuestUser()
+    guestUser.save!()
+    session[:guestUserId] = guestUser.id
+    @log.info("New guest User created '#{guestUser.username}', for host '#{request.host}'")
+    return guestUser
   end
 
   # @param requestParams [Hash]
   # @return [Boolean] Whether both navigation bars should be displayed depending on the request
   #   (e.g. on the current controller or webpage)
   def shouldDisplayNavBars(requestParams)
-    # Checking if the current controller is excluded from displaying navigation bars
-    return ["pages", "errors"].exclude?(requestParams[:controller])
+    return CONTROLLERS_WITH_NAV_BARS.include?(requestParams[:controller])
   end
 
   # Allows to set a button of the nav bar as highlighted based on the current request path.

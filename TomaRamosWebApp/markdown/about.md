@@ -7,7 +7,8 @@ Nota: *inscribir ramos a través de esta plataforma no tiene ninguna validez*, s
 ## Funcionalidades
 
 1. Construcción automática de horario.
-2. Actualización automática del catálogo con la información de la Facultad.
-3. Detección de conflictos de horario y de evaluaciones al tomar ramos.
+2. Descargar horario como imagen.
+3. Actualización constante del catálogo con la información de ramos la Facultad.
+4. Detección de conflictos de horario y de evaluaciones al tomar ramos.
 
 De momento, sólo se dispone de la malla de las carreras de **ingeniería civil**.
