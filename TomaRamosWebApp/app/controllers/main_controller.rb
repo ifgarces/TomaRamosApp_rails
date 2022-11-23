@@ -14,7 +14,6 @@ class MainController < ApplicationController
   # @return [nil]
   def initLog()
     @log = LoggingUtil.getStdoutLogger(__FILE__)
-    @inDebugMode = helpers.isRequestLocal()
   end
 
   # @return [nil]
@@ -174,18 +173,5 @@ class MainController < ApplicationController
       }
     )
     send_data(image, filename: "horario.png", type: "image/png") # https://stackoverflow.com/a/8295499/12684271
-  end
-
-  # @return [nil]
-  def debugClearSession()
-    @currentUser.destroy!() #! deleting guest user
-    session[:guestUserId] = nil
-    @currentUser = nil
-
-    # Refreshing current page for changes to be reflected immediately
-    redirect_to(
-      :courses,
-      notice: "[debug] Session cleared"
-    )
   end
 end

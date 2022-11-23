@@ -21,15 +21,6 @@
       </div>
     <% end %>
   </div>
-
-  <% if (@inDebugMode) %>
-    <%= button_to(
-          "[debug] Clear session",
-          "/debug-clear-session",
-          class: "btn btn-sm btn-danger shadow-sm text-white",
-          method: :post
-        ) %>
-  <% end %>
 </div>
 
 <hr>
