@@ -45,17 +45,11 @@ module ApplicationHelper
   end
 
   # Used to check whether a host entered the application for the first time (or the session expired).
-  # For synchronization reasons, creates the user if missing, so on the next page load this method
-  # will return `false` in such case.
   #
   # @return [Boolean] Whether there is user data stored in session (cookies) or not. Also ensures
   #   the data is consistent (user exists in database).
   def isUserInSession()
-    if (session[:guestUserId].nil? || User.find_by(id: session[:guestUserId]).nil?)
-      #createNewSessionUser()
-      return false
-    end
-    return true
+    return (session[:guestUserId] != nil) && (User.find_by(id: session[:guestUserId]) != nil)
   end
 
   # @return [User]
