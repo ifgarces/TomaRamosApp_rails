@@ -1,8 +1,6 @@
 ARG RUBY_VERSION
 FROM ruby:${RUBY_VERSION}
 
-ARG WEB_SERVER_PORT
-
 WORKDIR /home/tomaramos/webapp
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -49,6 +47,9 @@ ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgre
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
+ARG WEB_SERVER_PORT
 EXPOSE ${WEB_SERVER_PORT}
+ARG SSL_PORT
+EXPOSE ${SSL_PORT}
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]

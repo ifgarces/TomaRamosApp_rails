@@ -43,6 +43,7 @@ services:
       ADMIN_USER_PASSWORD: "qwerty"
       WEB_SERVER_PORT: ${WEB_SERVER_PORT}
       WEB_SERVER_HOST: ${WEB_SERVER_HOST}
+      SSL_PORT: ${SSL_PORT}
       SERVE_OVER_HTTPS: ${SERVE_OVER_HTTPS}
       HTML_TO_IMG_PORT: ${HTML_TO_IMG_PORT}
     networks:
@@ -50,6 +51,7 @@ services:
         ipv4_address: 10.12.0.3
     ports:
       - "${WEB_SERVER_PORT}:${WEB_SERVER_PORT}"
+      # - "${SSL_PORT}:${SSL_PORT}" # SSL for HTTPS
     depends_on:
       tomaramos-postgres:
         condition: service_healthy
