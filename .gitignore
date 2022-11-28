@@ -1,4 +1,5 @@
 drafts.sh
+*.log
 
 # Ignoring ENV file with stuff related to Google Cloud for Oauth
 .secrets.env
