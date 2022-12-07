@@ -1,7 +1,8 @@
 """
 ----------------------------------------------------------------------------------------------------
-Simple HTTP endpoint for converting an HTML+CSS_STRING into an image. Intended to be used as microservice
-for the TomaRamosApp RoR web application, for converting a given HTML+CSS_STRING into an image.
+Simple HTTP endpoint for converting an HTML+CSS_STRING into an image. Intended to be used as
+microservice for the TomaRamosApp RoR web application, for converting a given HTML+CSS_STRING into
+an image.
 
 This is used instead of `wkhtml*` ruby gems, as both wkhtmltopdf and wkhtmltoimage have a serous bug
 (see issue #19).
@@ -14,26 +15,27 @@ from os import environ
 app = flask.Flask(__name__)
 # app.debug = True # this will provide more verbosity
 
-PNG_TMP_FILE_NAME = "screenshot.png"
-OUTPUT_WIDTH = 720
-OUTPUT_HEIGHT = 1080
-CSS_STRING = None # :str
+PNG_TMP_FILE_NAME :str = "screenshot.png"
+OUTPUT_WIDTH :int = 720
+OUTPUT_HEIGHT :int = 1080
+CSS_STRING :str = None
 
 
-def debugPrintRequest(req: flask.Request) -> None:
-    print(
-        f"""
--------------------------------------------------
-HEADERS: {req.headers}
-DATA: {req.data}
-ARGS: {req.args}
-FORM: {req.form}
-ENDPOINT: {req.endpoint}
-METHOD: {req.method}
-HOST: {req.remote_addr}
--------------------------------------------------
-    """.strip()
-    )
+# def debugPrintRequest(req: flask.Request) -> None:
+#     print(
+#         f"""
+# -------------------------------------------------
+# HEADERS: {req.headers}
+# DATA: {req.data}
+# ARGS: {req.args}
+# FORM: {req.form}
+# ENDPOINT: {req.endpoint}
+# METHOD: {req.method}
+# HOST: {req.remote_addr}
+# -------------------------------------------------
+#     """.strip()
+#     )
+
 
 def create_app(testConfig=None):
     print("Hello, I was initialized.")
@@ -47,7 +49,7 @@ def convert():
     """
     # debugPrintRequest(flask.request)  # * DEBUGGING - TEMPORAL
     try:
-        htmlString = flask.request.json["html"]
+        htmlString :str = flask.request.json["html"]
     except KeyError as e:
         return (json.dumps(dict(msg="Body parameter '%s' missing" % e, error=str(type(e)))), 400)
 
