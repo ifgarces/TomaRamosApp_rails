@@ -11,5 +11,8 @@ For instance:
 └── 2022-20
     └── ing
         ├── base.csv
+        ├── foo.csv
         └── peg.csv
 ```
+
+For each period and career, al CSV files inside will be imported.

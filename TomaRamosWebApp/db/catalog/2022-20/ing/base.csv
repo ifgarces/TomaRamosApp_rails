@@ -1,14 +1,3 @@
-,Evaluaciones en las tardes o sábados,,,,,,,,,,,,,,,,,,,
-,Evaluaciones en horario de Clase/Ayudantía,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,
-TIPO HORARIO,DESCRIPCION,,,,,,,,,,,,,,,,,,,
-CLAS,CLASES,,,,,,,,,,,,,,,,,,,
-AYUD,AYUDANTIA,,,,,,,,,,,,,,,,,,,
-LABT,LABORATORIO,,,,,,,,,,,,,,,,,,,
-EXAM,EXAMEN,,,,,,,,,,,,,,,,,,,
-PRBA ,"PRUEBA (1, 2, 3...)",,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,
 PERIODO,PLAN DE ESTUDIOS,NRC,CONECTOR  LIGA,LISTA CRUZADA,MATERIA,CURSO,SECC.,TITULO,CREDITO,LUNES,MARTES,MIERCOLES,JUEVES,VIERNES,SABADO,INICIO,FIN,SALA,TIPO,PROFESOR
 202220,2022,4638,,UB,IOC,5206,1,ADM. Y CONTROL DE PROYECTOS,6,,,,16:30 -19:20,,,01/08/2022,16/11/2022,C-025,CLAS,DULOVITS/CORTES ALEXANDER ALOIS
 202220,2022,4638,,UB,IOC,5206,1,ADM. Y CONTROL DE PROYECTOS,6,,,,16:30 -19:20,,,01/09/2022,01/09/2022,C-025,PRBA 1,DULOVITS/CORTES ALEXANDER ALOIS

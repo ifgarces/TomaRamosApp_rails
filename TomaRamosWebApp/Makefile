@@ -16,7 +16,7 @@ DB_URL_PRODUCTION = "postgresql://tomaramosuandes:tomaramosuandes@localhost:${PO
 # Executes migrations, resets database, cleans assets and compiles javascript
 build: packages assets migrate seed import_csv
 
-# Runs the server, but not in background
+# Runs the server
 web_server:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
@@ -27,8 +27,7 @@ web_server:
 			--environment=${RUNTIME_ENVIRONMENT} \
 			--no-log-to-stdout
 
-#! This rule is for debugging-only
-# This one is intended for the server only
+#* WIP debugging-only rule for serving over HTTPS instead of HTTP
 https_web_server:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
@@ -42,9 +41,8 @@ https_web_server:
 # Runs the task for importing course data
 import_csv:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
-		rake data_importer:csv[2022-20] --trace
+		rake data_importer:csv --trace
 
-#// rails db:migrate:reset --trace
 migrate:
 	DATABASE_URL=${DB_URL_DEVELOPMENT} \
 		rails db:migrate --trace
