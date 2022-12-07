@@ -4,9 +4,9 @@ require "date"
 require "utils/logging_util"
 require "enums/event_type_enum"
 
-@log = LoggingUtil.getStdoutLogger(__FILE__)
-
 ADMIN_USER_EMAIL = "admin@tomaramos.app"
+
+@log = LoggingUtil.getStdoutLogger(__FILE__)
 
 # @param name [String]
 # @return [nil]
@@ -62,7 +62,7 @@ end
 
 def setCurrentAcademicPeriod()
   if (AcademicPeriod.getLatest().nil?)
-    @log.debug("Inserting current academic period")
+    @log.debug("Inserting current academic period '#{AcademicPeriod.getLatestPeriodName()}'")
     AcademicPeriod.new(
       name: AcademicPeriod.getLatestPeriodName()
     ).save!()

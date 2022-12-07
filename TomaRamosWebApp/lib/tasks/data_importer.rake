@@ -6,11 +6,6 @@ require "csv_parsing/csv_data_importer"
 
 CSV_ROOT_PATH = File.join("db", "catalog")
 
-ING_FILE_NAMES = [
-  CatalogCsvFile.new(name: "base.csv", headerRows: 12), # courses from the "core "curriculum of the career
-  CatalogCsvFile.new(name: "electives.csv", headerRows: 0) # PEGs, electives, etc.
-]
-
 # @param [String] periodName
 # @return [nil] Wether the CSV files are properly located for the given period name.
 def isCsvPathOk(periodName)
@@ -28,7 +23,7 @@ def clearCourseEvents(academicPeriod)
   academicPeriod.getCourseEvents().each do |event|
     event.destroy!()
   end
-end
+end 
 
 namespace :data_importer do
   task :csv, [:period] => :environment do |_, args|
@@ -63,16 +58,17 @@ namespace :data_importer do
     @log.info("Clearing CourseEvents of period '%s' prior to CSV parsing..." % [targetPeriod.name])
     clearCourseEvents(targetPeriod)
 
-    ING_FILE_NAMES.each do |csvFile|
-      filePath = File.join(
-        CSV_ROOT_PATH, File.join(targetPeriod.name, File.join("ing", csvFile.name))
-      )
-      @log.info("Importing file '%s'" % [filePath])
-      prevEventsCount = CourseEvent.count()
+    periodCsvRoot = File.join(
+      CSV_ROOT_PATH, File.join(targetPeriod.name, "ing")
+    )
+    Dir.children(periodCsvRoot).each do |filename|
+      periodCsvFilePath = File.join(periodCsvRoot, filename)
+      @log.info("Importing file '%s'" % [periodCsvFilePath])
+      prevEventsCount = targetPeriod.getCourseEvents().count()
 
       courses, eventsMapping = CsvDataImporter.import(
-        csvPath: filePath,
-        csvHeaderSize: csvFile.headerRows,
+        csvPath: periodCsvFilePath,
+        csvHeaderSize: 1, #! fixed header size, mind that!
         academicPeriod: targetPeriod
       )
 
@@ -87,7 +83,7 @@ namespace :data_importer do
         end
       end
       @log.info("Successfully imported %d courses from '%s'" % [
-        CourseEvent.count() - prevEventsCount, filePath
+        targetPeriod.getCourseEvents().count() - prevEventsCount, periodCsvFilePath
       ])
     end
 

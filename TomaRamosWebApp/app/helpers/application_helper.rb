@@ -118,16 +118,16 @@ module ApplicationHelper
   # References (many thanks, boys):
   #  - https://stackoverflow.com/questions/36957097/rails-4-how-i-use-the-contents-of-a-markdown-file-in-a-view
   #
-  # @param filename [String] Relative to the Rails root directory
+  # @param filename [String] Filename of the MD file inside ${RAILS_ROOT}/markdown.
   # @return [String] Rendered HTML
   def renderMarkdownFile(filename)
-    filename = "%s/%s" % [Rails.root, filename]
-    
-    @log.debug("Rendering Markdown file '%s'" % [filename])
+    filepath = File.join(File.join(Rails.root, "markdown"), filename)
+
+    @log.debug("Rendering Markdown file '%s'" % [filepath])
 
     raise ArgumentError.new(
-      "Markdown file '%s' not found" % [filename]
-    ) unless File.exist?(filename)
+      "Markdown file '%s' not found" % [filepath]
+    ) unless File.exist?(filepath)
 
     renderer = Redcarpet::Render::HTML.new({
       filter_html: true,
@@ -154,7 +154,7 @@ module ApplicationHelper
       quote: true #?
     })
 
-    mdRawContent = File.open(filename, File::RDONLY).read()
+    mdRawContent = File.open(filepath, File::RDONLY).read()
     @markdown.render(mdRawContent).html_safe()
   end
 end

@@ -8,7 +8,7 @@ class AcademicPeriod < ApplicationRecord
 
   private
 
-  @@LATEST_PERIOD_NAME = "2022-20"
+  @@LATEST_PERIOD_NAME = "2023-10"
 
   public
 
