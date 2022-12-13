@@ -113,7 +113,7 @@ module ApplicationHelper
     }
   end
 
-  # Renders a Markdown from a file name.
+  # Renders Markdown from a file name.
   #
   # References (many thanks, boys):
   #  - https://stackoverflow.com/questions/36957097/rails-4-how-i-use-the-contents-of-a-markdown-file-in-a-view
@@ -129,7 +129,7 @@ module ApplicationHelper
       "Markdown file '%s' not found" % [filepath]
     ) unless File.exist?(filepath)
 
-    renderer = Redcarpet::Render::HTML.new({
+    @renderer ||= Redcarpet::Render::HTML.new({
       filter_html: true,
       no_images: true, #! can't due Rails' security behavior for assets
       no_links: false,
@@ -142,7 +142,7 @@ module ApplicationHelper
       space_after_headers: true,
       fenced_code_blocks: true
     })
-    @markdown ||= Redcarpet::Markdown.new(renderer, {
+    @markdown ||= Redcarpet::Markdown.new(@renderer, {
       autolink: false,
       disable_indented_code_blocks: true,
       strikethrough: true,

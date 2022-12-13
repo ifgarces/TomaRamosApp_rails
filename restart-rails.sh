@@ -26,5 +26,5 @@ docker-compose up --detach tomaramos-rails
 # Copying HTTPS certificates accordingly (production server only)
 if [[ "${SERVE_OVER_HTTPS}" == "true" ]]; then
     docker cp ${PRODUCTION_SERVER_CERTS_DIR}/tomaramos_app.crt tomaramos-rails-container:/etc/ssl/certs/
-    docker cp ${PRODUCTION_SERVER_CERTS_DIR}/tomaramos_app.app.key        tomaramos-rails-container:/etc/ssl/certs/
+    docker cp ${PRODUCTION_SERVER_CERTS_DIR}/tomaramos_app.app.key tomaramos-rails-container:/etc/ssl/certs/
 fi
