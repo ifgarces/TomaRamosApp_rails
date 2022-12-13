@@ -8,7 +8,7 @@
 
 set -eu
 
-LOG_FILE="./deploy.log"
+LOG_FILE=./deploy.log
 date > ${LOG_FILE} 
 echo "Outputting to ${LOG_FILE}"
 
@@ -17,6 +17,7 @@ set -x
 cd ${TOMARAMOSAPP_RAILS}
 
 git pull origin master | tee -a ${LOG_FILE}
+git checkout master
 git fetch | tee -a ${LOG_FILE}
 git status | tee -a ${LOG_FILE}
 
@@ -28,6 +29,7 @@ fi
 
 ./restart-rails.sh | tee -a ${LOG_FILE}
 ./restart-html-to-image.sh | tee -a ${LOG_FILE}
-echo "[OK] Restart done" >> ${LOG_FILE}
+
+echo "[OK] Restart done" | tee -a ${LOG_FILE}
 
 docker-compose logs -f tomaramos-rails
