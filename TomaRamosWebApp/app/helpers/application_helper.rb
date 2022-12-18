@@ -5,6 +5,8 @@ require "enums/event_type_enum"
 module ApplicationHelper
   FEEDBACK_FORM_URL = "https://forms.gle/cm4YeuNtS9PrDutc8"
   COOKIE_INFORMATION_URL = "https://www.kaspersky.es/resource-center/definitions/cookies"
+
+  # Names of controllers in which navbars should be visible.
   CONTROLLERS_WITH_NAV_BARS = ["main", "course_instances", "course_events", "event_types"]
 
   # Note: could not find documentation on the constructor of Rails' `ApplicationHelper`, so I named
@@ -131,11 +133,11 @@ module ApplicationHelper
 
     @renderer ||= Redcarpet::Render::HTML.new({
       filter_html: true,
-      no_images: true, #! can't due Rails' security behavior for assets
+      no_images: true, #! can't due Rails' security constraints for assets
       no_links: false,
       no_styles: false,
       safe_links_only: false,
-      with_toc_data: false, #* would be interesting, but not in this case
+      with_toc_data: false,
       hard_wrap: true,
       prettify: true,
       link_attributes: { rel: "nofollow", target: "_blank" },
