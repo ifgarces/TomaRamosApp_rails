@@ -25,6 +25,7 @@ class User < ApplicationRecord
   has_many :inscriptions, dependent: :destroy
 
   GUEST_EMAIL_DOMAIN = "guest-user.com"
+  GUEST_USERNAME_LENGTH = 64
 
   # @return [Array<CourseInstance>]
   def getInscribedCourses()
@@ -32,9 +33,9 @@ class User < ApplicationRecord
   end
 
   # @param course [Course]
-  # @return [Boolean]
+  # @return [Boolean] Whether the given `course` is present in the inscribed courses of the user.
   def hasInscribedCourse(course)
-    return self.getInscribedCourses().map { |it| it.id } .include?(course.id)
+    return self.getInscribedCourses().map { |it| it.id }.include?(course.id)
   end
 
   # @return [Integer] The total amount of credits inscribed by the user
@@ -68,21 +69,15 @@ class User < ApplicationRecord
   end
 
   # @param newCourse [CourseInstance]
-  # @return [Array<Conflict>] Computed conflicts between events, checking the current
-  # inscribed courses by the user, and a target course
+  # @return [Array<Conflict>] Computed conflicts between events, checking the current inscribed
+  #   courses by the user, and a target course.
   def getConflictsForNewCourse(newCourse)
-    allConflicts = []
-
-    self.getInscribedCourses().each do |currentCourse|
-      allConflicts.concat(
-        CourseInstance.getConflictsBetween(currentCourse, newCourse)
-      )
-    end
-
-    return allConflicts
+    return self.getInscribedCourses().map { |currentCourse|
+      CourseInstance.getConflictsBetween(currentCourse, newCourse)
+    }
   end
 
-  # Updates the `last_activity` attribute with the current `DateTime`
+  # Updates the `last_activity` attribute with the current `DateTime`.
   # @return [nil]
   def updateLastActivity()
     #TODO: make this asynchronous for optimal performance
@@ -115,7 +110,7 @@ class User < ApplicationRecord
   # @return [String] A unique new guest username.
   def self.generateGuestUsername()
     while (true)
-      newUsername = Faker::Lorem.characters(number: 10)
+      newUsername = Faker::Lorem.characters(number: GUEST_USERNAME_LENGTH)
       isUnique = User.find_by(username: newUsername).nil?
       if (isUnique)
         return newUsername
