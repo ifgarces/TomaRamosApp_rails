@@ -5,7 +5,3 @@ LOGIN
 PASSWORD 'tomaramosuandes'
 CREATEDB
 NOSUPERUSER;
-
-CREATE DATABASE tomaramosuandes_development OWNER tomaramosuandes;
-CREATE DATABASE tomaramosuandes_test OWNER tomaramosuandes;
-CREATE DATABASE tomaramosuandes_production OWNER tomaramosuandes;
