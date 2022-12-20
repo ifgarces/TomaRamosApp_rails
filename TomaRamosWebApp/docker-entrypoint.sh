@@ -6,9 +6,6 @@
 
 set -exu
 
-echo "[debug] DATABASE_URL=${DATABASE_URL}"
-echo "[debug] SERVE_OVER_HTTPS=${SERVE_OVER_HTTPS}"
-
 # Compiling assets and initializing database
 #// rails db:create
 #// rails db:migrate:reset db:seed
@@ -66,7 +63,8 @@ DNS.1 = localhost
 elif [[ "${SERVE_OVER_HTTPS}" == "false" ]]; then
     rails server \
         --port=${WEB_SERVER_PORT} \
-        --binding=${WEB_SERVER_HOST}
+        --binding=${WEB_SERVER_HOST} \
+        --environment=development
 else
     echo "SERVE_OVER_HTTPS: Invalid non-boolean value \"${SERVE_OVER_HTTPS}\"" >&2
     exit 1

@@ -41,7 +41,9 @@ RUN mkdir storage \
     && bundle install \
 	&& yarn install --check-files
 
-# As Rails is not smart enough to properly load its own `database.yaml` for database connection
+# For some reason, I cannot place an embedded ENV variable value for the host at `database.yml`, so
+# for virtualized runtime, the database URL is override as follows
+RUN rm -f ./config/database.yml
 ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
 
 COPY docker-entrypoint.sh .
