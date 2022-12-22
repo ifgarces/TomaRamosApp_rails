@@ -7,6 +7,8 @@
     - [1.3. Formatting](#13-formatting)
   - [2. Committing](#2-committing)
   - [3. IDE recommendations](#3-ide-recommendations)
+    - [3.1. Documentation](#31-documentation)
+    - [3.2. Coding](#32-coding)
 
 ## 1. Ruby coding standards
 
@@ -22,27 +24,55 @@ Of course, everything should be in english, as is the standard in the industry. 
 
 ### 1.3. Formatting
 
-- Parenthesis have to be used wherever possible, in order to distinguish actual methods with attributes (attribute getters). This includes methods with no parameters.
-- Automatic formatting with [`rufo`](https://github.com/ruby-formatter/rufo) linter.
-- Line breaks should be configured at 100 characters. Make sure to set a vertical ruler at that threshold in your IDE, as the `rufo` formatter does not yet includes automatic line breaks.
-
-<!-- TODO: decide if to use `rufo` or `rubocop`, and automate it in `Makefile` and `settings.json` somehow -->
+- Parenthesis have to be used wherever possible, in order to distinguish actual methods (callables) with attributes (not callables). This includes methods with no parameters.
+- Strings in double quotes.
+- Indentation with 2 spaces.
+- Automatic formatting with [`rufo`](https://github.com/ruby-formatter/rufo) linter, mostly.
+- Line breaks should be configured at 100 characters. Make sure to set a vertical ruler at that threshold in your IDE.
 
 ## 2. Committing
 
-... <!-- TODO, sometime -->
+Commit names must be meaningful and should always reference an issue they are related to. The format is as follows:
+
+```text
+#ISSUE_NUMBER: meaningful summary
+
+Detailed summary of changes
+```
+
+Example for WIP commit on an issue:
+
+```text
+#33: fix on documentation related to tests 
+
+And some refactorings
+```
+
+Example for when closing an issue:
+
+```text
+Closes #18: added working cookie dialog 
+
+- Added standard modal automatically displayed when a host with no session (cookies) access any page
+- Added blank JavaScript files properly included for each controller (so I don't have to do it later)
+```
 
 ## 3. IDE recommendations
 
-It is strongly advised to use Visual Studio Code IDE with the following extensions:
+It is strongly advised to use Visual Studio Code IDE with the extensions mentioned in this section, separated from the contribution scope. They are also recommended for just code reading.
+
+### 3.1. Documentation
+
+1. [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one): for various smart Markdown utilities, such as automatic section headers and table of contents, formatting, and more.
+2. [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint): linter for implementing the best practices on the industry for writing Markdown files.
+
+### 3.2. Coding
 
 1. [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments): as various comments are formatted to be rendered nicely by this tool.
 2. [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker): for `Dockerfile` and `docker-compose` intellisense.
-3. [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one): for various smart Markdown utilities, such as automatic section headers and table of contents, formatting, and more.
-4. [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint): linter for implementing the best practices on the industry for writing Markdown files.
-5. [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker): great tool for avoiding typos on code and documentation.
-6. [Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph): autocompletion and intellisense for Ruby files, specially useful if you refuse to use [RubyMine IDE](https://www.jetbrains.com/ruby/) at all.
-7. [Yard documenter](https://marketplace.visualstudio.com/items?itemName=pavlitsky.yard): ruby documentation generator for functions, classes and modules. Once installed, locate your cursor in a function you want to document, and run on the command palette (with `ctrl+shift+p`): `Document with YARN`.
-8. [Rufo formatter](https://marketplace.visualstudio.com/items?itemName=jnbt.vscode-rufo): code linter for Ruby integrated in the IDE.
+3. [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker): great tool for avoiding typos on code and documentation.
+4. [Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph): autocompletion and intellisense for Ruby files, specially useful if you refuse to use [RubyMine IDE](https://www.jetbrains.com/ruby/) at all.
+5. [Yard documenter](https://marketplace.visualstudio.com/items?itemName=pavlitsky.yard): ruby documentation generator for functions, classes and modules. Once installed, locate your cursor in a function you want to document, and run on the command palette (with `ctrl+shift+p`): `Document with YARN`.
+6. [Rufo formatter](https://marketplace.visualstudio.com/items?itemName=jnbt.vscode-rufo): code linter for Ruby integrated in the IDE.
 
 Note: since [RubyMine](https://www.jetbrains.com/ruby/) has great build-in intellisense, it is recommended to use that IDE as well, for when the listed `vscode` extensions are not smart enough, specially when editing views with embedded ruby code.

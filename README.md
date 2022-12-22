@@ -1,12 +1,12 @@
-# TomaRamosUandes
+# TomaRamosApp
 
-Non-official mobile-focused web application for helping students plan their course inscription process (AKA *toma de ramos*) at Universidad de los Andes, Chile.
+Non-official mobile-focused web application for helping students plan their course inscription process (AKA *toma de ramos*) at Universidad de los Andes, Chile. Please visit the project's landing page at [`TomaRamos.App`](https://tomaramos.app) for more information.
 
-- [TomaRamosUandes](#tomaramosuandes)
+- [TomaRamosApp](#tomaramosapp)
   - [1. Main features](#1-main-features)
   - [2. Architecture](#2-architecture)
+  - [Project structure](#project-structure)
   - [3. Contributing](#3-contributing)
-  - [4. Developing](#4-developing)
   - [5. Usage](#5-usage)
     - [5.1. First run](#51-first-run)
     - [5.2. Build and run](#52-build-and-run)
@@ -25,28 +25,39 @@ Non-official mobile-focused web application for helping students plan their cour
 
 This application is deployed virtualized on docker-compose with the following services:
 
-<!-- TODO --> TODO
+- `tomaramos-postgres`: PostgreSQL database server.
+- `tomaramos-rails`: Ruby on Rails framework with the actual web application.
+- `html-to-image`: microservice utility used by `tomaramos-rails` for exporting an user's week schedule as image.
+
+![Docker architecture diagram](./docs/architecture-docker.png)
+
+## Project structure
+
+| Directory         | Description                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| `.vscode`         | Contains project-related IDE configuration (for Visual Studio Code).      |
+| `docs`            | Documentation resources.                                                  |
+| `postgres-volume` | Shared Docker volume with the database. See section [5.1](#51-first-run). |
+| `HTMLToImage`     | Docker microservice for converting HTML+CSS into an image.                |
+| `PostgresDB`      | Docker service with the database server (DBMS).                           |
+| `TomaRamosWebApp` | Source code of the Ruby on Rails web application.                         |
 
 ## 3. Contributing
 
 Please head to the [`docs`](./docs/) directory and read the [contributing docs](./docs/CONTRIBUTING.md).
 
-## 4. Developing
-
-Please review [`docs/developing.md`](./docs/developing.md).
-
 ## 5. Usage
 
 ### 5.1. First run
 
-Before anything, as the virtualized database (Docker container) is preserved via a volume mount, this data has first to exist in the host machine, i.e., the mounted directory, `postgres-data`, has to be filled with the minimum files for a blank PostgreSQL server to work.
+Before anything, as the virtualized database (Docker container) is preserved via a volume, this data has first to exist in the host machine, i.e., the mounted directory, `postgres-volume`, has to be filled with the minimum files for a blank PostgreSQL server to work.
 
 A clumsy way to do this is:
 
 1. Comment the `volume` statement for the postgres service at [`docker-compose.yaml`](./docker-compose.yaml).
 2. Run `docker-compose up --build tomaramos-postgres` for starting the database container only.
-3. From another terminal, create the `postgres-data` directory with `mkdir postgres-data`, in your host machine.
-4. Copy the blank postgres data files from the container into the `postgres-data` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/ ./postgres-data`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
+3. From another terminal, create the `postgres-volume` directory with `mkdir postgres-volume`, in your host machine.
+4. Copy the blank postgres data files from the container into the `postgres-volume` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/ ./postgres-volume`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
 5. Undo step (1).
 
 Also, it is mandatory to create a `.secrets.env` file with sensitive environment variables. The following command will create a template. The only mandatory variable for running the environment (outside Docker) is `ADMIN_USER_PASSWORD`.
