@@ -11,15 +11,3 @@ TODO
 | ...        | ...                                                                            |
 
 <!-- TODO -->
-
-## Dependencies
-
-<!-- TODO -->
-
-## Usage
-
-<!-- TODO -->
-
-## Testing
-
-<!-- TODO -->

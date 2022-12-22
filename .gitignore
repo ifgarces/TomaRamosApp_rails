@@ -1,8 +1,10 @@
 drafts.sh
 *.log
+.idea/
+
+# Database volume
+postgres-data/
 
 # Ignoring ENV file with stuff related to Google Cloud for Oauth
 .secrets.env
 .~lock*
-
-.idea/
