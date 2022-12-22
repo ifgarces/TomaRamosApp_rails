@@ -1,5 +1,4 @@
 require "logger"
-require "figaro"
 require "date"
 require "utils/logging_util"
 require "enums/event_type_enum"
@@ -8,26 +7,9 @@ ADMIN_USER_EMAIL = "admin@tomaramos.app"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
-# @param name [String]
 # @return [nil]
-# @raise [ArgumentError] In case the environment variable does not exist
-def assertEnvExists(name)
-  raise ArgumentError.new(
-    "Environment variable '#{name}' is not defined"
-  ) unless (ENV[name] != nil) && (!ENV[name].blank?)
-end
-
-# If an error triggers here, you have to fill your `.secrets.env` properly with stuff for Google
-# Cloud (for the Oauth2 button). This assert is just to ensure these are defined for the web
-# server, not needed on this file
-#! Disabled for now as Oauth is not yet implemented
-# assertEnvExists("OAUTH_CLIENT_ID")
-# assertEnvExists("OAUTH_CLIENT_SECRET")
-
 def createAdminUser()
-  assertEnvExists("ADMIN_USER_PASSWORD")
-
-  adminPassword = ENV["ADMIN_USER_PASSWORD"]
+  adminPassword = ENV.fetch("ADMIN_USER_PASSWORD")
 
   adminUser = User.find_by(email: ADMIN_USER_EMAIL)
   if (adminUser.nil?)
@@ -41,6 +23,7 @@ def createAdminUser()
   adminUser.save!()
 end
 
+# @return [nil]
 def createEventTypes()
   courseEventTypes = [
     EventTypeEnum::CLASS,
@@ -60,6 +43,7 @@ def createEventTypes()
   end
 end
 
+# @return [nil]
 def setCurrentAcademicPeriod()
   if (AcademicPeriod.getLatest().nil?)
     @log.debug("Inserting current academic period '#{AcademicPeriod.getLatestPeriodName()}'")

@@ -1,4 +1,3 @@
-require "figaro"
 require "rest_client"
 require "json"
 require "utils/logging_util"
@@ -162,7 +161,7 @@ class MainController < ApplicationController
     # Consuming html-to-image microservice and sending result to web client (docker-compose)
     image = RestClient::Request.execute(
       method: :get,
-      url: "http://html-to-image:#{ENV["HTML_TO_IMG_PORT"]}",
+      url: "http://html-to-image:#{ENV.fetch("HTML_TO_IMG_PORT")}",
       payload: JSON.dump({
         html: scheduleTableRawHTML
         #css: nil #TODO: include CSS styles, somehow

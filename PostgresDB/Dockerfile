@@ -22,7 +22,6 @@ COPY setup_db.sql .
 
 # Configuring database
 RUN /etc/init.d/postgresql start \
-    && su postgres -c "psql --command=\" ALTER USER postgres WITH PASSWORD 'postgres'; \"" \
     && su postgres -c "psql --file=./setup_db.sql"
 
 # Allowing all external connections

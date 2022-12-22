@@ -83,9 +83,6 @@ gem "rufo"
 # Hirb, for printing ActiveRecords as nice tables when running queries in rails console
 gem "hirb"
 
-# Figaro for environment variables
-gem "figaro"
-
 # RedCarpet for rendering markdown as views :D
 gem "redcarpet"
 
@@ -93,18 +90,11 @@ gem "redcarpet"
 # gem "devise" #TODO
 gem "bcrypt", "~> 3.1.7"
 
-# CanCan, for access control based on authentication levels
-# gem "cancancan" #TODO
-
 # Gem for authenticating the user with Google (OAuth2), for this case at an organization level
 # (@miuandes)
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection" #? needed?
-
-# Pagination in views #TODO
-# gem "kaminari"
-# gem "will_paginate", "~> 3.3"
 
 # REST client for consuming APIs (for HTML to image microservice)
 gem "rest-client", "~> 2.1"

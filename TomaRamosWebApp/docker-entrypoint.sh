@@ -9,6 +9,7 @@ set -exu
 # Compiling assets and initializing database
 #// rails db:create
 #// rails db:migrate:reset db:seed
+rails db:create
 rails db:migrate db:seed
 rails assets:clobber assets:precompile
 
@@ -58,12 +59,12 @@ DNS.1 = localhost
     echo "::: SERVING OVER HTTPS :::"
     rails server \
         --using=puma \
-        --binding="ssl://${WEB_SERVER_HOST}:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app.crt&verify_mode=none" \
+        --binding="ssl://0.0.0.0:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app.crt&verify_mode=none" \
         --environment=development
 elif [[ "${SERVE_OVER_HTTPS}" == "false" ]]; then
     rails server \
         --port=${WEB_SERVER_PORT} \
-        --binding=${WEB_SERVER_HOST} \
+        --binding=0.0.0.0 \
         --environment=development
 else
     echo "SERVE_OVER_HTTPS: Invalid non-boolean value \"${SERVE_OVER_HTTPS}\"" >&2
