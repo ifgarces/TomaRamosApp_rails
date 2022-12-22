@@ -45,16 +45,18 @@ A clumsy way to do this is:
 
 1. Comment the `volume` statement for the postgres service at [`docker-compose.yaml`](./docker-compose.yaml).
 2. Run `docker-compose up --build tomaramos-postgres` for starting the database container only.
-3. From another terminal, create the `postgres-data` directory with `mkdir postgres-data`.
+3. From another terminal, create the `postgres-data` directory with `mkdir postgres-data`, in your host machine.
 4. Copy the blank postgres data files from the container into the `postgres-data` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/ ./postgres-data`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
 5. Undo step (1).
 
-Also, it is mandatory to create a `.secrets.env` file with sensitive environment variables. The following command will create a template.The only mandatory variable for running the environment (outside Docker) is `ADMIN_USER_PASSWORD`.
+Also, it is mandatory to create a `.secrets.env` file with sensitive environment variables. The following command will create a template. The only mandatory variable for running the environment (outside Docker) is `ADMIN_USER_PASSWORD`.
 
 ```shell
+echo "
 ADMIN_USER_PASSWORD=fooPassword
 OAUTH_CLIENT_ID=
 OAUTH_CLIENT_SECRET=
+" > .secrets.env
 ```
 
 ### 5.2. Build and run

@@ -6,30 +6,23 @@
 # cloned at the production server.
 # --------------------------------------------------------------------------------------------------
 
-set -eu
-
-LOG_FILE=./deploy.log
-date > ${LOG_FILE} 
-echo "Outputting to ${LOG_FILE}"
-
-set -x
+set -exu
 
 cd ${TOMARAMOSAPP_RAILS}
 
-git pull origin master | tee -a ${LOG_FILE}
+# Pulling codebase
+git pull origin master
 git checkout master
-git fetch | tee -a ${LOG_FILE}
-git status | tee -a ${LOG_FILE}
+git fetch
+git status
 
-# Launching postgres server if not running
-# References: https://serverfault.com/a/935674
-if [ -z `docker ps -q --no-trunc | grep $(docker-compose ps -q tomaramos-postgres)` ]; then
-    docker-compose up --build --detach tomaramos-postgres | tee -a ${LOG_FILE}
-fi
+# Building
+docker-compose build
 
-./restart-rails.sh | tee -a ${LOG_FILE}
-./restart-html-to-image.sh | tee -a ${LOG_FILE}
+# Re-launching virtualized environment
+docker-compose down --remove-orphans
+docker-compose up --detach
 
-echo "[OK] Restart done" | tee -a ${LOG_FILE}
+echo "[OK] Restart done"
 
 docker-compose logs -f tomaramos-rails
