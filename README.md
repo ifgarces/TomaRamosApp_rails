@@ -1,6 +1,6 @@
 # TomaRamosUandes
 
-Non-official mobile-focused web application for dealing with the messy course inscription (AKA *toma de ramos*) process at Universidad de los Andes, Chile.
+Non-official mobile-focused web application for helping students plan their course inscription process (AKA *toma de ramos*) at Universidad de los Andes, Chile.
 
 - [TomaRamosUandes](#tomaramosuandes)
   - [1. Main features](#1-main-features)
@@ -20,8 +20,6 @@ Non-official mobile-focused web application for dealing with the messy course in
 - Download week schedule as image.
 - Parsing of the courses catalog provided by the Faculty (as CSV).
 - Detection of conflicts between courses when inscribing, including evaluations.
-
-<!-- TODO --> TODO
 
 ## 2. Architecture
 
@@ -51,6 +49,14 @@ A clumsy way to do this is:
 4. Copy the blank postgres data files from the container into the `postgres-data` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/ ./postgres-data`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
 5. Undo step (1).
 
+Also, it is mandatory to create a `.secrets.env` file with sensitive environment variables. The following command will create a template.The only mandatory variable for running the environment (outside Docker) is `ADMIN_USER_PASSWORD`.
+
+```shell
+ADMIN_USER_PASSWORD=fooPassword
+OAUTH_CLIENT_ID=
+OAUTH_CLIENT_SECRET=
+```
+
 ### 5.2. Build and run
 
 Simply run the environment with docker-compose, for instance, with:
@@ -65,10 +71,16 @@ As the database is preserved due the volume mount, restarting all containers wil
 
 ### 6.1. Virtualized
 
-Considering the environment is already up and running, you can execute rails tests with:
+Considering the environment is already up and running, an interactive shell for the Rails container can be launched with:
 
 ```shell
-docker exec tomaramos-rails-container rails test
+docker exec -it tomaramos-rails-container /bin/bash
+```
+
+Then, for correctly running Rails tests, the following command has to be executed within that shell instance:
+
+```shell
+DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" rails test
 ```
 
 ### 6.2. Local

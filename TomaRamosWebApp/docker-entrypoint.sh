@@ -6,9 +6,11 @@
 
 set -exu
 
+# Creating tests database
+DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" \
+    rails db:create
+
 # Compiling assets and initializing database
-#// rails db:create
-#// rails db:migrate:reset db:seed
 rails db:create
 rails db:migrate db:seed
 rails assets:clobber assets:precompile
@@ -49,6 +51,7 @@ DNS.0 = localhost
 DNS.1 = localhost
     " >> ca-config.temp.conf
 
+    # Creating self-signed SSL certificate
     openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -utf8 \
         -keyout /etc/ssl/certs/tomaramos.app.key \
         -out /etc/ssl/certs/tomaramos.app.crt \
@@ -61,11 +64,13 @@ DNS.1 = localhost
         --using=puma \
         --binding="ssl://0.0.0.0:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app.crt&verify_mode=none" \
         --environment=development
+
 elif [[ "${SERVE_OVER_HTTPS}" == "false" ]]; then
     rails server \
         --port=${WEB_SERVER_PORT} \
         --binding=0.0.0.0 \
         --environment=development
+
 else
     echo "SERVE_OVER_HTTPS: Invalid non-boolean value \"${SERVE_OVER_HTTPS}\"" >&2
     exit 1
