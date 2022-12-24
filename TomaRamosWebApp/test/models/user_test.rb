@@ -19,8 +19,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "isGuestUser false" do
-    guest = getFooUser()
-    assert_not(guest.isGuestUser())
+    noGuest = getFooUser()
+    assert_not(noGuest.isGuestUser())
   end
 
   test "inscribeNewCourse" do

@@ -31,6 +31,7 @@ COPY markdown/ markdown/
 COPY public/ public/
 COPY test/ test/
 
+# Copying encription key for sessions
 COPY tmp/development_secret.txt ./tmp/development_secret.txt
 
 # Just for debugging
@@ -51,7 +52,7 @@ RUN chmod +x docker-entrypoint.sh
 
 ARG WEB_SERVER_PORT
 EXPOSE ${WEB_SERVER_PORT}
-ARG SSL_PORT
-EXPOSE ${SSL_PORT}
+# ARG SSL_PORT
+# EXPOSE ${SSL_PORT}
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
