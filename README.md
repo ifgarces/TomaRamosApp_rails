@@ -44,7 +44,7 @@ This application is deployed virtualized on docker-compose with the following se
 
 ## 3. Contributing
 
-Please head to the [`docs`](./docs/) directory and read the [contributing docs](./docs/CONTRIBUTING.md).
+Please head to the [`docs`](./docs/) directory and read the [contributing docs](./docs/contributing.md).
 
 ## 5. Usage
 
