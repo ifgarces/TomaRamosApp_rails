@@ -52,7 +52,8 @@ RUN chmod +x docker-entrypoint.sh
 
 ARG WEB_SERVER_PORT
 EXPOSE ${WEB_SERVER_PORT}
-# ARG SSL_PORT
-# EXPOSE ${SSL_PORT}
+
+ARG 443
+EXPOSE 443
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
