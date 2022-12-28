@@ -13,6 +13,8 @@ Non-official mobile-focused web application for helping students plan their cour
   - [6. Testing](#6-testing)
     - [6.1. Virtualized](#61-virtualized)
     - [6.2. Local](#62-local)
+  - [8. Appendixes](#8-appendixes)
+    - [8.1. Debugging](#81-debugging)
 
 ## 1. Main features
 
@@ -57,7 +59,7 @@ A clumsy way to do this is:
 1. Comment the `volume` statement for the postgres service at [`docker-compose.yaml`](./docker-compose.yaml).
 2. Run `docker-compose up --build tomaramos-postgres` for starting the database container only.
 3. From another terminal, create the `postgres-volume` directory with `mkdir postgres-volume`, in your host machine.
-4. Copy the blank postgres data files from the container into the `postgres-volume` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/ ./postgres-volume`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
+4. Copy the blank postgres data files from the container into the `postgres-volume` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/* ./postgres-volume`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
 5. Undo step (1).
 
 Also, it is mandatory to create a `.secrets.env` file with sensitive environment variables. The following command will create a template. The only mandatory variable for running the environment (outside Docker) is `ADMIN_USER_PASSWORD`.
@@ -99,3 +101,13 @@ DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${
 ### 6.2. Local
 
 If you have the Rails app dependencies installed and set-up in your machine, you can directly cd into `TomaRamosWebApp` and run `rails test`, or `make test`.
+
+## 8. Appendixes
+
+### 8.1. Debugging
+
+In order to launch an interactive `psql` client in the database container, run:
+
+```shell
+docker exec -it tomaramos-postgres-container su postgres -c psql
+```
