@@ -72,9 +72,15 @@ class User < ApplicationRecord
   # @return [Array<Conflict>] Computed conflicts between events, checking the current inscribed
   #   courses by the user, and a target course.
   def getConflictsForNewCourse(newCourse)
-    return self.getInscribedCourses().map { |currentCourse|
-      CourseInstance.getConflictsBetween(currentCourse, newCourse)
-    }
+    allConflicts = []
+
+    self.getInscribedCourses().each do |currentCourse|
+      allConflicts.concat(
+        CourseInstance.getConflictsBetween(currentCourse, newCourse)
+      )
+    end
+
+    return allConflicts
   end
 
   # Updates the `last_activity` attribute with the current `DateTime`.
