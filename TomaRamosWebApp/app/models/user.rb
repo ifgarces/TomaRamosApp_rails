@@ -33,9 +33,9 @@ class User < ApplicationRecord
   end
 
   # @param course [Course]
-  # @return [Boolean] Whether the given `course` is present in the inscribed courses of the user.
+  # @return [Boolean]
   def hasInscribedCourse(course)
-    return self.getInscribedCourses().map { |it| it.id }.include?(course.id)
+    return self.getInscribedCourses().map { |it| it.id } .include?(course.id)
   end
 
   # @return [Integer] The total amount of credits inscribed by the user
@@ -69,15 +69,21 @@ class User < ApplicationRecord
   end
 
   # @param newCourse [CourseInstance]
-  # @return [Array<Conflict>] Computed conflicts between events, checking the current inscribed
-  #   courses by the user, and a target course.
+  # @return [Array<Conflict>] Computed conflicts between events, checking the current
+  # inscribed courses by the user, and a target course
   def getConflictsForNewCourse(newCourse)
-    return self.getInscribedCourses().map { |currentCourse|
-      CourseInstance.getConflictsBetween(currentCourse, newCourse)
-    }
+    allConflicts = []
+
+    self.getInscribedCourses().each do |currentCourse|
+      allConflicts.concat(
+        CourseInstance.getConflictsBetween(currentCourse, newCourse)
+      )
+    end
+
+    return allConflicts
   end
 
-  # Updates the `last_activity` attribute with the current `DateTime`.
+  # Updates the `last_activity` attribute with the current `DateTime`
   # @return [nil]
   def updateLastActivity()
     #TODO: make this asynchronous for optimal performance
