@@ -1,5 +1,5 @@
 # --------------------------------------------------------------------------------------------------
-# Makefile for quickly executing rails commands.
+# Makefile for quickly executing developing rails commands.
 # --------------------------------------------------------------------------------------------------
 
 include ../.env
@@ -17,7 +17,7 @@ web_server:
 		rails server \
 			--port=${WEB_SERVER_PORT} \
 			--binding=localhost \
-			--environment=${RUNTIME_ENVIRONMENT} \
+			--environment=development \
 			--no-log-to-stdout
 
 #* WIP debugging-only rule for serving over HTTPS instead of HTTP
@@ -27,7 +27,7 @@ https_web_server:
 		rails server \
 			--using=puma \
 			--binding="ssl://localhost:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app-bundle.crt" \
-			--environment=${RUNTIME_ENVIRONMENT} \
+			--environment=development \
 			--no-log-to-stdout
 
 # Runs the task for importing course data
@@ -58,9 +58,7 @@ clear_old_guest_users:
 
 # Run all Rails tests
 test:
-	RAILS_ENV=test \
-	DISABLE_DATABASE_ENVIRONMENT_CHECK=1 \
-		rails test
+	rails test --environment=test
 	#~~~~~~= [OK] Tests went fine =~~~~~~#
 
 __clear_sessions:

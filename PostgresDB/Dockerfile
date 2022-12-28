@@ -5,7 +5,7 @@
 ARG UBUNTU_VERSION
 FROM ubuntu:${UBUNTU_VERSION}
 
-ARG POSTGRES_VERSION=14
+ARG POSTGRES_VERSION
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -30,13 +30,9 @@ host    all     	all     0.0.0.0/0    md5 \n\
 host    all         all     ::/0         md5 \n\
 " >> /etc/postgresql/${POSTGRES_VERSION}/main/pg_hba.conf
 
-USER postgres
+COPY entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
 
 ENV POSTGRES_VERSION=${POSTGRES_VERSION}
 
-CMD [ "/bin/sh", "-exu", "-c", "/usr/lib/postgresql/${POSTGRES_VERSION}/bin/postgres \
-    -d ${POSTGRES_LOG_LEVEL} \
-    -p ${POSTGRES_PORT} \
-    -h 0.0.0.0 \
-    -D /var/lib/postgresql/${POSTGRES_VERSION}/main \
-    -c config_file=/etc/postgresql/${POSTGRES_VERSION}/main/postgresql.conf" ]
+ENTRYPOINT [ "./entrypoint.sh" ]
