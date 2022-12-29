@@ -1,4 +1,13 @@
 {
+    // Shell scripts schema works better for config files as variables are properly highlighted
+    "files.associations": {
+        "nginx.conf": "shellscript"
+    },
+    // Making sure the IDE will not do strange things in Makefiles
+    "[makefile]": {
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false
+    },
     // Setting code formatting rules for the project
     "[ruby]": {
         "editor.tabSize": 2,

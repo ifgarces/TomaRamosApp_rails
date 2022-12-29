@@ -16,7 +16,6 @@ services:
       context: NGINX
       args:
         NGINX_VERSION: 1.22.1
-        WEB_APP_PORT: ${RAILS_APP_PORT}
     ports:
       - "${RAILS_APP_PORT}:80"
     networks:
@@ -26,29 +25,6 @@ services:
       - "./sockets-volume:/tmp/sockets/:rw"
     depends_on:
       - tomaramos-rails
-
-  # ---------------------- DBMS ---------------------- #
-  tomaramos-postgres:
-    container_name: tomaramos-postgres-container
-    build:
-      context: PostgresDB
-      args:
-        UBUNTU_VERSION: 22.04
-        POSTGRES_VERSION: ${POSTGRES_VERSION}
-    environment:
-      POSTGRES_LOG_LEVEL: ${POSTGRES_LOG_LEVEL}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-    networks:
-      tomaramos-net:
-    restart: "unless-stopped" # <- so that `docker-compose stop` for this won't destroy the database
-    volumes:
-      - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 20s
-      timeout: 5s
-      retries: 1
-      start_period: 20s
 
   # ---------------------- Rails web app ---------------------- #
   tomaramos-rails:
@@ -73,6 +49,29 @@ services:
     depends_on:
       tomaramos-postgres:
         condition: service_healthy
+
+  # ---------------------- DBMS ---------------------- #
+  tomaramos-postgres:
+    container_name: tomaramos-postgres-container
+    build:
+      context: PostgresDB
+      args:
+        UBUNTU_VERSION: 22.04
+        POSTGRES_VERSION: ${POSTGRES_VERSION}
+    environment:
+      POSTGRES_LOG_LEVEL: ${POSTGRES_LOG_LEVEL}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    networks:
+      tomaramos-net:
+    restart: "unless-stopped" # <- so that `docker-compose stop` for this won't destroy the database
+    volumes:
+      - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 20s
+      timeout: 5s
+      retries: 1
+      start_period: 20s
 
   # ---------------------- HTML to Image microservice ---------------------- #
   html-to-image:
