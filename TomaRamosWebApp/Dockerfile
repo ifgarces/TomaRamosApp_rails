@@ -50,8 +50,8 @@ ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgre
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
-ARG WEB_SERVER_PORT
-EXPOSE ${WEB_SERVER_PORT}
+ARG RAILS_APP_PORT
+EXPOSE ${RAILS_APP_PORT}
 
 ARG 443
 EXPOSE 443
