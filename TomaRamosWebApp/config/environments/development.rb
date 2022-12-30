@@ -3,8 +3,7 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  #! placing here as there are issues when switching to production environment, for some reason
-  # config.force_ssl = true
+  config.force_ssl = ENV.key?("FORCE_SSL")
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
@@ -15,10 +14,9 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports.
-  #! Changed to its default value `true` as I had trouble running in the "production" environment
-  config.consider_all_requests_local = false
+  config.consider_all_requests_local = !ENV.key?("FORCE_SSL")
 
-  #! Minimizing logging
+  #* Reduced logging
   config.log_level = :info
 
   # Enable server timing
@@ -26,13 +24,13 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
+  if Rails.root.join("tmp/caching-dev.txt").exist?()
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      "Cache-Control" => "public, max-age=#{7.days.to_i()}"
     }
   else
     config.action_controller.perform_caching = false

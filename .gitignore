@@ -2,8 +2,9 @@ drafts.sh
 *.log
 .idea/
 
-# Database volume
+# Docker volumes
 postgres-volume/
+certs-volume/
 
 # Ignoring ENV file with stuff related to Google Cloud for Oauth
 .secrets.env

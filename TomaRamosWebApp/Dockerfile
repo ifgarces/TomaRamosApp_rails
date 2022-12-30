@@ -47,6 +47,42 @@ RUN mkdir storage \
 RUN rm -f ./config/database.yml
 ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
 
+# Creating SSL certs
+ARG SSL_CERT_FILE=/tmp/certs/tomaramos.app.crt
+ARG SSL_KEY_FILE=/tmp/certs/tomaramos.app.key
+RUN mkdir -p /tmp/certs/
+RUN echo "\n\
+[ req ]\n\
+prompt                 = no\n\
+days                   = 365\n\
+distinguished_name     = req_distinguished_name\n\
+req_extensions         = v3_req\n\
+\n\
+[ req_distinguished_name ]\n\
+countryName            = CL\n\
+stateOrProvinceName    = Metropolitana\n\
+localityName           = Santiago\n\
+organizationName       = localhost\n\
+organizationalUnitName = R&D\n\
+commonName             = localhost\n\
+emailAddress           = hostmaster@tomaramos.app\n\
+\n\
+[ v3_req ]\n\
+basicConstraints       = CA:false\n\
+extendedKeyUsage       = serverAuth\n\
+subjectAltName         = @sans\n\
+\n\
+[ sans ]\n\
+DNS.0 = localhost\n\
+DNS.1 = localhost\n\
+" >> /tmp/csr-local.conf \
+    && openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -utf8 \
+        -keyout ${SSL_KEY_FILE} \
+        -out ${SSL_CERT_FILE} \
+        -config /tmp/csr-local.conf
+ENV SSL_CERT_FILE=${SSL_CERT_FILE}
+ENV SSL_KEY_FILE=${SSL_KEY_FILE}
+
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 

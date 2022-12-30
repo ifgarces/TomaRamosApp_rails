@@ -18,11 +18,13 @@ services:
         NGINX_VERSION: 1.22.1
     ports:
       - "${RAILS_APP_PORT}:80"
+      # - "443:443"
     networks:
       tomaramos-net:
     restart: "always"
     volumes:
       - "./sockets-volume:/tmp/sockets/:rw"
+      - "./certs-volume:/tmp/certs/:rw"
     depends_on:
       - tomaramos-rails
 
@@ -33,19 +35,22 @@ services:
       context: TomaRamosWebApp
       args:
         RUBY_VERSION: 3.1.1
-        RAILS_APP_PORT: ${RAILS_APP_PORT}
+        RAILS_APP_PORT: ${RAILS_APP_PORT} #!
     environment:
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_HOST: "tomaramos-postgres"
       ADMIN_USER_PASSWORD: "qwerty"
-      #RAILS_APP_PORT: ${RAILS_APP_PORT}
-      SERVE_OVER_HTTPS: "false"
+      RAILS_APP_PORT: ${RAILS_APP_PORT} #!
+      SERVE_OVER_HTTPS: "true" #!
       HTML_TO_IMG_PORT: ${HTML_TO_IMG_PORT}
     networks:
       tomaramos-net:
+    # ports: #!
+      # - "${RAILS_APP_PORT}:${RAILS_APP_PORT}" #!
     restart: "no"
     volumes:
       - "./sockets-volume:/tmp/sockets/:rw"
+      - "./certs-volume:/tmp/certs/:rw"
     depends_on:
       tomaramos-postgres:
         condition: service_healthy
