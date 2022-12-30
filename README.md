@@ -106,7 +106,7 @@ If you have the Rails app dependencies installed and set-up in your machine, you
 
 ### 8.1. Debugging
 
-In order to launch an interactive `psql` client in the database container, run:
+In order to launch an interactive `psql` client in the database container itself, run:
 
 ```shell
 docker exec -it tomaramos-postgres-container su postgres -c psql

@@ -1,10 +1,8 @@
-#!/bin/bash
+#!/bin/bash -exu
 # --------------------------------------------------------------------------------------------------
 # Server initialization script that creates and seeds the database and other dependencies, for
 # finally starting the Rails web application.
 # --------------------------------------------------------------------------------------------------
-
-set -exu
 
 # Creating test database (for containerized Rails tests)
 DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" \
