@@ -5,10 +5,11 @@
     },
     // Making sure the IDE will not do strange things in Makefiles
     "[makefile]": {
+        "editor.tabSize": 4,
         "editor.insertSpaces": false,
         "editor.detectIndentation": false
     },
-    // Setting code formatting rules for the project
+    // Ruby code formatting rules for the project
     "[ruby]": {
         "editor.tabSize": 2,
         "editor.insertSpaces": true
