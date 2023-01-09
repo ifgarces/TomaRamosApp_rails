@@ -22,7 +22,7 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
     networks:
       tomaramos-net:
-    restart: "unless-stopped" # <- so that `docker-compose stop` for this won't destroy the database
+    restart: "unless-stopped"
     volumes:
       - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
     healthcheck:
@@ -31,8 +31,6 @@ services:
       timeout: 5s
       retries: 1
       start_period: 20s
-    #ports: #! only for debugging! never leave on production
-      #- "${POSTGRES_PORT}:${POSTGRES_PORT}"
 
   # ---------------------- Rails web app ---------------------- #
   tomaramos-rails:
