@@ -1,8 +1,9 @@
 ARG RUBY_VERSION
 FROM ruby:${RUBY_VERSION}
 
-WORKDIR /home/tomaramos/webapp
 ARG DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /home/tomaramos/webapp
 
 # Installing NodJS, Yarn and some debugging utilities
 RUN apt-get update --quiet && apt-get install -y \
@@ -43,7 +44,7 @@ RUN mkdir storage \
 	&& yarn install --check-files
 
 # For some reason, I cannot place an embedded ENV variable value for the host at `database.yml`, so
-# for virtualized runtime, the database URL is override as follows
+# for virtualized runtime, the database URL is overridden as follows
 RUN rm -f ./config/database.yml
 ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
 
