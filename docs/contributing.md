@@ -9,6 +9,7 @@
   - [3. IDE recommendations](#3-ide-recommendations)
     - [3.1. Documentation](#31-documentation)
     - [3.2. Coding](#32-coding)
+    - [3.3. Git](#33-git)
 
 ## 1. Ruby coding standards
 
@@ -63,16 +64,20 @@ It is strongly advised to use Visual Studio Code IDE with the extensions mention
 
 ### 3.1. Documentation
 
-1. [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one): for various smart Markdown utilities, such as automatic section headers and table of contents, formatting, and more.
-2. [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint): linter for implementing the best practices on the industry for writing Markdown files.
+- [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one): for various smart Markdown utilities, such as automatic section headers and table of contents, formatting, and more.
+- [Markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint): linter for implementing the best practices on the industry for writing Markdown files.
 
 ### 3.2. Coding
 
-1. [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments): as various comments are formatted to be rendered nicely by this tool.
-2. [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker): for `Dockerfile` and `docker-compose` intellisense.
-3. [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker): great tool for avoiding typos on code and documentation.
-4. [Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph): autocompletion and intellisense for Ruby files, specially useful if you refuse to use [RubyMine IDE](https://www.jetbrains.com/ruby/) at all.
-5. [Yard documenter](https://marketplace.visualstudio.com/items?itemName=pavlitsky.yard): ruby documentation generator for functions, classes and modules. Once installed, locate your cursor in a function you want to document, and run on the command palette (with `ctrl+shift+p`): `Document with YARN`.
-6. [Rufo formatter](https://marketplace.visualstudio.com/items?itemName=jnbt.vscode-rufo): code linter for Ruby integrated in the IDE.
+- [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments): as various comments are formatted to be rendered nicely by this tool.
+- [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker): for `Dockerfile` and `docker-compose` intellisense.
+- [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker): great tool for avoiding typos on both code and documentation.
+- [Ruby Solargraph](https://marketplace.visualstudio.com/items?itemName=castwide.solargraph): autocompletion and intellisense for Ruby files, specially useful if you refuse to use [RubyMine IDE](https://www.jetbrains.com/ruby/) at all.
+- [Yard documenter](https://marketplace.visualstudio.com/items?itemName=pavlitsky.yard): ruby documentation generator for functions, classes and modules. Once installed, locate your cursor in a function you want to document, and run on the command palette (with `ctrl+shift+p`): `Document with YARN`.
+- [Rufo formatter](https://marketplace.visualstudio.com/items?itemName=jnbt.vscode-rufo): code linter for Ruby integrated in the IDE.
 
-Note: since [RubyMine](https://www.jetbrains.com/ruby/) has great build-in intellisense, it is recommended to use that IDE as well, for when the listed `vscode` extensions are not smart enough, specially when editing views with embedded ruby code.
+Note: since [RubyMine](https://www.jetbrains.com/ruby/) has great build-in intellisense, it is recommended to use that IDE as well, for when the listed `vscode` extensions are not smart enough, specially when editing views (with embedded ruby code).
+
+### 3.3. Git
+
+- [Git Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie.git-graph): provides visualization of commit history. Useful for viewing changes and merges on branches.
