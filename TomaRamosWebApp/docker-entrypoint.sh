@@ -8,6 +8,8 @@
 DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" \
     rails db:create
 
+export DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
+
 # Compiling assets and initializing database
 rails db:create
 rails db:migrate db:seed
