@@ -43,17 +43,14 @@ RUN mkdir storage \
     && bundle install \
 	&& yarn install --check-files
 
-# For some reason, I cannot place an embedded ENV variable value for the host at `database.yml`, so
-# for virtualized runtime, the database URL is overridden as follows
-RUN rm -f ./config/database.yml
-ENV DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
+# Replacing host to postgres container in database connection file (for some reason, could not do
+# it with ENV variables)
+RUN sed -i "s/localhost/tomaramos-postgres/g" ./config/database.yml
 
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh
 
 ARG WEB_SERVER_PORT
 EXPOSE ${WEB_SERVER_PORT}
-# ARG SSL_PORT
-# EXPOSE ${SSL_PORT}
 
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
