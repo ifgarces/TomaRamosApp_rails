@@ -23,4 +23,4 @@ docker-compose up --detach
 
 echo "[OK] Restart done"
 
-docker-compose logs -f tomaramos-rails
+docker-compose logs -f rails
