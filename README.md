@@ -86,16 +86,11 @@ As the database is preserved due the volume mount, restarting all containers wil
 
 ### 6.1. Virtualized
 
-Considering the environment is already up and running, an interactive shell for the Rails container can be launched with:
+Considering the environment is already up and running, the following command will execute Rails tests inside its container:
 
 ```shell
-docker exec -it tomaramos-rails-container /bin/bash
-```
-
-Then, for correctly running Rails tests, the following command has to be executed within that shell instance:
-
-```shell
-DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" rails test
+docker exec -it tomaramos-rails /bin/bash -c \
+    'DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" rails test'
 ```
 
 ### 6.2. Local
@@ -109,5 +104,5 @@ If you have the Rails app dependencies installed and set-up in your machine, you
 In order to launch an interactive `psql` client in the database container, run:
 
 ```shell
-docker exec -it tomaramos-postgres-container su postgres -c psql
+docker exec -it tomaramos-postgres su postgres -c psql
 ```

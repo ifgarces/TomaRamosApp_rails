@@ -1,6 +1,4 @@
-#!/bin/bash
-
-set -exu
+#!/bin/bash -exu
 
 # Handling permissions due Docker volume
 chown -R postgres:postgres /var/lib/postgresql/${POSTGRES_VERSION}/main

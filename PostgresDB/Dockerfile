@@ -1,13 +1,9 @@
-# --------------------------------------------------------------------------------------------------
-# Postgresql for the Django application.
-# --------------------------------------------------------------------------------------------------
-
 ARG UBUNTU_VERSION
 FROM ubuntu:${UBUNTU_VERSION}
 
-ARG POSTGRES_VERSION
-
 ARG DEBIAN_FRONTEND=noninteractive
+
+ARG POSTGRES_VERSION
 
 # Installing PostgreSQL server
 RUN apt-get update --quiet && apt-get install --quiet -y \

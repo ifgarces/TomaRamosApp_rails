@@ -1,12 +1,10 @@
-#!/bin/bash
+#!/bin/bash -exu
 # --------------------------------------------------------------------------------------------------
 # Intended to be executed on the deployment server for pulling the main branch and refreshing Rails.
 #
 # Note: `TOMARAMOSAPP_RAILS` has to be defined, as the absolute route where this repository is
 # cloned at the production server.
 # --------------------------------------------------------------------------------------------------
-
-set -exu
 
 cd ${TOMARAMOSAPP_RAILS}
 
@@ -25,4 +23,4 @@ docker-compose up --detach
 
 echo "[OK] Restart done"
 
-docker-compose logs -f tomaramos-rails
+docker-compose logs -f rails
