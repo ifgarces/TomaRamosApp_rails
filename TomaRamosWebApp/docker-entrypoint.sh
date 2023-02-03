@@ -5,10 +5,9 @@
 # --------------------------------------------------------------------------------------------------
 
 # Creating tests database
-DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" \
-    rails db:create
+RAILS_ENV=test rails db:create
 
-export DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_development"
+export RAILS_ENV=development
 
 # Compiling assets and initializing database
 rails db:create

@@ -47,7 +47,6 @@ services:
       POSTGRES_HOST: "tomaramos-postgres"
       ADMIN_USER_PASSWORD: "qwerty"
       WEB_SERVER_PORT: ${WEB_SERVER_PORT}
-      SSL_PORT: ${SSL_PORT}
       HTML_TO_IMG_PORT: ${HTML_TO_IMG_PORT}
     networks:
       tomaramos-net:
