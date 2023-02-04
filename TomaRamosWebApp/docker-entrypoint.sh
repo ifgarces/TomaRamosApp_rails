@@ -4,7 +4,11 @@
 # server, executed when the container starts.
 # --------------------------------------------------------------------------------------------------
 
-# Creating tests database
+# For some reason, when running virtualized, this will be required as Rails refuses to properly load
+# the required .env files
+erb ./config/database.yml >> ./config/database.yml
+
+# Creating database for eventually running virtualized tests
 RAILS_ENV=test rails db:create
 
 export RAILS_ENV=development

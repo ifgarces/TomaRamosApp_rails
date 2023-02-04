@@ -1,34 +1,32 @@
-# Database connection settings.
+# --------------------------------------------------------------------------------------------------
+# Database connection settings. Note that there is embedded Ruby code here, which is correctly
+# supported by Rails. You can "test" this file with the command `erb config/database.yml` and
+# check the parsed output. Also, note that this file reads the ENV variables set at both .env files
+# at the root directory of the project. Will fork properly for both virtualized and native cases.
+# --------------------------------------------------------------------------------------------------
+
+<%
+require "dotenv"
+Dotenv.load(File.join("..", ".env"), File.join("..", ".secrets.env"))
+%>
 
 default: &default
   adapter: postgresql
   encoding: unicode
-  #// encoding: utf8
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
 
 development:
   <<: *default
-  url: "postgresql://tomaramosuandes:tomaramosuandes@localhost:<%= ENV.fetch('POSTGRES_PORT') { 5434 } %>/tomaramosuandes_development"
-
-  # Schema search path. The server defaults to $user,public
-  #schema_search_path: myapp,sharedapp,public
-
-  # Minimum log levels, in increasing order:
-  #   debug5, debug4, debug3, debug2, debug1,
-  #   log, notice, warning, error, fatal, and panic
-  # Defaults to warning.
+  url: "postgresql://tomaramosuandes:tomaramosuandes@<%= ENV.fetch('POSTGRES_HOST') { 'localhost' } %>:<%= ENV.fetch('POSTGRES_PORT') %>/tomaramosuandes_development"
   min_messages: notice
 
-
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
 test:
   <<: *default
-  url: "postgresql://tomaramosuandes:tomaramosuandes@localhost:<%= ENV.fetch('POSTGRES_PORT') { 5434 } %>/tomaramosuandes_test"
-
+  url: "postgresql://tomaramosuandes:tomaramosuandes@<%= ENV.fetch('POSTGRES_HOST') { 'localhost' } %>:<%= ENV.fetch('POSTGRES_PORT') %>/tomaramosuandes_test"
+  min_messages: log
 
 production:
+  # WIP
   <<: *default
-  url: "postgresql://tomaramosuandes:<%= ENV.fetch('TOMARAMOSUANDES_DATABASE_PASSWORD') { 'foo' } %>@localhost:<%= ENV.fetch('POSTGRES_PORT') { 5434 } %>/tomaramosuandes_production"
+  url: "postgresql://tomaramosuandes:<%= ENV.fetch('TOMARAMOSUANDES_DATABASE_PASSWORD') { 'todo' } %>@<%= ENV.fetch('POSTGRES_HOST') { 'localhost' } %>:<%= ENV.fetch('POSTGRES_PORT') %>/tomaramosuandes_production"
+  min_messages: warning
