@@ -4,10 +4,6 @@
 # server, executed when the container starts.
 # --------------------------------------------------------------------------------------------------
 
-# For some reason, when running virtualized, this will be required as Rails refuses to properly load
-# the required .env files
-erb ./config/database.yml >> ./config/database.yml
-
 # Creating database for eventually running virtualized tests
 RAILS_ENV=test rails db:create
 
@@ -24,5 +20,4 @@ rake data_importer:csv --trace
 # Starting web server, logging to STDOUT/STDERR
 rails server \
     --port=${WEB_SERVER_PORT} \
-    --binding=0.0.0.0 \
-    --environment=development
+    --binding=0.0.0.0
