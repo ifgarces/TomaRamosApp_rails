@@ -6,6 +6,7 @@
     - [1.2. Naming (Ruby)](#12-naming-ruby)
     - [1.3. Formatting (Ruby)](#13-formatting-ruby)
   - [2. Committing](#2-committing)
+  - [Languages](#languages)
   - [3. IDE recommendations](#3-ide-recommendations)
     - [3.1. Documentation](#31-documentation)
     - [3.2. Coding](#32-coding)
@@ -57,6 +58,10 @@ Closes #18: added working cookie dialog
 - Added standard modal automatically displayed when a host with no session (cookies) access any page
 - Also added blank JavaScript files properly included for each controller
 ```
+
+## Languages
+
+Git commit messages and ALL code (including code documentation) must be in english, as it is the standard in the software industry. Markdown documents should also be in english. Other ways of communication (e.g. GitHub issues and GitHub discussion) has to be in spanish.
 
 ## 3. IDE recommendations
 
