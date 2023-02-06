@@ -11,7 +11,7 @@ networks:
 services:
   # ---------------------- DBMS ---------------------- #
   postgres:
-    container_name: tomaramos-postgres
+    container_name: "tomaramos-postgres"
     build:
       context: PostgresDB
       args:
@@ -23,8 +23,6 @@ services:
     networks:
       tomaramos-net:
     restart: "unless-stopped"
-    ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}" # for developing only
     volumes:
       - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
     healthcheck:
@@ -36,7 +34,7 @@ services:
 
   # ---------------------- Rails web app ---------------------- #
   rails:
-    container_name: tomaramos-rails
+    container_name: "tomaramos-rails"
     build:
       context: TomaRamosWebApp
       args:
@@ -52,6 +50,9 @@ services:
       tomaramos-net:
     ports:
       - "${WEB_SERVER_PORT}:${WEB_SERVER_PORT}"
+    volumes:
+      - ".env:/home/tomaramos/.env:ro"
+      - ".secrets.env:/home/tomaramos/.secrets.env:ro"
     depends_on:
       postgres:
         condition: service_healthy
@@ -59,7 +60,7 @@ services:
 
   # ---------------------- HTML to Image microservice ---------------------- #
   html-to-image:
-    container_name: tomaramos-html-to-image
+    container_name: "tomaramos-html-to-image"
     build:
       context: HTMLToImage
       args:

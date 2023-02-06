@@ -16,12 +16,18 @@ RUN apt-get update --quiet && apt-get install -y \
     && apt-get update --quiet && apt-get install -y \
         nodejs yarn
 
-# Stylizing PS1, for when opening an interactive shell
+# Stylizing PS1, for when opening an interactive debugging shell in the container
 RUN echo 'PS1="\[\033[1;33m\]tomaramos-rails-container::\[\033[0m\]${PWD} $ "' >> /root/.bashrc
 
 COPY config.ru .
 COPY Gemfile .
 COPY package.json .
+
+# Installing Ruby and JavaScript packages
+RUN mkdir storage \
+    && bundle install \
+	&& yarn install --non-interactive --check-files
+
 COPY Rakefile .
 COPY app/ app/
 COPY bin/ bin/
@@ -32,20 +38,11 @@ COPY markdown/ markdown/
 COPY public/ public/
 COPY test/ test/
 
-# Copying encription key for sessions
+# Copying encryption key for sessions
 COPY tmp/development_secret.txt ./tmp/development_secret.txt
 
 # Just for debugging
 COPY Makefile .
-
-# Installing application packages
-RUN mkdir storage \
-    && bundle install \
-	&& yarn install --check-files
-
-# Replacing host to postgres container in database connection file (for some reason, could not do
-# it with ENV variables)
-RUN sed -i "s/localhost/tomaramos-postgres/g" ./config/database.yml
 
 COPY docker-entrypoint.sh .
 RUN chmod +x docker-entrypoint.sh

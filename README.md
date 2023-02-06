@@ -25,13 +25,15 @@ Non-official mobile-focused web application for helping students plan their cour
 
 ## 2. Architecture
 
-This application is deployed virtualized on docker-compose with the following services:
+This application is deployed virtualized on docker-compose with the following containers:
 
 - `tomaramos-postgres`: PostgreSQL database server.
-- `tomaramos-rails`: Ruby on Rails framework with the actual web application.
+- `tomaramos-rails`: Ruby on Rails framework with the web application.
 - `html-to-image`: microservice utility used by `tomaramos-rails` for exporting an user's week schedule as image.
 
 ![Docker architecture diagram](./docs/architecture-docker.png)
+
+Currently, TomaRamosApp is deployed on Google Cloud, using an "e2-migro" virtual machine (with Ubuntu as OS, of course). The resources for this machine are very low, but it fits on [Google Cloud's free tier](https://cloud.google.com/free/docs/free-cloud-features#compute) services. The script [`deploy.sh`](./deploy.sh) is executed inside the deployment machine for pulling code and rebuilding/restarting the environment.
 
 ## Project structure
 
@@ -82,6 +84,8 @@ docker-compose down --remove-orphans && docker-compose up --build
 
 As the database is preserved due the volume mount, restarting all containers will not erase the database, which is intended for virtualized deployment.
 
+Also, in a development-only setting, you can execute `./run-dev.sh` for starting the virtualized environment with settings overriden at `docker-compose.dev.yaml`. It can be very useful for set the database up and for running the Rails application natively in your machine.
+
 ## 6. Testing
 
 ### 6.1. Virtualized
@@ -89,8 +93,7 @@ As the database is preserved due the volume mount, restarting all containers wil
 Considering the environment is already up and running, the following command will execute Rails tests inside its container:
 
 ```shell
-docker exec -it tomaramos-rails /bin/bash -c \
-    'DATABASE_URL="postgresql://tomaramosuandes:tomaramosuandes@tomaramos-postgres:${POSTGRES_PORT}/tomaramosuandes_test" rails test'
+docker exec -it tomaramos-rails /bin/bash -c 'RAILS_ENV=test rails test'
 ```
 
 ### 6.2. Local

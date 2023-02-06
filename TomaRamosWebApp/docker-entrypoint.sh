@@ -4,7 +4,7 @@
 # server, executed when the container starts.
 # --------------------------------------------------------------------------------------------------
 
-# Creating tests database
+# Creating database for eventually running virtualized tests
 RAILS_ENV=test rails db:create
 
 export RAILS_ENV=development
@@ -20,5 +20,4 @@ rake data_importer:csv --trace
 # Starting web server, logging to STDOUT/STDERR
 rails server \
     --port=${WEB_SERVER_PORT} \
-    --binding=0.0.0.0 \
-    --environment=development
+    --binding=0.0.0.0

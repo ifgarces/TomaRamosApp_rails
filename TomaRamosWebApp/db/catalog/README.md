@@ -11,7 +11,7 @@ For instance:
 └── 2022-20
     └── ing
         ├── base.csv
-        ├── foo.csv
+        ├── teo.csv
         └── peg.csv
 ```
 

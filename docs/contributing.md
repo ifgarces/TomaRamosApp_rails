@@ -3,9 +3,10 @@
 - [Contributing](#contributing)
   - [1. Ruby coding standards](#1-ruby-coding-standards)
     - [1.1. Documentation](#11-documentation)
-    - [1.2. Naming](#12-naming)
-    - [1.3. Formatting](#13-formatting)
+    - [1.2. Naming (Ruby)](#12-naming-ruby)
+    - [1.3. Formatting (Ruby)](#13-formatting-ruby)
   - [2. Committing](#2-committing)
+  - [Languages](#languages)
   - [3. IDE recommendations](#3-ide-recommendations)
     - [3.1. Documentation](#31-documentation)
     - [3.2. Coding](#32-coding)
@@ -19,11 +20,11 @@ The Ruby *entities* such as classes, modules and functions should have their res
 
 For documenting models, please do it in the model class and not in the migration. [This good man](https://stackoverflow.com/questions/64678789/documenting-ruby-on-rails-models-with-yard) provides a good example of the format.
 
-### 1.2. Naming
+### 1.2. Naming (Ruby)
 
 Of course, everything should be in english, as is the standard in the industry. For this project, `camelCase` will be used for both methods, attributes and variables (except for Rails models), instead of Ruby's recommended style (which is `snake_case`). All other Ruby naming standards will be followed (e.g. `PascalCase` for class/module names, indentation of 2 spaces, etc.).
 
-### 1.3. Formatting
+### 1.3. Formatting (Ruby)
 
 - Parenthesis have to be used wherever possible, in order to distinguish actual methods (callables) with attributes (not callables). This includes methods with no parameters.
 - Strings in double quotes.
@@ -55,8 +56,12 @@ Example for when closing an issue:
 Closes #18: added working cookie dialog 
 
 - Added standard modal automatically displayed when a host with no session (cookies) access any page
-- Added blank JavaScript files properly included for each controller (so I don't have to do it later)
+- Also added blank JavaScript files properly included for each controller
 ```
+
+## Languages
+
+Git commit messages and ALL code (including code documentation) must be in english, as it is the standard in the software industry. Markdown documents should also be in english. Other ways of communication (e.g. GitHub issues and GitHub discussion) has to be in spanish.
 
 ## 3. IDE recommendations
 
