@@ -12,23 +12,11 @@ build: packages assets migrate seed import_csv
 
 # Runs the server
 web_server:
-	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
-	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-		rails server \
-			--port=${WEB_SERVER_PORT} \
-			--binding=localhost \
-			--environment=development \
-			--no-log-to-stdout
-
-#* WIP debugging-only rule for serving over HTTPS instead of HTTP
-https_web_server:
-	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
-	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-		rails server \
-			--using=puma \
-			--binding="ssl://localhost:${WEB_SERVER_PORT}?key=/etc/ssl/certs/tomaramos.app.key&cert=/etc/ssl/certs/tomaramos.app-bundle.crt" \
-			--environment=development \
-			--no-log-to-stdout
+	rails server \
+		--port=${WEB_SERVER_PORT} \
+		--binding=localhost \
+		--environment=development \
+		--no-log-to-stdout
 
 # Runs the task for importing course data
 import_csv:
@@ -38,15 +26,12 @@ migrate:
 	rails db:migrate --trace
 
 seed:
-	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
-	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-		rails db:seed --trace
+	rails db:seed --trace
 
 # Installs Ruby and JavaScript dependencies
 packages:
 	bundle install
 	yarn install --check-files
-	#---./bin/rails db:environment:set RAILS_ENV=development
 
 # Updates assets such as CSS styles
 assets:

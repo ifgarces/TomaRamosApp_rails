@@ -55,7 +55,7 @@ Example for when closing an issue:
 Closes #18: added working cookie dialog 
 
 - Added standard modal automatically displayed when a host with no session (cookies) access any page
-- Added blank JavaScript files properly included for each controller (so I don't have to do it later)
+- Also added blank JavaScript files properly included for each controller
 ```
 
 ## 3. IDE recommendations
