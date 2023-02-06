@@ -1,0 +1,8 @@
+services:
+  postgres:
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+
+  rails:
+    volumes:
+      - "./TomaRamosWebApp:/home/tomaramos/webapp:rw"

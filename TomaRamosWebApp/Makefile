@@ -40,14 +40,13 @@ migrate:
 seed:
 	OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID} \
 	OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET} \
-	ADMIN_USER_PASSWORD=${ADMIN_USER_PASSWORD} \
 		rails db:seed --trace
 
 # Installs Ruby and JavaScript dependencies
 packages:
 	bundle install
 	yarn install --check-files
-	./bin/rails db:environment:set RAILS_ENV=${RUNTIME_ENVIRONMENT}
+	#---./bin/rails db:environment:set RAILS_ENV=development
 
 # Updates assets such as CSS styles
 assets:

@@ -23,8 +23,6 @@ services:
     networks:
       tomaramos-net:
     restart: "unless-stopped"
-    # ports:
-    #   - "${POSTGRES_PORT}:${POSTGRES_PORT}" # for developing only
     volumes:
       - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
     healthcheck:
