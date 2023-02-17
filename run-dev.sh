@@ -16,7 +16,8 @@ set +x
 echo "
 —————————————————— -- ——————————————————
 
-[OK] Rails dependencies running in virtualized environment. Now you can run your native Rails app.
+Rails dependencies running in virtualized environment. Now you can run your native Rails app:
+    cd TomaRamosWebApp && make web_server
 
 —————————————————— -- ——————————————————
 "
