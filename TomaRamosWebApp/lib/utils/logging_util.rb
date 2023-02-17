@@ -1,6 +1,8 @@
 require "logger"
 
-# Simple interface for initializing loggers with a custom format for this application.
+# Interface for simplifying initialization of loggers, with a custom format for TomaRamosApp. The
+# method `getStdoutLogger` allows to initialize a logger to STDOUT for any file which outputs the
+# filename of the source code from which it was called. Good for small applications.
 # 
 # Author: Ignacio F. Garcés
 module LoggingUtil
@@ -46,7 +48,6 @@ module LoggingUtil
     @@logsHash[label] = newLogger
     return newLogger
   end
-
 
   # Logger for when exceptions are rescued globally.
   #

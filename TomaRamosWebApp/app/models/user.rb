@@ -58,7 +58,7 @@ class User < ApplicationRecord
 
   # @param course [CourseInstance]
   # @return [nil]
-  def uninscribeCourse(course)
+  def deinscribeCourse(course)
     auxArr = self.inscriptions.first().course_instances.delete(course)
     self.save!()
   end

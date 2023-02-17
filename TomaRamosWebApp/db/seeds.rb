@@ -3,25 +3,20 @@ require "date"
 require "utils/logging_util"
 require "enums/event_type_enum"
 
-ADMIN_USER_EMAIL = "admin@tomaramos.app"
-
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
 # @return [nil]
-def createAdminUser()
-  adminPassword = ENV.fetch("ADMIN_USER_PASSWORD")
-
-  adminUser = User.find_by(email: ADMIN_USER_EMAIL)
-  if (adminUser.nil?)
-    adminUser = User.new(email: ADMIN_USER_EMAIL)
-  end
-
-  adminUser.username = "admin"
-  adminUser.password = adminPassword
-  adminUser.is_admin = true
-
-  adminUser.save!()
-end
+# def createSuperAdminUser() #! Unused
+#   adminEmail = ENV.fetch("ADMIN_EMAIL") { "admin@tomaramos.app" }
+#   superAdmin = User.find_by(email: adminEmail)
+#   if (superAdmin.nil?)
+#     superAdmin = User.new(email: adminEmail)
+#   end
+#   superAdmin.username = ENV.fetch("ADMIN_USERNAME") { "admin" }
+#   superAdmin.password = ENV.fetch("ADMIN_PASSWORD")
+#   superAdmin.is_admin = true
+#   superAdmin.save!()
+# end
 
 # @return [nil]
 def createEventTypes()
@@ -43,6 +38,7 @@ def createEventTypes()
   end
 end
 
+# If a new period was set (i.e. AcademicPeriod.LATEST_PERIOD_NAME was changed by code)
 # @return [nil]
 def setCurrentAcademicPeriod()
   if (AcademicPeriod.getLatest().nil?)
@@ -53,8 +49,7 @@ def setCurrentAcademicPeriod()
   end
 end
 
-createAdminUser()
 createEventTypes()
 setCurrentAcademicPeriod()
 
-@log.info("✔️ Seeds complete")
+@log.info("[OK] Seeds complete")

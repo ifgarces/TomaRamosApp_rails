@@ -8,7 +8,7 @@ class AcademicPeriod < ApplicationRecord
 
   private
 
-  @@LATEST_PERIOD_NAME = "2023-10"
+  @@LATEST_PERIOD_NAME = ENV.fetch("LATEST_ACADEMIC_PERIOD").strip()
 
   public
 

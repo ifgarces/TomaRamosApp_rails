@@ -1,4 +1,8 @@
-/* Header */
+/**
+ * Styles must match MainController's at the Rails application.
+*/
+
+/* Headers */
 
 .cell-day-dark-gray {
     background-color: #444444;

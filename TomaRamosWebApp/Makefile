@@ -3,7 +3,7 @@
 # --------------------------------------------------------------------------------------------------
 
 include ../.env
-include ../.secrets.env
+# include ../.secrets.env #! unused
 
 .PHONY: build web_server import_csv migrate seed packages assets clear_sessions test
 

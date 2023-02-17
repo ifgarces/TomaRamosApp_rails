@@ -3,6 +3,10 @@ services:
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
 
-  rails:
-    volumes:
-      - "./TomaRamosWebApp:/home/tomaramos/webapp:rw"
+  html-to-image:
+    ports:
+      - "${HTML_TO_IMG_PORT}:${HTML_TO_IMG_PORT}"
+
+  # rails: # this does not work well...
+  #   volumes:
+  #     - "./TomaRamosWebApp:/home/tomaramos/webapp:rw"

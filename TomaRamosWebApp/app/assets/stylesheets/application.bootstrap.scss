@@ -32,7 +32,7 @@ $BOTTOM-NAV-BAR-HEIGHT: 82px;
 
 .better-in-mobile-notice {
     position: fixed;
-    Z-index: -2;
+    Z-index: 33; // Z-index: -2;
     top: $TOP-NAV-BAR-HEIGHT;
     right: 0;
     color: gray;
@@ -88,3 +88,12 @@ $BOTTOM-NAV-BAR-HEIGHT: 82px;
     background-color: transparent;
     border-color: transparent;
 }
+
+/* Toggling mobile notice */
+// @media (min-width: 600px)
+// {
+//     #BetterInMobileNotice
+//     {
+//         display: none;
+//     }
+// }

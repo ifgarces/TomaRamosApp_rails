@@ -99,10 +99,10 @@ class MainController < ApplicationController
   end
 
   # @return [nil]
-  def uninscribeCourse()
+  def deinscribeCourse()
     targetCourse = CourseInstance.find_by(id: params[:courseId])
     if (targetCourse.nil?)
-      @log.error("Cannot un-inscribe course ID '#{params[:courseId]}': invalid ID")
+      @log.error("Cannot deinscribe course ID '#{params[:courseId]}': invalid ID")
       redirect_to(
         course_instances_url,
         alert: "Error: ramo inválido, intente de nuevo"
@@ -112,7 +112,7 @@ class MainController < ApplicationController
 
     targetCourseTitle = targetCourse.title
     targetCourseNrc = targetCourse.nrc
-    @currentUser.uninscribeCourse(targetCourse)
+    @currentUser.deinscribeCourse(targetCourse)
     redirect_to(
       :courses,
       notice: "%s (NRC %s) des-inscrito" % [targetCourseTitle, targetCourseNrc]
@@ -120,7 +120,7 @@ class MainController < ApplicationController
   end
 
   # @return [nil]
-  def uninscribeAllCourses()
+  def deinscribeAllCourses()
     userCourses = @currentUser.getInscribedCourses()
     count = userCourses.count()
     @currentUser.clearCoursesInscriptions()
@@ -163,8 +163,7 @@ class MainController < ApplicationController
       method: :get,
       url: "http://html-to-image:#{ENV.fetch("HTML_TO_IMG_PORT")}",
       payload: JSON.dump({
-        html: scheduleTableRawHTML
-        #css: nil #TODO: include CSS styles, somehow
+        html: scheduleTableRawHTML # note: will use CSS styles from bootstrap 5
       }),
       headers: {
         content_type: :json,

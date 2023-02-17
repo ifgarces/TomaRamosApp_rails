@@ -1,11 +1,9 @@
 """
 ----------------------------------------------------------------------------------------------------
-Simple HTTP endpoint for converting an HTML+CSS_STRING into an image. Intended to be used as
-microservice for the TomaRamosApp RoR web application, for converting a given HTML+CSS_STRING into
-an image.
+Simple HTTP endpoint for converting an HTML+CSS into an image. Intended to be used as microservice
+for TomaRamosApp's download week schedule feature. See issue #19 for details.
 
-This is used instead of `wkhtml*` ruby gems, as both wkhtmltopdf and wkhtmltoimage have a serous bug
-(see issue #19).
+Author: Ignacio F. Garcés.
 ----------------------------------------------------------------------------------------------------
 """
 
@@ -13,32 +11,28 @@ import flask, html2image, json
 from os import environ
 
 app = flask.Flask(__name__)
-# app.debug = True # this will provide more verbosity
+# app.debug = True # this will provide more verbosity from Flask
 
-PNG_TMP_FILE_NAME :str = "screenshot.png"
-OUTPUT_WIDTH :int = 720
-OUTPUT_HEIGHT :int = 1080
-CSS_STRING :str = None
+CSS_STRING: str = None
+PNG_TMP_FILE_NAME: str = "screenshot.png"
 
-
-# def debugPrintRequest(req: flask.Request) -> None:
-#     print(
-#         f"""
-# -------------------------------------------------
-# HEADERS: {req.headers}
-# DATA: {req.data}
-# ARGS: {req.args}
-# FORM: {req.form}
-# ENDPOINT: {req.endpoint}
-# METHOD: {req.method}
-# HOST: {req.remote_addr}
-# -------------------------------------------------
-#     """.strip()
-#     )
+# HTML dimensions for "screenshot"
+OUTPUT_WIDTH: int = 720
+OUTPUT_HEIGHT: int = 1280
 
 
-def create_app(testConfig=None):
-    print("Hello, I was initialized.")
+def debugPrintRequest(req: flask.Request) -> None:
+    print(f"""
+————————————————————————————————————
+HEADERS: {req.headers}
+DATA: {req.data}
+ARGS: {req.args}
+FORM: {req.form}
+ENDPOINT: {req.endpoint}
+METHOD: {req.method}
+HOST: {req.remote_addr}
+————————————————————————————————————
+""".strip())
 
 
 @app.route("/", methods=["GET"])
@@ -47,9 +41,10 @@ def convert():
     Get with parameters into body as JSON (not possible via standard GET query args). Returns the
     generated PNG file.
     """
-    # debugPrintRequest(flask.request)  # * DEBUGGING - TEMPORAL
+    if app.debug:
+        debugPrintRequest(flask.request)
     try:
-        htmlString :str = flask.request.json["html"]
+        htmlString: str = flask.request.json["html"]
     except KeyError as e:
         return (json.dumps(dict(msg="Body parameter '%s' missing" % e, error=str(type(e)))), 400)
 
