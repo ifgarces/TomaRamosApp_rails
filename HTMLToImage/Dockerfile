@@ -9,7 +9,10 @@ ENV PYTHONUNBUFFERED=1
 # Installing Flask and html2image (and its dependency chromium for websites "screenshots")
 # Ref: https://github.com/vgalin/html2image/blob/master/Dockerfile
 RUN apt-get update --quiet && apt-get install -y chromium \
-    && pip3 install --upgrade flask requests html2image \
+    && pip3 install --upgrade \
+        flask \
+        requests \
+        html2image \
     && echo 'export CHROMIUM_FLAGS="$CHROMIUM_FLAGS --no-sandbox"' >> /etc/chromium.d/default-flags
 
 WORKDIR /code/

@@ -7,7 +7,7 @@
 
 <%
 require "dotenv"
-Dotenv.load(File.join("..", ".env"), File.join("..", ".secrets.env"))
+Dotenv.load(File.join("..", ".env"))
 %>
 
 default: &default
@@ -23,17 +23,17 @@ default: &default
 development:
   <<: *default
   password: "tomaramosuandes"
-  database: tomaramosuandes_development
+  database: development
   min_messages: notice
 
 test:
   <<: *default
-  database: tomaramosuandes_test
+  database: test
   min_messages: log
 
 production:
   # WIP
   <<: *default
-  password: <%= ENV.fetch("TOMARAMOSUANDES_DATABASE_PASSWORD") { "todo" } %>
-  database: tomaramosuandes_production
+  password: <%= ENV.fetch("PRODUCTION_DB_PASSWORD") { "todo" } %>
+  database: production
   min_messages: warning

@@ -5,16 +5,16 @@ Non-official mobile-focused web application for helping students plan their cour
 - [TomaRamosApp](#tomaramosapp)
   - [1. Main features](#1-main-features)
   - [2. Architecture](#2-architecture)
-  - [Project structure](#project-structure)
-  - [3. Contributing](#3-contributing)
+  - [3. Project structure](#3-project-structure)
+  - [4. Contributing](#4-contributing)
   - [5. Usage](#5-usage)
     - [5.1. First run](#51-first-run)
     - [5.2. Build and run](#52-build-and-run)
   - [6. Testing](#6-testing)
     - [6.1. Virtualized](#61-virtualized)
     - [6.2. Local](#62-local)
-  - [8. Appendixes](#8-appendixes)
-    - [8.1. Debugging](#81-debugging)
+  - [7. Appendixes](#7-appendixes)
+    - [7.1. Debugging](#71-debugging)
 
 ## 1. Main features
 
@@ -35,7 +35,7 @@ This application is deployed virtualized on docker-compose with the following co
 
 Currently, TomaRamosApp is deployed on Google Cloud, using an "e2-migro" virtual machine (with Ubuntu as OS, of course). The resources for this machine are very low, but it fits on [Google Cloud's free tier](https://cloud.google.com/free/docs/free-cloud-features#compute) services. The script [`deploy.sh`](./deploy.sh) is executed inside the deployment machine for pulling code and rebuilding/restarting the environment.
 
-## Project structure
+## 3. Project structure
 
 | Directory         | Description                                                               |
 | ----------------- | ------------------------------------------------------------------------- |
@@ -46,7 +46,7 @@ Currently, TomaRamosApp is deployed on Google Cloud, using an "e2-migro" virtual
 | `PostgresDB`      | Docker service with the database server (DBMS).                           |
 | `TomaRamosWebApp` | Source code of the Ruby on Rails web application.                         |
 
-## 3. Contributing
+## 4. Contributing
 
 Please head to the [`docs`](./docs/) directory and read the [contributing docs](./docs/contributing.md).
 
@@ -62,17 +62,9 @@ A clumsy way to do this is:
 2. Run `docker-compose up --build tomaramos-postgres` for starting the database container only.
 3. From another terminal, create the `postgres-volume` directory with `mkdir postgres-volume`, in your host machine.
 4. Copy the blank postgres data files from the container into the `postgres-volume` directory in your host machine with `docker cp tomaramos-postgres-container:/var/lib/postgresql/${POSTGRES_VERSION}/main/* ./postgres-volume`, where `POSTGRES_VERSION` is defined in the [`.env`](./.env) file.
-5. Undo step (1).
+5. Undo step (1) and run `docker-compose down --remove-orphans`.
 
-Also, it is mandatory to create a `.secrets.env` file with sensitive environment variables. The following command will create a template. The only mandatory variable for running the environment (outside Docker) is `ADMIN_USER_PASSWORD`.
-
-```shell
-echo "
-ADMIN_USER_PASSWORD=fooPassword
-OAUTH_CLIENT_ID=
-OAUTH_CLIENT_SECRET=
-" > .secrets.env
-```
+Now, you are ready to start the environment normally, which is explained in the following section. Also, if you are familiar with dumps in postgres, you can use the `pg_dump` and `pg_restore` commands to perform step (4) in a cleaner way.
 
 ### 5.2. Build and run
 
@@ -84,7 +76,7 @@ docker-compose down --remove-orphans && docker-compose up --build
 
 As the database is preserved due the volume mount, restarting all containers will not erase the database, which is intended for virtualized deployment.
 
-Also, in a development-only setting, you can execute `./run-dev.sh` for starting the virtualized environment with settings overriden at `docker-compose.dev.yaml`. It can be very useful for set the database up and for running the Rails application natively in your machine.
+Also, in a development-only setting, you can execute `./run-dev.sh` for starting the virtualized environment with settings overridden at `docker-compose.dev.yaml`. It can be very useful for set the database up and for running the Rails application natively in your machine.
 
 ## 6. Testing
 
@@ -93,19 +85,21 @@ Also, in a development-only setting, you can execute `./run-dev.sh` for starting
 Considering the environment is already up and running, the following command will execute Rails tests inside its container:
 
 ```shell
-docker exec -it tomaramos-rails /bin/bash -c 'RAILS_ENV=test rails test'
+docker exec -it tomaramos-rails bash -c 'RAILS_ENV=test rails test'
 ```
 
 ### 6.2. Local
 
-If you have the Rails app dependencies installed and set-up in your machine, you can directly cd into `TomaRamosWebApp` and run `rails test`, or `make test`.
+If you have the Rails app dependencies installed and set-up in your machine, you can directly cd into `TomaRamosWebApp` and run whether `rails test` or `make test`.
 
-## 8. Appendixes
+## 7. Appendixes
 
-### 8.1. Debugging
+### 7.1. Debugging
 
-In order to launch an interactive `psql` client in the database container, run:
+In order to launch an interactive `psql` client in the database container (in development environment), run:
 
 ```shell
-docker exec -it tomaramos-postgres su postgres -c psql
+docker exec -it tomaramos-postgres bash -c 'psql postgresql://tomaramosuandes:tomaramosuandes@localhost:${POSTGRES_PORT}/development'
 ```
+
+Note: in the previous command, the single quotes are required. Also, the credentials must match the ones at [`database.yml`](./TomaRamosWebApp/config/database.yml).

@@ -18,8 +18,8 @@ Rails.application.routes.draw do
 
   # Button actions
   post "/inscribe-course" => "main#inscribeCourse"
-  post "/uninscribe-all" => "main#uninscribeAllCourses"
-  post "/uninscribe" => "main#uninscribeCourse"
+  post "/deinscribe-all" => "main#deinscribeAllCourses"
+  post "/deinscribe" => "main#deinscribeCourse"
   get "/downloadSchedule" => "main#downloadSchedule" # has to be a GET since a file should be downloaded
 
   # ------------------------- PagesController ------------------------- #
