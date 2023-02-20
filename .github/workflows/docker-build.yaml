@@ -1,0 +1,33 @@
+# --------------------------------------------------------------------------------------------------
+# GitHub workflow for building and testing the TomaRamosApp web application on docker-compose.
+# Excludes branches named with pattern `*temp*`, in case they ever exist.
+# --------------------------------------------------------------------------------------------------
+
+name: Virtualized environment build and Rails tests
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+      - :*temp*
+  pull_request:
+    branches:
+      - master
+      - develop
+      - :*temp*
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build environment
+        run: docker-compose build
+
+      - name: Start environment
+        run: docker-compose up --detach
+
+      - name: Run Rails tests
+        run: docker exec -it tomaramos-rails bash -c 'RAILS_ENV=test rails test'
