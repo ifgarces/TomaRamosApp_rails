@@ -48,7 +48,7 @@ Currently, TomaRamosApp is deployed on Google Cloud, using an "e2-migro" virtual
 
 ## 4. Contributing
 
-Please head to the [`docs`](./docs/) directory and read the [contributing docs](./docs/contributing.md).
+Please head to the [`docs`](./docs/) directory and read the [contributing](./docs/contributing.md) file.
 
 ## 5. Usage
 
