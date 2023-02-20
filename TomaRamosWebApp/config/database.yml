@@ -22,7 +22,6 @@ default: &default
 
 development:
   <<: *default
-  password: "tomaramosuandes"
   database: development
   min_messages: notice
 

@@ -3,31 +3,33 @@
 # Excludes branches named with pattern `*temp*`, in case they ever exist.
 # --------------------------------------------------------------------------------------------------
 
-name: Virtualized environment build and Rails tests
+name: Docker build and Rails tests
 
 on:
   push:
     branches:
-      - master
-      - develop
-      - :*temp*
+      - "master"
+      - "develop"
+      - ":*temp*"
   pull_request:
     branches:
-      - master
-      - develop
-      - :*temp*
+      - "master"
+      - "develop"
+      - ":*temp*"
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v2
 
       - name: Build environment
         run: docker-compose build
 
       - name: Start environment
-        run: docker-compose up --detach
+        run: docker-compose up --detach --remove-orphans
 
+      # Using bare sleep as healthcheck for the Rails web server is not yet implemented...
       - name: Run Rails tests
-        run: docker exec -it tomaramos-rails bash -c 'RAILS_ENV=test rails test'
+        run: sleep 20 && docker exec -it tomaramos-rails bash -c 'RAILS_ENV=test rails test'
