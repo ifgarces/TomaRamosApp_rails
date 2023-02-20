@@ -37,8 +37,6 @@ This application is deployed virtualized on docker-compose with the following co
 
 ![Docker architecture diagram](./docs/architecture-docker.png)
 
-Currently, TomaRamosApp is deployed on Google Cloud, using an "e2-migro" virtual machine (with Ubuntu as OS, of course). The resources for this machine are very low, but it fits on [Google Cloud's free tier](https://cloud.google.com/free/docs/free-cloud-features#compute) services. The script [`deploy.sh`](./deploy.sh) is executed inside the deployment machine for pulling code and rebuilding/restarting the environment.
-
 ## 3. Project structure
 
 | Directory         | Description                                                               |
