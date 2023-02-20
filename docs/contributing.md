@@ -1,5 +1,7 @@
 # Contributing
 
+Welcome! This document details instructions for contributing to TomaRamosApp.
+
 - [Contributing](#contributing)
   - [1. Ruby coding standards](#1-ruby-coding-standards)
     - [1.1. Documentation](#11-documentation)
@@ -34,7 +36,7 @@ Of course, everything should be in english, as is the standard in the industry. 
 
 ## 2. Committing
 
-Commit names must be meaningful and should always reference an issue they are related to. The format is as follows:
+Commit names must be meaningful and should always reference an issue they are related to. The expected format is the following (note the blank line between *paragraphs*):
 
 ```text
 #ISSUE_NUMBER: meaningful summary
@@ -45,7 +47,7 @@ Detailed summary of changes
 Example for WIP commit on an issue:
 
 ```text
-#33: fix on documentation related to tests 
+#33: fix on documentation related to tests
 
 And some refactorings
 ```
@@ -53,7 +55,7 @@ And some refactorings
 Example for when closing an issue:
 
 ```text
-Closes #18: added working cookie dialog 
+Closes #18: added working cookie dialog
 
 - Added standard modal automatically displayed when a host with no session (cookies) access any page
 - Also added blank JavaScript files properly included for each controller
