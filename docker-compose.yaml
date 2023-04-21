@@ -22,7 +22,7 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
     networks:
       tomaramos-net:
-    restart: unless-stopped
+    restart: "on-failure"
     volumes:
       - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
     healthcheck:
@@ -74,7 +74,7 @@ services:
         API_PORT: ${HTML_TO_IMG_PORT}
     networks:
       tomaramos-net:
-    restart: unless-stopped
+    restart: "on-failure"
     depends_on: # not an actual dependency, just used for coordination for `docker-compose up -d`
       rails:
         condition: service_healthy
