@@ -13,14 +13,7 @@ docker-compose ${DEV_FLAGS} down --remove-orphans
 docker-compose ${DEV_FLAGS} up --detach postgres html-to-image
 
 set +x
-echo "
-—————————————————— -- ——————————————————
-
-Rails dependencies running in virtualized environment. Now you can run your native Rails app:
+echo "[OK] Rails dependencies running in virtualized environment. Now you can run your native Rails app:
     cd TomaRamosWebApp && make web_server
-
-—————————————————— -- ——————————————————
 "
-
-sleep 1
-docker-compose logs -f
+docker-compose ${DEV_FLAGS} ps

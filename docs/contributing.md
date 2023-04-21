@@ -14,6 +14,7 @@ Welcome! This document details instructions for contributing to TomaRamosApp.
     - [4.2. Coding](#42-coding)
     - [4.3. Git](#43-git)
   - [5. Updating the courses catalog](#5-updating-the-courses-catalog)
+  - [6. About deployment](#6-about-deployment)
 
 ## 1. Ruby coding standards
 
@@ -102,3 +103,7 @@ This section explains how to update the catalog of courses for a given academic 
 6. Ensure Rails tests pass (`make test`). Then, the changes (at the CSV files) can be pushed to Git.
 
 Note: as the format may change over time, the application may need source code updates once in a while. In that case, check [`data_importer.rake`](./../TomaRamosWebApp/lib/tasks/data_importer.rake).
+
+## 6. About deployment
+
+Currently, TomaRamosApp is deployed on a "e2-migro" virtual machine on Google Cloud. Its resources are very limited, but it fits [Google Cloud's free tier](https://cloud.google.com/free/docs/free-cloud-features#compute) services. The script [`deploy.sh`](./deploy.sh) is manually executed inside the deployment machine for pulling code and rebuilding/restarting the environment, on every push at the `master` branch.

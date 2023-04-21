@@ -40,5 +40,8 @@ Rails.application.routes.draw do
   #// get "/login" => "sessions#new"
   #// get "/google-auth/custom-redirect" => "pages#awesome" # callback for Google Oauth
 
+  # Health check endpoint for docker-compose
+  get "/healthcheck", to: proc { [200, {}, ["I am alright, thanks"]] }
+
   root "pages#home"
 end

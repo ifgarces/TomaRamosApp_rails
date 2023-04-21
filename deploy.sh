@@ -18,7 +18,7 @@ git status
 docker-compose build
 
 # Re-launching virtualized environment
-docker-compose down --remove-orphans
+docker-compose down --remove-orphans --timeout 20
 docker-compose up --detach
 
 echo "[OK] Restart done"

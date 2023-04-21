@@ -22,14 +22,13 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build environment
         run: docker-compose build
 
       - name: Start environment
-        run: docker-compose up --detach --remove-orphans
+        run: docker-compose up --detach
 
-      # Using bare sleep as healthcheck for the Rails web server is not yet implemented...
       - name: Run Rails tests
-        run: sleep 20 && docker exec -it tomaramos-rails bash -c 'RAILS_ENV=test rails test'
+        run: docker exec -it tomaramos-rails bash -c 'RAILS_ENV=test rails test'
