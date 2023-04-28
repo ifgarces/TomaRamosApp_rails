@@ -88,13 +88,13 @@ gem "redcarpet"
 gem "bcrypt", "~> 3.1.7"
 
 gem "devise", "~> 4.9.0"
+gem "omniauth"
 
 # Gem for authenticating the user with Google (OAuth2), for this case at an organization level
 # (@miuandes)
-#!WIP
-gem "omniauth"
-gem "omniauth-google-oauth2"
-gem "omniauth-rails_csrf_protection" #? needed?
+# #!WIP
+# gem "omniauth-google-oauth2"
+# gem "omniauth-rails_csrf_protection" #? needed?
 
 # REST client for consuming APIs (for HTML to image microservice)
 gem "rest-client", "~> 2.1"

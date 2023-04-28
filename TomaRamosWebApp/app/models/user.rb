@@ -19,7 +19,11 @@ require "events_logic/conflict"
 #   @return [Boolean] Wether the user has admin privileges.
 
 class User < ApplicationRecord
-  has_secure_password #* bcrypt
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
+
+  #has_secure_password #* bcrypt
   validates :email, presence: true, uniqueness: true, email: true
 
   has_many :inscriptions, dependent: :destroy

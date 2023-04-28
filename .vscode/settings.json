@@ -4,6 +4,10 @@
         "editor.tabSize": 2,
         "editor.insertSpaces": true
     },
+    "[html]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
+    },
     // Adding recurrent words that should be included in the workspace dictionary (spell check)
     "cSpell.words": [
         "assistantships",
