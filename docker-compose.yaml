@@ -75,6 +75,3 @@ services:
     networks:
       tomaramos-net:
     restart: "on-failure"
-    depends_on: # not an actual dependency, just used for coordination for `docker-compose up -d`
-      rails:
-        condition: service_healthy
