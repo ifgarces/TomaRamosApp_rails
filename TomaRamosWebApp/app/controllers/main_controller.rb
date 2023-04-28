@@ -158,7 +158,8 @@ class MainController < ApplicationController
       height: aspectRatio[:height] * scale
     )
 
-    # Consuming html-to-image microservice and sending result to web client (docker-compose)
+    # Consuming html-to-image microservice and sending result to web client (docker-compose runtime
+    # only)
     image = RestClient::Request.execute(
       method: :get,
       url: "http://html-to-image:#{ENV.fetch("HTML_TO_IMG_PORT")}",
