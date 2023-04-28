@@ -26,7 +26,7 @@ migrate:
 	rails db:migrate --trace
 
 seed:
-	rails db:seed --trace
+	ADMIN_PASSWORD=qwerty rails db:seed --trace
 
 # Installs Ruby and JavaScript dependencies
 packages:

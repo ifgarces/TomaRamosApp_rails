@@ -9,10 +9,13 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag("application", "data-turbo-track": "reload") %>
-    <%= stylesheet_link_tag(params[:controller]) %>
-
     <%= javascript_include_tag("application", "data-turbo-track": "reload", defer: true) %>
-    <%= javascript_include_tag(params[:controller]) %>
+
+    <%# Linking controller-specific CSS and JS, except for devise views %>
+    <% if (!params[:controller].starts_with?("devise")) %>
+      <%= stylesheet_link_tag(params[:controller]) %>
+      <%= javascript_include_tag(params[:controller]) %>
+    <% end %>
 
     <%# Displaying cookie dialog on page load if an new user enters the application, on any page %>
     <% if (!isUserInSession()) %>

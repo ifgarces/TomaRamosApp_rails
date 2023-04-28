@@ -5,18 +5,20 @@ require "enums/event_type_enum"
 
 @log = LoggingUtil.getStdoutLogger(__FILE__)
 
+
+# Will create/update the default admin user accordingly.
 # @return [nil]
-# def createSuperAdminUser() #! Unused
-#   adminEmail = ENV.fetch("ADMIN_EMAIL") { "admin@tomaramos.app" }
-#   superAdmin = User.find_by(email: adminEmail)
-#   if (superAdmin.nil?)
-#     superAdmin = User.new(email: adminEmail)
-#   end
-#   superAdmin.username = ENV.fetch("ADMIN_USERNAME") { "admin" }
-#   superAdmin.password = ENV.fetch("ADMIN_PASSWORD")
-#   superAdmin.is_admin = true
-#   superAdmin.save!()
-# end
+def createSuperAdminUser()
+  adminEmail = ENV.fetch("ADMIN_EMAIL") { "admin@tomaramos.app" }
+  superAdmin = User.find_by(email: adminEmail)
+  if (superAdmin.nil?)
+    superAdmin = User.new(email: adminEmail)
+  end
+  # superAdmin.username = ENV.fetch("ADMIN_USERNAME") { "admin" }
+  superAdmin.password = ENV.fetch("ADMIN_PASSWORD")
+  superAdmin.is_admin = true
+  superAdmin.save!()
+end
 
 # @return [nil]
 def createEventTypes()
@@ -38,7 +40,8 @@ def createEventTypes()
   end
 end
 
-# If a new period was set (i.e. AcademicPeriod.LATEST_PERIOD_NAME was changed by code)
+# If a new period was set, updates it on database (i.e. `AcademicPeriod.LATEST_PERIOD_NAME` was
+# changed by code).
 # @return [nil]
 def setCurrentAcademicPeriod()
   if (AcademicPeriod.getLatest().nil?)
@@ -49,6 +52,7 @@ def setCurrentAcademicPeriod()
   end
 end
 
+createSuperAdminUser()
 createEventTypes()
 setCurrentAcademicPeriod()
 
