@@ -79,7 +79,7 @@ docker-compose down --remove-orphans && docker-compose up --build
 
 As the database is preserved due the volume mount, restarting all containers will not erase the database, which is intended for virtualized deployment.
 
-Also, in a development-only setting, you can execute `./run-dev.sh` for starting the virtualized environment with settings overridden at `docker-compose.dev.yaml`. It can be very useful for set the database up and for running the Rails application natively in your machine.
+Also, in a development-only setting, you can execute `./scripts/run-dev.sh` for starting the virtualized environment with settings overridden at `docker-compose.dev.yaml`. It can be very useful for set the database up and for running the Rails application natively in your machine.
 
 ## 6. Testing
 
