@@ -22,5 +22,3 @@ docker-compose down --remove-orphans --timeout 20
 docker-compose up --detach
 
 echo "[OK] Restart done"
-
-docker-compose logs -f rails
