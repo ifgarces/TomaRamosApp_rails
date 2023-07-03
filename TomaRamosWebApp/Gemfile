@@ -87,7 +87,7 @@ gem "redcarpet"
 # gem "devise" #TODO
 gem "bcrypt", "~> 3.1.7"
 
-gem "devise", "~> 4.9.0"
+# gem "devise", "~> 4.9.0"
 
 # Gem for authenticating the user with Google (OAuth2), for this case at an organization level
 # (@miuandes)
