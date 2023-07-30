@@ -22,7 +22,9 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
     networks:
       tomaramos-net:
-    restart: "on-failure"
+    restart: "unless-stopped"
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
       - "./postgres-volume:/var/lib/postgresql/${POSTGRES_VERSION}/main:rw"
     healthcheck:
@@ -74,4 +76,6 @@ services:
         API_PORT: ${HTML_TO_IMG_PORT}
     networks:
       tomaramos-net:
+    ports:
+      - "${HTML_TO_IMG_PORT}:${HTML_TO_IMG_PORT}"
     restart: "on-failure"

@@ -57,7 +57,6 @@ module ApplicationHelper
   # @return [User]
   def createNewSessionUser()
     guestUser = User.createNewGuestUser()
-    guestUser.save!()
     session[:guestUserId] = guestUser.id
     @log.info("New guest User created '#{guestUser.username}', for host '#{request.host}'")
     return guestUser
