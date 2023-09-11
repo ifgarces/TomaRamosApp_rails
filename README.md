@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![CI build status badge](https://github.com/ifgarces/TomaRamosApp_rails/actions/workflows/docker-build.yaml/badge.svg)
 
-> END OF SUPPORT NOTICE: this project is no longer actively developed by its creator @ifgarces.
+> ❗️ END OF SUPPORT NOTICE: this project is no longer actively developed by its creator @ifgarces.
 
 Non-official mobile-focused web application for helping students plan their course inscription process (AKA *toma de ramos*) at Universidad de los Andes, Chile. Please visit the project's landing page at [`TomaRamos.App`](https://tomaramos.app) for more information.
 
